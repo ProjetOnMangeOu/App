@@ -2,7 +2,6 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:flutter/foundation.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
-import 'package:flutter/foundation.dart';
 import 'package:onmangeou/shared/utils.dart';
 
 enum AuthStatus {
