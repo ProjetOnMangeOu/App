@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'App_router.dart';
+import 'package:onmangeou/core/infrastructure/auth_api.dart';
+import 'app_router.dart';
 
 
 void main() {
@@ -12,8 +13,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-    final router = AppRouter.createRouter(context);
+    AuthAPI authAPI = AuthAPI();
+    final router = AppRouter.createRouter(context,authAPI);
 
     return MaterialApp.router(
       title: 'Flutter Demo',
