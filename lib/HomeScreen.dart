@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("Hello home!"),
+      body: Text("Hello home!"),);
     /*  bottomNavigationBar: BottomNavigationWidget(
         children: [BottomNavBarItem(title: "Test", icon: Icons.confirmation_number)],
         currentIndex: 0,
