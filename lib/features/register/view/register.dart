@@ -15,15 +15,20 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordConfirmController = TextEditingController();
+  final TextEditingController passwordConfirmController =
+      TextEditingController();
 
   // Il manque dans ce controller des retours pour informations incorrecte ou password non identique
 
-  registerAccount(String username, String email, String password, String passwordConfirm) {
-    try{
-      context.read<AuthAPI>().registerAccount(email: email, password: password, username: username);
+  registerAccount(
+      String username, String email, String password, String passwordConfirm) {
+    try {
+      context.read<AuthAPI>().registerAccount(
+          email: email, password: password, username: username);
     } on AppwriteException catch (e) {
-      Utils.logDebug(message: "LoginViewState: error while signing with password ", error: e);
+      Utils.logDebug(
+          message: "LoginViewState: error while signing with password ",
+          error: e);
     }
   }
 
@@ -34,40 +39,39 @@ class _RegisterViewState extends State<RegisterView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(
-                controller: usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'username',
-                ),
-              ),
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: 'email',
-                ),
-              ),
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'password',
-                ),
-              ),
-              TextField(
-                controller: passwordConfirmController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'confirm password',
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  registerAccount(usernameController.text, emailController.text, passwordController.text, passwordConfirmController.text);
-                },
-                child: const Text('register'),
-              ),
-            ]
-        )
-    );
+          TextField(
+            controller: usernameController,
+            decoration: const InputDecoration(
+              labelText: 'username',
+            ),
+          ),
+          TextField(
+            controller: emailController,
+            decoration: const InputDecoration(
+              labelText: 'email',
+            ),
+          ),
+          TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              labelText: 'password',
+            ),
+          ),
+          TextField(
+            controller: passwordConfirmController,
+            obscureText: true,
+            decoration: const InputDecoration(
+              labelText: 'confirm password',
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              registerAccount(usernameController.text, emailController.text,
+                  passwordController.text, passwordConfirmController.text);
+            },
+            child: const Text('register'),
+          ),
+        ]));
   }
 }

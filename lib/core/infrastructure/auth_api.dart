@@ -54,11 +54,10 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
-  Future<void> registerAccount({
-    required String email,
-    required String password,
-    required String username
-  }) async {
+  Future<void> registerAccount(
+      {required String email,
+      required String password,
+      required String username}) async {
     try {
       await account.create(
           userId: ID.unique(),

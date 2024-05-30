@@ -5,25 +5,23 @@ import 'app_router.dart';
 import 'core/domain/entities/user.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => AuthAPI(),
-        ),
-        ChangeNotifierProxyProvider<AuthAPI, User?>(
-          create: (_) => null,
-          update: (_, auth, previousUser) {
-            if (auth.status == AuthStatus.authenticated) {
-              return User(user: auth.currentUser);
-            }
-            return null;
-          },
-        ),
-      ],
-      child: const AppRoot(),
-    )
-  );
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => AuthAPI(),
+      ),
+      ChangeNotifierProxyProvider<AuthAPI, User?>(
+        create: (_) => null,
+        update: (_, auth, previousUser) {
+          if (auth.status == AuthStatus.authenticated) {
+            return User(user: auth.currentUser);
+          }
+          return null;
+        },
+      ),
+    ],
+    child: const AppRoot(),
+  ));
 }
 
 class AppRoot extends StatelessWidget {

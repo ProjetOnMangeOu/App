@@ -19,8 +19,10 @@ class AppRouter {
             builder: (context, state) => const HomeView(),
             redirect: (BuildContext context, GoRouterState state) {
               final insideLoginPath =
-                  state.fullPath.toString().startsWith('/login') || state.fullPath.toString().startsWith('/register');
-              if (authStatus == AuthStatus.unauthenticated && !insideLoginPath) {
+                  state.fullPath.toString().startsWith('/login') ||
+                      state.fullPath.toString().startsWith('/register');
+              if (authStatus == AuthStatus.unauthenticated &&
+                  !insideLoginPath) {
                 return "/login";
               } else {
                 return null;
@@ -28,48 +30,48 @@ class AppRouter {
             },
             routes: [
               GoRoute(
-                  path: 'login',
-                  builder: (context, state) => const LoginView(),
-                  redirect: (_, __) {
-                    if (authStatus == AuthStatus.authenticated) {
-                      return '/';
-                    } else {
-                      return null;
-                    }
-                  },
-                  // J'ai préparé les routes pour la réinitialisation du mot de passe
-                  // routes: [
-                  //   GoRoute(
-                  //       path: 'request-password',
-                  //       builder: (context, state) => const RequestPasswordResetView()
-                  //   ),
-                  //   GoRoute(
-                  //       path: 'request-password-sent',
-                  //       builder: (context, state) => const RequestPasswordSentView()
-                  //   ),
-                  //   GoRoute(
-                  //       path: 'reset-password/:token',
-                  //       builder: (context, state) => const ResetPasswordView()
-                  //   ),
-                  // ]
+                path: 'login',
+                builder: (context, state) => const LoginView(),
+                redirect: (_, __) {
+                  if (authStatus == AuthStatus.authenticated) {
+                    return '/';
+                  } else {
+                    return null;
+                  }
+                },
+                // J'ai préparé les routes pour la réinitialisation du mot de passe
+                // routes: [
+                //   GoRoute(
+                //       path: 'request-password',
+                //       builder: (context, state) => const RequestPasswordResetView()
+                //   ),
+                //   GoRoute(
+                //       path: 'request-password-sent',
+                //       builder: (context, state) => const RequestPasswordSentView()
+                //   ),
+                //   GoRoute(
+                //       path: 'reset-password/:token',
+                //       builder: (context, state) => const ResetPasswordView()
+                //   ),
+                // ]
               ),
               GoRoute(
-                  path: 'register',
-                  builder: (context, state) => const RegisterView(),
-                  redirect: (_, __) {
-                    if (authStatus == AuthStatus.authenticated) {
-                      return '/';
-                    } else {
-                      return null;
-                    }
-                  },
-                  // J'ai préparé les routes pour la vérification de l'email
-                  // routes: [
-                  //     GoRoute(
-                  //         path: 'verify-email/:token',
-                  //         builder: (context, state) => const VerifyEmailView(),
-                  //     ),
-                  // ]
+                path: 'register',
+                builder: (context, state) => const RegisterView(),
+                redirect: (_, __) {
+                  if (authStatus == AuthStatus.authenticated) {
+                    return '/';
+                  } else {
+                    return null;
+                  }
+                },
+                // J'ai préparé les routes pour la vérification de l'email
+                // routes: [
+                //     GoRoute(
+                //         path: 'verify-email/:token',
+                //         builder: (context, state) => const VerifyEmailView(),
+                //     ),
+                // ]
               )
             ]),
       ],
