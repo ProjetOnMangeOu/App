@@ -11,17 +11,14 @@ class LoginView extends StatefulWidget {
   State<StatefulWidget> createState() {
     return _LoginViewState();
   }
-
-
 }
-class _LoginViewState extends State<LoginView> {
 
-  signInWithPassword(String email,String password){
-    try{
-      context.read<AuthAPI>().loginWithPass(email: email,password:password);
-    }
-    on AppwriteException catch(e){
-      Utils.logDebug(message: "login error",error: e);
+class _LoginViewState extends State<LoginView> {
+  signInWithPassword(String email, String password) {
+    try {
+      context.read<AuthAPI>().loginWithPass(email: email, password: password);
+    } on AppwriteException catch (e) {
+      Utils.logDebug(message: "login error", error: e);
     }
   }
 

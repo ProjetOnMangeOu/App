@@ -32,7 +32,10 @@ class AuthAPI extends ChangeNotifier {
     client
         .setEndpoint(AppWriteConstants.endpoint)
         .setProject(AppWriteConstants.projectId)
-        .setSelfSigned(status: kReleaseMode ? false : true); // Self-signed certificate for development
+        .setSelfSigned(
+            status: kReleaseMode
+                ? false
+                : true); // Self-signed certificate for development
     account = Account(client);
   }
 
@@ -49,10 +52,8 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
-  Future<void> loginWithPass({
-    required String email,
-    required String password
-  }) async {
+  Future<void> loginWithPass(
+      {required String email, required String password}) async {
     try {
       await account.createEmailSession(email: email, password: password);
       await loadCurrentUser();
@@ -71,5 +72,4 @@ class AuthAPI extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 }

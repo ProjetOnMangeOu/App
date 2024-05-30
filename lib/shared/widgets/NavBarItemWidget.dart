@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'BottomNavigationWidget.dart';
 
@@ -20,6 +19,7 @@ class NavBarItem extends StatefulWidget {
   @override
   State<NavBarItem> createState() => _NavBarItemState();
 }
+
 class _NavBarItemState extends State<NavBarItem> {
   @override
   Widget build(BuildContext context) {

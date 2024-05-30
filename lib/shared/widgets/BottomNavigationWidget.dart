@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'NavBarItemWidget.dart';
 
-class BottomNavBarItem{
+class BottomNavBarItem {
   final String title;
   final IconData icon;
   BottomNavBarItem({required this.title, required this.icon});
@@ -16,14 +16,13 @@ class BottomNavigationWidget extends StatefulWidget {
   BottomNavigationWidget(
       {super.key,
       required this.children,
-      required this.currentIndex ,
+      required this.currentIndex,
       this.backgroundColor,
-      required this.onTap}
-      );
+      required this.onTap});
 
   @override
   State<BottomNavigationWidget> createState() => _BottomNavigationWidgetState();
-  }
+}
 
 class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
@@ -41,7 +40,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(
           widget.children.length,
-              (index) => NavBarItem(
+          (index) => NavBarItem(
             index: index,
             item: widget.children[index],
             selected: widget.currentIndex == index,
@@ -57,4 +56,3 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     );
   }
 }
-
