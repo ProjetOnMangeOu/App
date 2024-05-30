@@ -10,10 +10,11 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Text("Hello Home!"),
+      body: Text("Hello from homepage"),
     );
   }
 }

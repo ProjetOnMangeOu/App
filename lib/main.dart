@@ -1,25 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
+import 'package:provider/provider.dart';
 import 'app_router.dart';
+import 'core/domain/entities/user.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthAPI(),
+        ),
+        ChangeNotifierProxyProvider<AuthAPI, User?>(
+          create: (_) => null,
+          update: (_, auth, previousUser) {
+            if (auth.status == AuthStatus.authenticated) {
+              return User(user: auth.currentUser);
+            }
+            return null;
+          },
+        ),
+      ],
+      child: const AppRoot(),
+    )
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AppRoot extends StatelessWidget {
+  const AppRoot({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    AuthAPI authAPI = AuthAPI();
-    final router = AppRouter.createRouter(context, authAPI);
+    final router = AppRouter.createRouter(context, context.watch<AuthAPI>());
 
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'On Mange Où ?',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromRGBO(255, 184, 76, 1.0)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
         fontFamily: 'Inter',
         useMaterial3: true,
       ),

@@ -46,9 +46,27 @@ class AuthAPI extends ChangeNotifier {
       _status = AuthStatus.authenticated;
     } on AppwriteException catch (e) {
       _status = AuthStatus.unauthenticated;
-      Utils.logError(message: 'Load current user failed', error: e);
+      if (e.code != 401) {
+        Utils.logError(message: 'Load current user failed', error: e);
+      }
     } finally {
       notifyListeners();
+    }
+  }
+
+  Future<void> registerAccount({
+    required String email,
+    required String password,
+    required String username
+  }) async {
+    try {
+      await account.create(
+          userId: ID.unique(),
+          email: email,
+          password: password,
+          name: username);
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Register failed', error: e);
     }
   }
 
