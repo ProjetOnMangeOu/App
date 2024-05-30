@@ -9,6 +9,7 @@ class User extends ChangeNotifier {
   late String _id;
 
   //Getters
+  models.User get user => _user;
   String get username => _username;
   String get id => _id;
 
