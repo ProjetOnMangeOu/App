@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:onmangeou/app_router.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:provider/provider.dart';
-import 'app_router.dart';
-import 'core/domain/entities/user.dart';
+import 'package:onmangeou/core/domain/entities/user.dart';
 
 void main() {
   runApp(MultiProvider(
