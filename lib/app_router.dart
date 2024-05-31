@@ -7,6 +7,7 @@ import 'package:onmangeou/features/login/view/request_password_reset.dart';
 import 'package:onmangeou/features/login/view/request_password_sent.dart';
 import 'package:onmangeou/features/login/view/reset_password.dart';
 import 'package:onmangeou/features/register/view/register.dart';
+import 'package:onmangeou/features/welcome/view/welcome.dart';
 import 'package:onmangeou/shared/utils.dart';
 
 class AppRouter {
@@ -19,7 +20,13 @@ class AppRouter {
       routes: [
         GoRoute(
             path: '/',
-            builder: (context, state) => const HomeView(),
+            builder: (context, state) {
+              if(authStatus == AuthStatus.authenticated) {
+                return const HomeView();
+              } else {
+                return const WelcomeView();
+              }
+            },
             redirect: (BuildContext context, GoRouterState state) {
               final insideLoginPath =
                   state.fullPath.toString().startsWith('/login') ||

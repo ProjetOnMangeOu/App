@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
 
   resetPassword(String password, String confirmPassword, String userId, String secret) {
     try {
-      context.read<AuthAPI>().confirmPasswordReset(userId: userId, secret: secret, password: password, passwordAgain: confirmPassword);
+      context.read<AuthAPI>().confirmPasswordReset(userId: userId, secret: secret, password: password, passwordAgain: confirmPassword).then((_) {
+        context.go('/login');
+      });
     } on AppwriteException catch (e) {
       Utils.logDebug(
           message: "ResetPasswordViewState: error while resetting password ",

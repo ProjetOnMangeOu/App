@@ -84,7 +84,7 @@ class AuthAPI extends ChangeNotifier {
     required String url,
   }) async {
     try {
-      await account.createRecovery(email: email, url: url);
+      await account.createRecovery(email: email, url: 'http://onmangeou.sygix.fr');
       return true;
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Request password reset failed', error: e);
