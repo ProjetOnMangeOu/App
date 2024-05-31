@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:onmangeou/core/infrastructure/auth_api.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,8 +14,18 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text("Hello from homepage"),
+    return Scaffold(
+      body: Column(
+        children: [
+          const Text('Home'),
+          ElevatedButton(
+            onPressed: () {
+              context.read<AuthAPI>().logout();
+            },
+            child: const Text('logout'),
+          ),
+        ]
+      ),
     );
   }
 }

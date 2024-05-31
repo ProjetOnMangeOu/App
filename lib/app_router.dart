@@ -44,15 +44,22 @@ class AppRouter {
                 },
                 routes: [
                   GoRoute(
-                      path: '/request-password',
+                      path: 'request-password',
                       builder: (context, state) => const RequestPasswordResetView()
                   ),
                   GoRoute(
-                      path: '/request-password-sent',
-                      builder: (context, state) => const RequestPasswordSentView()
+                    path: 'request-password-sent',
+                    redirect: (_, state) {
+                      var email = (state.extra as Map<String, dynamic>?)?['email'];
+                      return email == null ? '/login/request-password' : null;
+                    },
+                    builder: (context, state) {
+                      var email = (state.extra as Map<String, dynamic>?)?['email']!;
+                      return RequestPasswordSentView(email: email);
+                    },
                   ),
                   GoRoute(
-                      path: '/reset-password',
+                      path: 'reset-password',
                       redirect: (_, state) {
                         if (!state.uri.queryParameters.containsKey('userId') && !state.uri.queryParameters.containsKey('secret')) {
                           return '/login';
