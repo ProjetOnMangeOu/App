@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onmangeou/core/domain/entities/user.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:onmangeou/features/home/view/home_view.dart';
 import 'package:onmangeou/features/login/view/login.dart';
 import 'package:onmangeou/features/register/view/register.dart';
+import 'package:onmangeou/features/register/view/register_email_verification.dart';
 import 'package:onmangeou/shared/utils.dart';
 
 class AppRouter {
-  static GoRouter createRouter(BuildContext context, AuthAPI authAPI) {
+  static GoRouter createRouter(BuildContext context, AuthAPI authAPI, User? user) {
     final authStatus = authAPI.status;
+    final isVerified = user?.isVerified ?? false;
     Utils.logDebug(message: 'Auth status: $authStatus');
 
     return GoRouter(
@@ -21,12 +24,16 @@ class AppRouter {
               final insideLoginPath =
                   state.fullPath.toString().startsWith('/login') ||
                       state.fullPath.toString().startsWith('/register');
-              if (authStatus == AuthStatus.unauthenticated &&
-                  !insideLoginPath) {
+              if (authStatus == AuthStatus.unauthenticated && !insideLoginPath ) {
                 return "/login";
-              } else {
+              }
+              else if (authStatus == AuthStatus.authenticated && !insideLoginPath && !isVerified){
+                return "/register/email-verification";
+              }
+              else {
                 return null;
               }
+
             },
             routes: [
               GoRoute(
@@ -65,15 +72,21 @@ class AppRouter {
                     return null;
                   }
                 },
-                // J'ai préparé les routes pour la vérification de l'email
-                // routes: [
-                //     GoRoute(
-                //         path: 'verify-email/:token',
-                //         builder: (context, state) => const VerifyEmailView(),
-                //     ),
-                // ]
-              )
-            ]),
+                 routes: [
+                     GoRoute(
+                         path: 'email-verification',
+                         redirect: (_, state) {
+                           if(!state.uri.queryParameters.containsKey('userId') && !state.uri.queryParameters.containsKey('secret')) {
+                             return '/register';
+                           }
+                           else {
+                             return null;
+                           }
+                         },
+                         builder: (context, state) => RegisterEmailVerificationView(userId: state.uri.queryParameters['userId']!, secret: state.uri.queryParameters['secret']!),
+                     ),
+                 ]
+              )]),
       ],
     );
   }

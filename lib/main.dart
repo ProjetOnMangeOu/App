@@ -30,7 +30,7 @@ class AppRoot extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final router = AppRouter.createRouter(context, context.watch<AuthAPI>());
+    final router = AppRouter.createRouter(context, context.watch<AuthAPI>(), context.watch<User?>());
 
     return MaterialApp.router(
       title: 'On Mange Où ?',

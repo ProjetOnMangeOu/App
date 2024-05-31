@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:flutter/foundation.dart';
@@ -54,7 +56,7 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
-  Future<void> registerAccount(
+  Future<bool> registerAccount(
       {required String email,
       required String password,
       required String username}) async {
@@ -64,9 +66,14 @@ class AuthAPI extends ChangeNotifier {
           email: email,
           password: password,
           name: username);
+      await loginWithPass(email: email, password: password);//login
+      await sendEmailVerification();
+      return true;
     } on AppwriteException catch (e) {
+      return false;
       Utils.logError(message: 'Register failed', error: e);
     }
+
   }
 
   Future<void> loginWithPass(
@@ -89,4 +96,15 @@ class AuthAPI extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> sendEmailVerification() async {
+    try {
+      await account.createVerification(
+          url: AppWriteConstants.verficationUrl
+      );
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Send email verification failed', error: e);
+    }
+  }
+
 }
