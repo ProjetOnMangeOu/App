@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
-import 'package:onmangeou/features/home/view/home_view.dart';
+import 'package:onmangeou/features/home/view/home.dart';
 import 'package:onmangeou/features/login/view/login.dart';
 import 'package:onmangeou/features/register/view/register.dart';
 import 'package:onmangeou/shared/utils.dart';

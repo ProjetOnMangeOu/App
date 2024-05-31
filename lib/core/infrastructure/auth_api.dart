@@ -69,10 +69,34 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
+  Future<void> requestPasswordReset({
+    required String email,
+    required String url,
+  }) async {
+    try {
+      await account.createRecovery(email: email, url: url);
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Request password reset failed', error: e);
+    }
+  }
+
+  Future<void> confirmPasswordReset({
+    required String userId,
+    required String secret,
+    required String password,
+    required String passwordAgain,
+  }) async {
+    try {
+      await account.updateRecovery(userId: userId, secret: secret, password: password);
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Confirm password reset failed', error: e);
+    }
+  }
+
   Future<void> loginWithPass(
       {required String email, required String password}) async {
     try {
-      await account.createEmailSession(email: email, password: password);
+      await account.createEmailPasswordSession(email: email, password: password);
       await loadCurrentUser();
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Login failed', error: e);

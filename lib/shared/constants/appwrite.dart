@@ -4,4 +4,5 @@ class AppWriteConstants {
   static const String databaseId = '';
   static const String collectionId = '';
   static const String functionId = '';
+  static const String resetPasswordUrl = 'io.onmangeou.app.onmangeou';
 }
