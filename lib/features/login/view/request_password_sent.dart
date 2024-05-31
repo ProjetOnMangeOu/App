@@ -6,22 +6,22 @@ import 'package:onmangeou/shared/constants/appwrite.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
 
-class RequestPasswordResetView extends StatefulWidget {
-  const RequestPasswordResetView({super.key});
+class RequestPasswordSentView extends StatefulWidget {
+  const RequestPasswordSentView({super.key});
 
   @override
-  State<RequestPasswordResetView> createState() => _RequestPasswordResetViewState();
+  State<RequestPasswordSentView> createState() => _RequestPasswordSentViewState();
 }
 
-class _RequestPasswordResetViewState extends State<RequestPasswordResetView> {
-  final TextEditingController emailController = TextEditingController();
+class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
 
+  // TODO: implement 30s wait before resending email and get email from previous screen
   requestPasswordReset(String email) {
     try {
       context.read<AuthAPI>().requestPasswordReset(email: email, url: AppWriteConstants.resetPasswordUrl);
     } on AppwriteException catch (e) {
       Utils.logDebug(
-          message: "RequestPasswordResetViewState: error while requesting password reset ",
+          message: "RequestPasswordSentViewState: error while requesting password reset ",
           error: e);
     }
   }
@@ -31,18 +31,12 @@ class _RequestPasswordResetViewState extends State<RequestPasswordResetView> {
     return Scaffold(
       body: Column(
         children: [
-          const Text('Request password reset'),
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              labelText: 'email',
-            ),
-          ),
+          const Text('Request password reset sent'),
           ElevatedButton(
             onPressed: () {
-              requestPasswordReset(emailController.text);
+              // resend email
             },
-            child: const Text('send email'),
+            child: const Text('send email again (30s)'),
           ),
           ElevatedButton(
             onPressed: () {

@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:onmangeou/features/home/view/home.dart';
 import 'package:onmangeou/features/login/view/login.dart';
+import 'package:onmangeou/features/login/view/request_password_reset.dart';
+import 'package:onmangeou/features/login/view/request_password_sent.dart';
+import 'package:onmangeou/features/login/view/reset_password.dart';
 import 'package:onmangeou/features/register/view/register.dart';
 import 'package:onmangeou/shared/utils.dart';
 
@@ -39,21 +42,27 @@ class AppRouter {
                     return null;
                   }
                 },
-                // J'ai préparé les routes pour la réinitialisation du mot de passe
-                // routes: [
-                //   GoRoute(
-                //       path: 'request-password',
-                //       builder: (context, state) => const RequestPasswordResetView()
-                //   ),
-                //   GoRoute(
-                //       path: 'request-password-sent',
-                //       builder: (context, state) => const RequestPasswordSentView()
-                //   ),
-                //   GoRoute(
-                //       path: 'reset-password/:token',
-                //       builder: (context, state) => const ResetPasswordView()
-                //   ),
-                // ]
+                routes: [
+                  GoRoute(
+                      path: '/request-password',
+                      builder: (context, state) => const RequestPasswordResetView()
+                  ),
+                  GoRoute(
+                      path: '/request-password-sent',
+                      builder: (context, state) => const RequestPasswordSentView()
+                  ),
+                  GoRoute(
+                      path: '/reset-password',
+                      redirect: (_, state) {
+                        if (!state.uri.queryParameters.containsKey('userId') && !state.uri.queryParameters.containsKey('secret')) {
+                          return '/login';
+                        } else {
+                          return null;
+                        }
+                      },
+                      builder: (context, state) => ResetPasswordView(userId: state.uri.queryParameters['userId']!, secret: state.uri.queryParameters['secret']!)
+                  ),
+                ]
               ),
               GoRoute(
                 path: 'register',
