@@ -55,9 +55,16 @@ class _LoginViewState extends State<LoginView> {
             ),
             TextButton(
               onPressed: () {
-                context.go('/register');
+                context.go(
+                    '/register'); // Go to register page while replacing stack
               },
               child: const Text('REGISTER'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.push('/login/request-password');
+              },
+              child: const Text('reset password'),
             )
           ]),
     );
