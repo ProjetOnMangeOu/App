@@ -79,20 +79,25 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
-  Future<bool> requestPasswordReset({
+  Future<Map<String, Object>> requestPasswordReset({
     required String email,
     required String url,
   }) async {
     try {
-      await account.createRecovery(email: email, url: 'http://onmangeou.sygix.fr');
-      return true;
+      await account.createRecovery(email: email, url: url);
+      return {
+        'success': true,
+      };
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Request password reset failed', error: e);
-      return false;
+      return {
+        'success': false,
+        'error': e,
+      };
     }
   }
 
-  Future<void> confirmPasswordReset({
+  Future<Map<String, Object>> confirmPasswordReset({
     required String userId,
     required String secret,
     required String password,
@@ -100,8 +105,15 @@ class AuthAPI extends ChangeNotifier {
   }) async {
     try {
       await account.updateRecovery(userId: userId, secret: secret, password: password);
+      return {
+        'success': true,
+      };
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Confirm password reset failed', error: e);
+      return {
+        'success': false,
+        'error': e,
+      };
     }
   }
 

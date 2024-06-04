@@ -18,11 +18,11 @@ class _RequestPasswordResetViewState extends State<RequestPasswordResetView> {
 
   requestPasswordReset(String email) {
     try {
-      context.read<AuthAPI>().requestPasswordReset(email: email, url: AppWriteConstants.resetPasswordUrl).then((success) {
-        if (success) {
+      context.read<AuthAPI>().requestPasswordReset(email: email, url: AppWriteConstants.resetPasswordUrl).then((res) {
+        if (res['success'] == true) {
           context.push('/login/request-password-sent', extra: {'email': emailController.text});
         } else {
-          Utils.logDebug(message: 'RequestPasswordResetViewState: error while requesting password reset');
+          Utils.logDebug(message: 'RequestPasswordResetViewState: not successful');
           // TODO: show error message to user
         }
       });

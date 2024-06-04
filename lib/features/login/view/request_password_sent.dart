@@ -18,26 +18,47 @@ class RequestPasswordSentView extends StatefulWidget {
 }
 
 class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
-  bool isResending = false;
+  Duration remainingTime = const Duration(seconds: AppConstants.resendEmailWaitTime);
+  Timer? timer;
+
+  startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        if (remainingTime.inSeconds == 0) {
+          t.cancel();
+          remainingTime = const Duration(seconds: AppConstants.resendEmailWaitTime);
+        } else {
+          remainingTime = remainingTime - const Duration(seconds: 1);
+        }
+      });
+    });
+  }
 
   requestPasswordReset() {
     try {
-      if(isResending) return;
+      if(remainingTime.inSeconds > 0) return;
 
       setState(() {
-        isResending = true;
+        startTimer();
       });
       context.read<AuthAPI>().requestPasswordReset(email: widget.email, url: AppWriteConstants.resetPasswordUrl);
-      Timer(const Duration(seconds: AppConstants.resendEmailWaitTime), () {
-        setState(() {
-          isResending = false;
-        });
-      });
     } on AppwriteException catch (e) {
       Utils.logDebug(
           message: "RequestPasswordSentViewState: error while requesting password reset ",
           error: e);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -50,7 +71,7 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
             onPressed: () {
               // resend email
             },
-            child: const Text('send email again (30s)'),
+            child: Text('send email again (${remainingTime.inSeconds})'),
           ),
           ElevatedButton(
             onPressed: () {

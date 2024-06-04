@@ -69,6 +69,7 @@ class AppRouter {
                       path: 'reset-password',
                       redirect: (_, state) {
                         if (!state.uri.queryParameters.containsKey('userId') && !state.uri.queryParameters.containsKey('secret')) {
+                          Utils.logDebug(message: 'Reset password: missing userId or secret');
                           return '/login';
                         } else {
                           return null;

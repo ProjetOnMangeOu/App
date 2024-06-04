@@ -12,3 +12,9 @@ class Utils {
         time: DateTime.now(), name: 'ERROR', level: 1000, error: error);
   }
 }
+
+class ApiResponse {
+  late final bool success;
+  late Object? data;
+  late final Object? error;
+}
