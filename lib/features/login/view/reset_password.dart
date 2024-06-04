@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 class ResetPasswordView extends StatefulWidget {
   final String userId;
   final String secret;
-  const ResetPasswordView({super.key, required this.userId, required this.secret});
+  const ResetPasswordView(
+      {super.key, required this.userId, required this.secret});
 
   @override
   State<ResetPasswordView> createState() => _ResetPasswordViewState();
@@ -16,17 +17,24 @@ class ResetPasswordView extends StatefulWidget {
 
 class _ResetPasswordViewState extends State<ResetPasswordView> {
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
-  resetPassword({
-    required String password,
-    required String confirmPassword,
-    required String userId,
-    required String secret
-}) {
+  resetPassword(
+      {required String password,
+      required String confirmPassword,
+      required String userId,
+      required String secret}) {
     try {
-      context.read<AuthAPI>().confirmPasswordReset(userId: userId, secret: secret, password: password, passwordAgain: confirmPassword).then((res) {
-        if(res['success'] == true) {
+      context
+          .read<AuthAPI>()
+          .confirmPasswordReset(
+              userId: userId,
+              secret: secret,
+              password: password,
+              passwordAgain: confirmPassword)
+          .then((res) {
+        if (res['success'] == true) {
           context.go('/login');
         } else {
           Utils.logDebug(message: 'ResetPasswordViewState: not successful');
@@ -42,7 +50,6 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Column(
         children: [
@@ -63,7 +70,8 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
           ),
           ElevatedButton(
             onPressed: () {
-              resetPassword(password: passwordController.text,
+              resetPassword(
+                  password: passwordController.text,
                   confirmPassword: confirmPasswordController.text,
                   userId: widget.userId,
                   secret: widget.secret);

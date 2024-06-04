@@ -72,7 +72,8 @@ class AuthAPI extends ChangeNotifier {
   Future<void> loginWithPass(
       {required String email, required String password}) async {
     try {
-      await account.createEmailPasswordSession(email: email, password: password);
+      await account.createEmailPasswordSession(
+          email: email, password: password);
       await loadCurrentUser();
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Login failed', error: e);
@@ -104,7 +105,8 @@ class AuthAPI extends ChangeNotifier {
     required String passwordAgain,
   }) async {
     try {
-      await account.updateRecovery(userId: userId, secret: secret, password: password);
+      await account.updateRecovery(
+          userId: userId, secret: secret, password: password);
       return {
         'success': true,
       };

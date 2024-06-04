@@ -4,5 +4,6 @@ class AppWriteConstants {
   static const String databaseId = '';
   static const String collectionId = '';
   static const String functionId = '';
-  static const String resetPasswordUrl = 'https://onmangeou.sygix.fr/login/reset-password';
+  static const String resetPasswordUrl =
+      'https://onmangeou.sygix.fr/login/reset-password';
 }

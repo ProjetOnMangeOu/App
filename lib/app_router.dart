@@ -21,7 +21,7 @@ class AppRouter {
         GoRoute(
             path: '/',
             builder: (context, state) {
-              if(authStatus == AuthStatus.authenticated) {
+              if (authStatus == AuthStatus.authenticated) {
                 return const HomeView();
               } else {
                 return const WelcomeView();
@@ -40,45 +40,52 @@ class AppRouter {
             },
             routes: [
               GoRoute(
-                path: 'login',
-                builder: (context, state) => const LoginView(),
-                redirect: (_, __) {
-                  if (authStatus == AuthStatus.authenticated) {
-                    return '/';
-                  } else {
-                    return null;
-                  }
-                },
-                routes: [
-                  GoRoute(
-                      path: 'request-password',
-                      builder: (context, state) => const RequestPasswordResetView()
-                  ),
-                  GoRoute(
-                    path: 'request-password-sent',
-                    redirect: (_, state) {
-                      var email = (state.extra as Map<String, dynamic>?)?['email'];
-                      return email == null ? '/login/request-password' : null;
-                    },
-                    builder: (context, state) {
-                      var email = (state.extra as Map<String, dynamic>?)?['email']!;
-                      return RequestPasswordSentView(email: email);
-                    },
-                  ),
-                  GoRoute(
-                      path: 'reset-password',
+                  path: 'login',
+                  builder: (context, state) => const LoginView(),
+                  redirect: (_, __) {
+                    if (authStatus == AuthStatus.authenticated) {
+                      return '/';
+                    } else {
+                      return null;
+                    }
+                  },
+                  routes: [
+                    GoRoute(
+                        path: 'request-password',
+                        builder: (context, state) =>
+                            const RequestPasswordResetView()),
+                    GoRoute(
+                      path: 'request-password-sent',
                       redirect: (_, state) {
-                        if (!state.uri.queryParameters.containsKey('userId') && !state.uri.queryParameters.containsKey('secret')) {
-                          Utils.logDebug(message: 'Reset password: missing userId or secret');
-                          return '/login';
-                        } else {
-                          return null;
-                        }
+                        var email =
+                            (state.extra as Map<String, dynamic>?)?['email'];
+                        return email == null ? '/login/request-password' : null;
                       },
-                      builder: (context, state) => ResetPasswordView(userId: state.uri.queryParameters['userId']!, secret: state.uri.queryParameters['secret']!)
-                  ),
-                ]
-              ),
+                      builder: (context, state) {
+                        var email =
+                            (state.extra as Map<String, dynamic>?)?['email']!;
+                        return RequestPasswordSentView(email: email);
+                      },
+                    ),
+                    GoRoute(
+                        path: 'reset-password',
+                        redirect: (_, state) {
+                          if (!state.uri.queryParameters
+                                  .containsKey('userId') &&
+                              !state.uri.queryParameters
+                                  .containsKey('secret')) {
+                            Utils.logDebug(
+                                message:
+                                    'Reset password: missing userId or secret');
+                            return '/login';
+                          } else {
+                            return null;
+                          }
+                        },
+                        builder: (context, state) => ResetPasswordView(
+                            userId: state.uri.queryParameters['userId']!,
+                            secret: state.uri.queryParameters['secret']!)),
+                  ]),
               GoRoute(
                 path: 'register',
                 builder: (context, state) => const RegisterView(),

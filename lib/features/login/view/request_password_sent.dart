@@ -14,11 +14,13 @@ class RequestPasswordSentView extends StatefulWidget {
   const RequestPasswordSentView({super.key, required this.email});
 
   @override
-  State<RequestPasswordSentView> createState() => _RequestPasswordSentViewState();
+  State<RequestPasswordSentView> createState() =>
+      _RequestPasswordSentViewState();
 }
 
 class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
-  Duration remainingTime = const Duration(seconds: AppConstants.resendEmailWaitTime);
+  Duration remainingTime =
+      const Duration(seconds: AppConstants.resendEmailWaitTime);
   Timer? timer;
 
   startTimer() {
@@ -26,7 +28,8 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
       setState(() {
         if (remainingTime.inSeconds == 0) {
           t.cancel();
-          remainingTime = const Duration(seconds: AppConstants.resendEmailWaitTime);
+          remainingTime =
+              const Duration(seconds: AppConstants.resendEmailWaitTime);
         } else {
           remainingTime = remainingTime - const Duration(seconds: 1);
         }
@@ -36,15 +39,17 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
 
   requestPasswordReset() {
     try {
-      if(remainingTime.inSeconds > 0) return;
+      if (remainingTime.inSeconds > 0) return;
 
       setState(() {
         startTimer();
       });
-      context.read<AuthAPI>().requestPasswordReset(email: widget.email, url: AppWriteConstants.resetPasswordUrl);
+      context.read<AuthAPI>().requestPasswordReset(
+          email: widget.email, url: AppWriteConstants.resetPasswordUrl);
     } on AppwriteException catch (e) {
       Utils.logDebug(
-          message: "RequestPasswordSentViewState: error while requesting password reset ",
+          message:
+              "RequestPasswordSentViewState: error while requesting password reset ",
           error: e);
     }
   }

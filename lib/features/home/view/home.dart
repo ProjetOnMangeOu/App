@@ -15,17 +15,15 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const Text('Home'),
-          ElevatedButton(
-            onPressed: () {
-              context.read<AuthAPI>().logout();
-            },
-            child: const Text('logout'),
-          ),
-        ]
-      ),
+      body: Column(children: [
+        const Text('Home'),
+        ElevatedButton(
+          onPressed: () {
+            context.read<AuthAPI>().logout();
+          },
+          child: const Text('logout'),
+        ),
+      ]),
     );
   }
 }
