@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:flutter/foundation.dart';
@@ -44,6 +42,7 @@ class AuthAPI extends ChangeNotifier {
   // Methods
   Future<void> loadCurrentUser() async {
     try {
+      Utils.logDebug(message: 'Loading current user');
       _currentUser = await account.get();
       _status = AuthStatus.authenticated;
     } on AppwriteException catch (e) {
@@ -56,7 +55,7 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
-  Future<bool> registerAccount(
+  Future<Map<String, Object>> registerAccount(
       {required String email,
       required String password,
       required String username}) async {
@@ -66,20 +65,41 @@ class AuthAPI extends ChangeNotifier {
           email: email,
           password: password,
           name: username);
-      await loginWithPass(email: email, password: password);//login
-      await sendEmailVerification();
-      return true;
-    } on AppwriteException catch (e) {
-      return false;
-      Utils.logError(message: 'Register failed', error: e);
-    }
+      await loginWithPass(email: email, password: password);
+      await sendEmailVerification(url: AppWriteConstants.emailVerificationUrl);
+      return {
+        'success': true,
+      };
 
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Register failed', error: e);
+      return {
+        'success': false,
+        'error': e,
+      };
+    }
+  }
+
+  Future<void> sendEmailVerification({required String url}) async {
+    try {
+      await account.createVerification(url: url);
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Send email verification failed', error: e);
+    }
+  }
+
+  Future<void> confirmEmailVerification({required String userId, required String secret}) async {
+    try {
+      await account.updateVerification(userId: userId, secret: secret);
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Email verification failed', error: e);
+    }
   }
 
   Future<void> loginWithPass(
       {required String email, required String password}) async {
     try {
-      await account.createEmailPasswordSession(
+      await account.createEmailSession(
           email: email, password: password);
       await loadCurrentUser();
     } on AppwriteException catch (e) {
@@ -113,7 +133,7 @@ class AuthAPI extends ChangeNotifier {
   }) async {
     try {
       await account.updateRecovery(
-          userId: userId, secret: secret, password: password);
+          userId: userId, secret: secret, password: password, passwordAgain: passwordAgain);
       return {
         'success': true,
       };
@@ -136,15 +156,4 @@ class AuthAPI extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  Future<void> sendEmailVerification() async {
-    try {
-      await account.createVerification(
-          url: AppWriteConstants.verficationUrl
-      );
-    } on AppwriteException catch (e) {
-      Utils.logError(message: 'Send email verification failed', error: e);
-    }
-  }
-
 }

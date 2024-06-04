@@ -34,7 +34,7 @@ class _RequestPasswordResetViewState extends State<RequestPasswordResetView> {
         }
       });
     } on AppwriteException catch (e) {
-      Utils.logDebug(
+      Utils.logError(
           message:
               "RequestPasswordResetViewState: error while requesting password reset ",
           error: e);

@@ -7,13 +7,15 @@ import 'package:onmangeou/features/login/view/login.dart';
 import 'package:onmangeou/features/login/view/request_password_reset.dart';
 import 'package:onmangeou/features/login/view/request_password_sent.dart';
 import 'package:onmangeou/features/login/view/reset_password.dart';
+import 'package:onmangeou/features/register/view/email_verification.dart';
 import 'package:onmangeou/features/register/view/register.dart';
 import 'package:onmangeou/features/welcome/view/welcome.dart';
-import 'package:onmangeou/features/register/view/register_email_verification.dart';
+import 'package:onmangeou/features/register/view/email_verification_sent.dart';
 import 'package:onmangeou/shared/utils.dart';
 
 class AppRouter {
-  static GoRouter createRouter(BuildContext context, AuthAPI authAPI, User? user) {
+  static GoRouter createRouter(
+      BuildContext context, AuthAPI authAPI, User? user) {
     final authStatus = authAPI.status;
     final isVerified = user?.isVerified ?? false;
     Utils.logDebug(message: 'Auth status: $authStatus');
@@ -34,13 +36,14 @@ class AppRouter {
               final insideLoginPath =
                   state.fullPath.toString().startsWith('/login') ||
                       state.fullPath.toString().startsWith('/register');
-              if (authStatus == AuthStatus.unauthenticated && !insideLoginPath ) {
+              if (authStatus == AuthStatus.unauthenticated &&
+                  !insideLoginPath) {
                 return "/login";
-              }
-              else if (authStatus == AuthStatus.authenticated && !insideLoginPath && !isVerified){
-                return "/register/email-verification";
-              }
-              else {
+              } else if (authStatus == AuthStatus.authenticated &&
+                  !insideLoginPath &&
+                  !isVerified) {
+                return "/register/email-verification-sent";
+              } else {
                 return null;
               }
             },
@@ -93,30 +96,49 @@ class AppRouter {
                             secret: state.uri.queryParameters['secret']!)),
                   ]),
               GoRoute(
-                path: 'register',
-                builder: (context, state) => const RegisterView(),
-                redirect: (_, __) {
-                  if (authStatus == AuthStatus.authenticated) {
-                    return '/';
-                  } else {
-                    return null;
-                  }
-                },
-                 routes: [
-                     GoRoute(
-                         path: 'email-verification',
-                         redirect: (_, state) {
-                           if(!state.uri.queryParameters.containsKey('userId') && !state.uri.queryParameters.containsKey('secret')) {
-                             return '/register';
-                           }
-                           else {
-                             return null;
-                           }
-                         },
-                         builder: (context, state) => RegisterEmailVerificationView(userId: state.uri.queryParameters['userId']!, secret: state.uri.queryParameters['secret']!),
-                     ),
-                 ]
-              )]),
+                  path: 'register',
+                  builder: (context, state) => const RegisterView(),
+                  redirect: (_, __) {
+                    if (authStatus == AuthStatus.authenticated && isVerified) {
+                      return '/';
+                    }else if(authStatus == AuthStatus.authenticated && !isVerified){
+                      return '/register/email-verification-sent';
+                    } else {
+                      return null;
+                    }
+                  },
+                  routes: [
+                    GoRoute(
+                      path: 'email-verification-sent',
+                      redirect: (_, state) {
+                        // check if loggedin / must be logged in
+                        var email =
+                            (state.extra as Map<String, dynamic>?)?['email'];
+                        return email == null ? '/register' : null;
+                      },
+                      builder: (context, state) {
+                        var email =
+                            (state.extra as Map<String, dynamic>?)?['email'];
+                        return EmailVerificationSentView(email: email);
+                      },
+                    ),
+                    GoRoute(
+                      path: 'email-verification',
+                      redirect: (_, state) {
+                        if (!state.uri.queryParameters.containsKey('userId') &&
+                            !state.uri.queryParameters.containsKey('secret')) {
+                          return '/register';
+                        } else {
+                          return null;
+                        }
+                      },
+                      builder: (context, state) =>
+                          EmailVerificationView(
+                              userId: state.uri.queryParameters['userId']!,
+                              secret: state.uri.queryParameters['secret']!),
+                    ),
+                  ])
+            ]),
       ],
     );
   }

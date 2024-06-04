@@ -9,18 +9,19 @@ import 'package:onmangeou/shared/constants/appwrite.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
 
-class RequestPasswordSentView extends StatefulWidget {
+class EmailVerificationSentView extends StatefulWidget {
   final String email;
-  const RequestPasswordSentView({super.key, required this.email});
+
+  const EmailVerificationSentView({super.key, required this.email});
 
   @override
-  State<RequestPasswordSentView> createState() =>
-      _RequestPasswordSentViewState();
+  EmailVerificationSentViewState createState() =>
+      EmailVerificationSentViewState();
 }
 
-class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
+class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
   Duration remainingTime =
-      const Duration(seconds: AppConstants.resendEmailWaitTime);
+    const Duration(seconds: AppConstants.resendEmailWaitTime);
   Timer? timer;
 
   startTimer() {
@@ -29,7 +30,7 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
         if (remainingTime.inSeconds == 0) {
           t.cancel();
           remainingTime =
-              const Duration(seconds: AppConstants.resendEmailWaitTime);
+          const Duration(seconds: AppConstants.resendEmailWaitTime);
         } else {
           remainingTime = remainingTime - const Duration(seconds: 1);
         }
@@ -37,17 +38,16 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
     });
   }
 
-  requestPasswordReset() {
+  resendEmail(){
     try {
       if (remainingTime.inSeconds > 0) return;
 
       startTimer();
-      context.read<AuthAPI>().requestPasswordReset(
-          email: widget.email, url: AppWriteConstants.resetPasswordUrl);
+      context.read<AuthAPI>().sendEmailVerification(url: AppWriteConstants.emailVerificationUrl);
     } on AppwriteException catch (e) {
       Utils.logError(
           message:
-              "RequestPasswordSentViewState: error while requesting password reset ",
+          "RegisterEmailVerificationViewState: error while requesting email verification ",
           error: e);
     }
   }
@@ -69,10 +69,10 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
     return Scaffold(
       body: Column(
         children: [
-          const Text('Request password reset sent'),
+          const Text('We send you a verification'),
           ElevatedButton(
             onPressed: () {
-              // resend email
+              resendEmail();
             },
             child: Text('send email again (${remainingTime.inSeconds})'),
           ),

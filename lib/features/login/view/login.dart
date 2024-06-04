@@ -20,7 +20,7 @@ class _LoginViewState extends State<LoginView> {
     try {
       context.read<AuthAPI>().loginWithPass(email: email, password: password);
     } on AppwriteException catch (e) {
-      Utils.logDebug(
+      Utils.logError(
           message: "LoginViewState: error while signing with password ",
           error: e);
     }

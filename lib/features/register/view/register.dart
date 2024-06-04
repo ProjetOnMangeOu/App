@@ -16,22 +16,26 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordConfirmController =
-      TextEditingController();
+  final TextEditingController passwordConfirmController = TextEditingController();
 
-  // TODO : Add ux feedback of errors.
   registerAccount(
       String username, String email, String password, String passwordConfirm) {
     try {
-      context.read<AuthAPI>().registerAccount(
-          email: email, password: password, username: username).then((success) {
-            if (success) {
-              context.push('/register/email-verification');
-            }
+      context
+          .read<AuthAPI>()
+          .registerAccount(email: email, password: password, username: username)
+          .then((res) {
+        if (res['success'] == true) {
+          context.push('/register/email-verification-sent');
+        } else {
+          // TODO : Add error feedback
+          Utils.logDebug(
+              message: "RegisterViewState: unsuccessful registration");
+        }
       });
     } on AppwriteException catch (e) {
-      Utils.logDebug(
-          message: "LoginViewState: error while signing with password ",
+      Utils.logError(
+          message: "RegisterViewState: error while registering account",
           error: e);
     }
   }
