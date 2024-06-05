@@ -42,7 +42,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
         }
       });
     } on AppwriteException catch (e) {
-      Utils.logDebug(
+      Utils.logError(
           message: "ResetPasswordViewState: error while resetting password ",
           error: e);
     }

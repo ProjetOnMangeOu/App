@@ -54,7 +54,7 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
-  Future<void> registerAccount(
+  Future<Map<String, Object>> registerAccount(
       {required String email,
       required String password,
       required String username}) async {
@@ -64,16 +64,48 @@ class AuthAPI extends ChangeNotifier {
           email: email,
           password: password,
           name: username);
+      await loginWithPass(email: email, password: password);
+      await sendEmailVerification(url: AppWriteConstants.emailVerificationUrl);
+      return {
+        'success': true,
+      };
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Register failed', error: e);
+      return {
+        'success': false,
+        'error': e,
+      };
+    }
+  }
+
+  Future<void> sendEmailVerification({required String url}) async {
+    try {
+      await account.createVerification(url: url);
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Send email verification failed', error: e);
+    }
+  }
+
+  Future<Map<String, Object>> confirmEmailVerification(
+      {required String userId, required String secret}) async {
+    try {
+      await account.updateVerification(userId: userId, secret: secret);
+      return {
+        'success': true,
+      };
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Email verification failed', error: e);
+      return {
+        'success': false,
+        'error': e,
+      };
     }
   }
 
   Future<void> loginWithPass(
       {required String email, required String password}) async {
     try {
-      await account.createEmailPasswordSession(
-          email: email, password: password);
+      await account.createEmailSession(email: email, password: password);
       await loadCurrentUser();
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Login failed', error: e);
@@ -106,7 +138,10 @@ class AuthAPI extends ChangeNotifier {
   }) async {
     try {
       await account.updateRecovery(
-          userId: userId, secret: secret, password: password);
+          userId: userId,
+          secret: secret,
+          password: password,
+          passwordAgain: passwordAgain);
       return {
         'success': true,
       };

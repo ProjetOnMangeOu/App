@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
@@ -18,18 +19,35 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController passwordConfirmController =
       TextEditingController();
 
-  // Il manque dans ce controller des retours pour informations incorrecte ou password non identique
-
   registerAccount(
       String username, String email, String password, String passwordConfirm) {
     try {
-      context.read<AuthAPI>().registerAccount(
-          email: email, password: password, username: username);
+      context
+          .read<AuthAPI>()
+          .registerAccount(email: email, password: password, username: username)
+          .then((res) {
+        if (res['success'] == true) {
+          context.push('/register/email-verification-sent');
+        } else {
+          // TODO : Add error feedback
+          Utils.logDebug(
+              message: "RegisterViewState: unsuccessful registration");
+        }
+      });
     } on AppwriteException catch (e) {
-      Utils.logDebug(
-          message: "LoginViewState: error while signing with password ",
+      Utils.logError(
+          message: "RegisterViewState: error while registering account",
           error: e);
     }
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    passwordConfirmController.dispose();
+    super.dispose();
   }
 
   @override
