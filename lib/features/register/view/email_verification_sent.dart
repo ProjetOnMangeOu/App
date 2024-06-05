@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onmangeou/core/domain/entities/user.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:onmangeou/shared/constants/app.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
