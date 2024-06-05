@@ -24,38 +24,36 @@ class AppRouter {
       initialLocation: '/',
       routes: [
         GoRoute(
-            path: '/',
-            builder: (context, state) {
-              if (authStatus == AuthStatus.authenticated && isVerified) {
-                return const HomeView();
-              } else {
-                return const WelcomeView();
-              }
-            },
-            redirect: (BuildContext context, GoRouterState state) {
-              final insideLoginPath =
-                  state.fullPath.toString().startsWith('/login') ||
-                      state.fullPath.toString().startsWith('/register');
+          path: '/',
+          builder: (context, state) {
+            if (authStatus == AuthStatus.authenticated && isVerified) {
+              return const HomeView();
+            } else {
+              return const WelcomeView();
+            }
+          },
+          redirect: (BuildContext context, GoRouterState state) {
+            final insideLoginPath =
+                state.fullPath.toString().startsWith('/login') ||
+                    state.fullPath.toString().startsWith('/register');
 
-              if (authStatus == AuthStatus.unauthenticated &&
-                  !insideLoginPath) {
-                return "/login";
-              } else if (authStatus == AuthStatus.authenticated &&
-                  !isVerified) {
-                return "/register/email-verification-sent";
-              } else {
-                return null;
-              }
-            },
-            ),
-
+            if (authStatus == AuthStatus.unauthenticated && !insideLoginPath) {
+              return "/login";
+            } else if (authStatus == AuthStatus.authenticated && !isVerified) {
+              return "/register/email-verification-sent";
+            } else {
+              return null;
+            }
+          },
+        ),
         GoRoute(
             path: '/login',
             builder: (context, state) => const LoginView(),
             redirect: (_, __) {
               if (authStatus == AuthStatus.authenticated && isVerified) {
                 return '/';
-              } else if (authStatus == AuthStatus.authenticated && !isVerified) {
+              } else if (authStatus == AuthStatus.authenticated &&
+                  !isVerified) {
                 return '/register/email-verification-sent';
               } else {
                 return null;
@@ -65,30 +63,25 @@ class AppRouter {
               GoRoute(
                   path: 'request-password',
                   builder: (context, state) =>
-                  const RequestPasswordResetView()),
+                      const RequestPasswordResetView()),
               GoRoute(
                 path: 'request-password-sent',
                 redirect: (_, state) {
-                  var email =
-                  (state.extra as Map<String, dynamic>?)?['email'];
+                  var email = (state.extra as Map<String, dynamic>?)?['email'];
                   return email == null ? '/login/request-password' : null;
                 },
                 builder: (context, state) {
-                  var email =
-                  (state.extra as Map<String, dynamic>?)?['email']!;
+                  var email = (state.extra as Map<String, dynamic>?)?['email']!;
                   return RequestPasswordSentView(email: email);
                 },
               ),
               GoRoute(
                   path: 'reset-password',
                   redirect: (_, state) {
-                    if (!state.uri.queryParameters
-                        .containsKey('userId') &&
-                        !state.uri.queryParameters
-                            .containsKey('secret')) {
+                    if (!state.uri.queryParameters.containsKey('userId') &&
+                        !state.uri.queryParameters.containsKey('secret')) {
                       Utils.logDebug(
-                          message:
-                          'Reset password: missing userId or secret');
+                          message: 'Reset password: missing userId or secret');
                       return '/login';
                     } else {
                       return null;
@@ -98,7 +91,6 @@ class AppRouter {
                       userId: state.uri.queryParameters['userId']!,
                       secret: state.uri.queryParameters['secret']!)),
             ]),
-
         GoRoute(
             path: '/register',
             builder: (context, state) => const RegisterView(),
@@ -113,7 +105,7 @@ class AppRouter {
               GoRoute(
                 path: 'email-verification-sent',
                 redirect: (_, state) {
-                  if(authStatus != AuthStatus.authenticated){
+                  if (authStatus != AuthStatus.authenticated) {
                     return '/login';
                   } else {
                     return null;
@@ -126,7 +118,7 @@ class AppRouter {
               GoRoute(
                 path: 'email-verification',
                 redirect: (_, state) {
-                  if(authStatus != AuthStatus.authenticated){
+                  if (authStatus != AuthStatus.authenticated) {
                     return '/login';
                   } else if (!state.uri.queryParameters.containsKey('userId') &&
                       !state.uri.queryParameters.containsKey('secret')) {
@@ -135,10 +127,9 @@ class AppRouter {
                     return null;
                   }
                 },
-                builder: (context, state) =>
-                    EmailVerificationView(
-                        userId: state.uri.queryParameters['userId']!,
-                        secret: state.uri.queryParameters['secret']!),
+                builder: (context, state) => EmailVerificationView(
+                    userId: state.uri.queryParameters['userId']!,
+                    secret: state.uri.queryParameters['secret']!),
               ),
             ]),
       ],

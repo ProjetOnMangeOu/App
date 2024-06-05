@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 class EmailVerificationView extends StatefulWidget {
   final String userId;
   final String secret;
-  const EmailVerificationView({super.key, required this.userId, required this.secret});
+  const EmailVerificationView(
+      {super.key, required this.userId, required this.secret});
 
   @override
   State<EmailVerificationView> createState() => _EmailVerificationViewState();
@@ -16,13 +17,15 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
   @override
   void initState() {
     super.initState();
-    context.read<AuthAPI>().confirmEmailVerification(
-        userId: widget.userId, secret: widget.secret).then((res) {
-          if(res['success'] == false) {
-            context.go('/register/email-verification-sent');
-          } else {
-            context.go('/');
-          }
+    context
+        .read<AuthAPI>()
+        .confirmEmailVerification(userId: widget.userId, secret: widget.secret)
+        .then((res) {
+      if (res['success'] == false) {
+        context.go('/register/email-verification-sent');
+      } else {
+        context.go('/');
+      }
     });
   }
 
@@ -31,4 +34,3 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
     return const Scaffold(body: Text('Email verification in progress...'));
   }
 }
-

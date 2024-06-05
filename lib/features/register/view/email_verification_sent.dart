@@ -23,8 +23,7 @@ class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
   Timer? timer;
 
   startTimer() {
-    remainingTime =
-    const Duration(seconds: AppConstants.resendEmailWaitTime);
+    remainingTime = const Duration(seconds: AppConstants.resendEmailWaitTime);
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() {
         if (remainingTime.inSeconds == 0) {
@@ -36,16 +35,18 @@ class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
     });
   }
 
-  resendEmail(){
+  resendEmail() {
     try {
       if (remainingTime.inSeconds > 0) return;
 
       startTimer();
-      context.read<AuthAPI>().sendEmailVerification(url: AppWriteConstants.emailVerificationUrl);
+      context
+          .read<AuthAPI>()
+          .sendEmailVerification(url: AppWriteConstants.emailVerificationUrl);
     } on AppwriteException catch (e) {
       Utils.logError(
           message:
-          "RegisterEmailVerificationViewState: error while requesting email verification ",
+              "RegisterEmailVerificationViewState: error while requesting email verification ",
           error: e);
     }
   }

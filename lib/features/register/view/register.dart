@@ -16,7 +16,8 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordConfirmController = TextEditingController();
+  final TextEditingController passwordConfirmController =
+      TextEditingController();
 
   registerAccount(
       String username, String email, String password, String passwordConfirm) {

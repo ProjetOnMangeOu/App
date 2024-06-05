@@ -69,7 +69,6 @@ class AuthAPI extends ChangeNotifier {
       return {
         'success': true,
       };
-
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Register failed', error: e);
       return {
@@ -87,7 +86,8 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, Object>> confirmEmailVerification({required String userId, required String secret}) async {
+  Future<Map<String, Object>> confirmEmailVerification(
+      {required String userId, required String secret}) async {
     try {
       await account.updateVerification(userId: userId, secret: secret);
       return {
@@ -105,8 +105,7 @@ class AuthAPI extends ChangeNotifier {
   Future<void> loginWithPass(
       {required String email, required String password}) async {
     try {
-      await account.createEmailSession(
-          email: email, password: password);
+      await account.createEmailSession(email: email, password: password);
       await loadCurrentUser();
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Login failed', error: e);
@@ -139,7 +138,10 @@ class AuthAPI extends ChangeNotifier {
   }) async {
     try {
       await account.updateRecovery(
-          userId: userId, secret: secret, password: password, passwordAgain: passwordAgain);
+          userId: userId,
+          secret: secret,
+          password: password,
+          passwordAgain: passwordAgain);
       return {
         'success': true,
       };
