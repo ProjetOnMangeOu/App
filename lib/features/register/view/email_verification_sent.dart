@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onmangeou/core/domain/entities/user.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:onmangeou/shared/constants/app.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
@@ -10,9 +11,7 @@ import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
 
 class EmailVerificationSentView extends StatefulWidget {
-  final String email;
-
-  const EmailVerificationSentView({super.key, required this.email});
+  const EmailVerificationSentView({super.key});
 
   @override
   EmailVerificationSentViewState createState() =>
@@ -20,17 +19,16 @@ class EmailVerificationSentView extends StatefulWidget {
 }
 
 class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
-  Duration remainingTime =
-    const Duration(seconds: AppConstants.resendEmailWaitTime);
+  late Duration remainingTime;
   Timer? timer;
 
   startTimer() {
+    remainingTime =
+    const Duration(seconds: AppConstants.resendEmailWaitTime);
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() {
         if (remainingTime.inSeconds == 0) {
           t.cancel();
-          remainingTime =
-          const Duration(seconds: AppConstants.resendEmailWaitTime);
         } else {
           remainingTime = remainingTime - const Duration(seconds: 1);
         }

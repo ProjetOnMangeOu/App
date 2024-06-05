@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:provider/provider.dart';
 
@@ -16,12 +17,18 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
   void initState() {
     super.initState();
     context.read<AuthAPI>().confirmEmailVerification(
-        userId: widget.userId, secret: widget.secret);
+        userId: widget.userId, secret: widget.secret).then((res) {
+          if(res['success'] == false) {
+            context.go('/register/email-verification-sent');
+          } else {
+            context.go('/');
+          }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: CircularProgressIndicator());
+    return const Scaffold(body: Text('Email verification in progress...'));
   }
 }
 

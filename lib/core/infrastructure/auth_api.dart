@@ -42,7 +42,6 @@ class AuthAPI extends ChangeNotifier {
   // Methods
   Future<void> loadCurrentUser() async {
     try {
-      Utils.logDebug(message: 'Loading current user');
       _currentUser = await account.get();
       _status = AuthStatus.authenticated;
     } on AppwriteException catch (e) {
@@ -88,11 +87,18 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
-  Future<void> confirmEmailVerification({required String userId, required String secret}) async {
+  Future<Map<String, Object>> confirmEmailVerification({required String userId, required String secret}) async {
     try {
       await account.updateVerification(userId: userId, secret: secret);
+      return {
+        'success': true,
+      };
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Email verification failed', error: e);
+      return {
+        'success': false,
+        'error': e,
+      };
     }
   }
 
