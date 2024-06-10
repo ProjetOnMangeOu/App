@@ -1,29 +1,34 @@
 import 'package:flutter/foundation.dart';
+import 'package:isar/isar.dart';
 import 'price.dart';
 import 'restaurant_hours.dart';
 import 'restaurant_service.dart';
 import 'restaurant_type.dart';
 
+part 'restaurant.g.dart';
+
+@collection
 class Restaurant extends ChangeNotifier {
-  late final String _id;
-  late final String _name;
-  late final String _address;
-  late final double _lat;
-  late final double _long;
-  late final String _phone;
-  late final double _googleMapRating;
-  late final String _image;
-  late final String _gmapLink;
-  late final String _website;
+  Id id = Isar.autoIncrement;
+  late String _documentId;
+  late String _name;
+  late String _address;
+  late double _lat;
+  late double _long;
+  late String _phone;
+  late double _googleMapRating;
+  late String _image;
+  late String _gmapLink;
+  late String _website;
 
   // Relationships
-  late final Price _price;
-  late final RestaurantType _restaurantType;
-  late final RestaurantService _restaurantService;
-  late final RestaurantHours _restaurantHours;
+  final IsarLink<Price> price = IsarLink<Price>();
+  final IsarLinks<RestaurantType> restaurantType = IsarLinks<RestaurantType>();
+  final IsarLinks<RestaurantService> restaurantServices = IsarLinks<RestaurantService>();
+  final IsarLinks<RestaurantHours> restaurantHours = IsarLinks<RestaurantHours>();
 
   // Getters
-  String get id => _id;
+  String get documentId => _documentId;
   String get name => _name;
   String get address => _address;
   double get lat => _lat;
@@ -34,39 +39,26 @@ class Restaurant extends ChangeNotifier {
   String get gmapLink => _gmapLink;
   String get website => _website;
 
-  Price get price => _price;
-  RestaurantType get restaurantType => _restaurantType;
-  RestaurantService get restaurantService => _restaurantService;
-  RestaurantHours get restaurantHours => _restaurantHours;
-
   // Constructor
   Restaurant({
-    required String id,
+    required String documentId,
     required String name,
     required String address,
     required double lat,
     required double long,
-    required Price price,
     required String phone,
-    required RestaurantType restaurantType,
     required double googleMapRating,
-    required RestaurantService restaurantService,
-    required RestaurantHours restaurantHours,
     required String image,
     required String gmapLink,
     required String website,
   }) {
-    _id = id;
+    _documentId = documentId;
     _name = name;
     _address = address;
     _lat = lat;
     _long = long;
-    _price = price;
     _phone = phone;
-    _restaurantType = restaurantType;
     _googleMapRating = googleMapRating;
-    _restaurantService = restaurantService;
-    _restaurantHours = restaurantHours;
     _image = image;
     _gmapLink = gmapLink;
     _website = website;
@@ -75,41 +67,48 @@ class Restaurant extends ChangeNotifier {
 
   // Factory method to create a Restaurant object from a Map
   factory Restaurant.fromMap(Map<String, dynamic> data) {
-    return Restaurant(
-      id: data['\$id'],
+    final restaurant = Restaurant(
+      documentId: data['\$id'],
       name: data['name'],
       address: data['address'],
       lat: data['lat'],
       long: data['long'],
-      price: Price.fromMap(data['price']),
       phone: data['phone'],
-      restaurantType: RestaurantType.fromMap(data['restaurantTypes']),
       googleMapRating: data['googleMapRating'],
-      restaurantService: RestaurantService.fromMap(data['restaurantService']),
-      restaurantHours: RestaurantHours.fromMap(data['restaurantHours']),
       image: data['image'],
       gmapLink: data['gmapLink'],
       website: data['website'],
     );
+    restaurant.price.value = Price.fromMap(data['price']);
+    restaurant.restaurantType.addAll(
+      (data['restaurantType'] as List).map((e) => RestaurantType.fromMap(e)),
+    );
+    restaurant.restaurantServices.addAll(
+      (data['restaurantServices'] as List).map((e) => RestaurantService.fromMap(e)),
+    );
+    restaurant.restaurantHours.addAll(
+      (data['restaurantHours'] as List).map((e) => RestaurantHours.fromMap(e)),
+    );
+    return restaurant;
   }
 
   // Method to convert a Restaurant object to a Map
   Map<String, dynamic> toMap() {
     return {
-      '\$id': _id,
+      '\$id': _documentId,
       'name': _name,
       'address': _address,
       'lat': _lat,
       'long': _long,
-      'price': _price.toMap(),
       'phone': _phone,
-      'restaurantTypes': _restaurantType.toMap(),
       'googleMapRating': _googleMapRating,
-      'restaurantService': _restaurantService.toMap(),
-      'restaurantHours': _restaurantHours.toMap(),
       'image': _image,
       'gmapLink': _gmapLink,
       'website': _website,
+      'price': price.value?.toMap(),
+      'restaurantType': restaurantType.map((type) => type.toMap()).toList(),
+      'restaurantServices': restaurantServices.map((service) => service.toMap()).toList(),
+      'restaurantHours': restaurantHours.map((hours) => hours.toMap()).toList(),
     };
   }
 
@@ -119,15 +118,17 @@ class Restaurant extends ChangeNotifier {
     _address = updatedRestaurant.address;
     _lat = updatedRestaurant.lat;
     _long = updatedRestaurant.long;
-    _price = updatedRestaurant.price;
     _phone = updatedRestaurant.phone;
-    _restaurantType = updatedRestaurant.restaurantType;
     _googleMapRating = updatedRestaurant.googleMapRating;
-    _restaurantService = updatedRestaurant.restaurantService;
-    _restaurantHours = updatedRestaurant.restaurantHours;
     _image = updatedRestaurant.image;
     _gmapLink = updatedRestaurant.gmapLink;
     _website = updatedRestaurant.website;
+    price.value = updatedRestaurant.price.value;
+    restaurantType.addAll(updatedRestaurant.restaurantType);
+    restaurantServices.clear();
+    restaurantServices.addAll(updatedRestaurant.restaurantServices);
+    restaurantHours.clear();
+    restaurantHours.addAll(updatedRestaurant.restaurantHours);
     notifyListeners();
   }
 }
