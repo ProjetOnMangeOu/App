@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onmangeou/app_router.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
+import 'package:onmangeou/core/infrastructure/restaurant_api.dart';
 import 'package:provider/provider.dart';
 import 'package:onmangeou/core/domain/entities/user.dart';
 
@@ -15,6 +16,15 @@ void main() {
         update: (_, auth, previousUser) {
           if (auth.status == AuthStatus.authenticated) {
             return User(user: auth.currentUser);
+          }
+          return null;
+        },
+      ),
+      ChangeNotifierProxyProvider<AuthAPI, RestaurantAPI?>(
+        create: (_) => null,
+        update: (_, auth, previousRestaurantAPI) {
+          if (auth.status == AuthStatus.authenticated) {
+            return RestaurantAPI();
           }
           return null;
         },
