@@ -15,6 +15,7 @@ class RestaurantAPI extends ChangeNotifier {
   Client client = Client();
   late final Databases database;
   late final Isar.Isar isar;
+  List<Restaurant> restaurants = [];
 
   // Constructor
   RestaurantAPI() {
@@ -38,6 +39,7 @@ class RestaurantAPI extends ChangeNotifier {
     isar = await Isar.Isar.open(
       [RestaurantSchema, PriceSchema, RestaurantTypesSchema, RestaurantServiceSchema, RestaurantHoursSchema],
       directory: dir.path,
+      inspector: kReleaseMode ? false : true,
     );
   }
 
@@ -52,18 +54,19 @@ class RestaurantAPI extends ChangeNotifier {
           .map((doc) => Restaurant.fromMap(doc.data))
           .toList();
 
-
       // TODO: Save fetched data to cache
 
       return restaurants;
     } on AppwriteException catch (e) {
-      Utils.logError(message: 'Fetch restaurants failed', error: e);
+      Utils.logError(message: '[RestaurantAPI] fetch restaurants failed', error: e);
       return [];
     }
   }
   
-  Future<List<Restaurant>> getRestaurants() async {
-    return await fetchRestaurantsFromAppwrite();
+  Future<void> getRestaurants() async {
+    Utils.logDebug(message: '[RestaurantAPI] Getting restaurants...');
+    restaurants = await fetchRestaurantsFromAppwrite();
+    notifyListeners();
   }
 
 }

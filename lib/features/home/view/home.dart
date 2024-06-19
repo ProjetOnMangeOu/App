@@ -15,12 +15,10 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  List<Restaurant> restaurants = [];
-
-
-  void getRestaurants() async {
+  void getRestaurants() {
     Utils.logDebug(message: '[Home] Getting restaurants...');
-    restaurants = (await context.read<RestaurantAPI?>()?.getRestaurants()) ?? [];
+    context.read<RestaurantAPI>().getRestaurants();
+    // Trigger fetching restaurants with geo-location
   }
 
   @override
@@ -34,14 +32,22 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       body: Column(children: [
         const Text('Home'),
-        Text('Restaurants: ${restaurants.length}'),
+        Consumer<RestaurantAPI>(
+          builder: (context, restaurantAPI, child) {
+            return Text('Restaurants: ${restaurantAPI.restaurants.length}');
+          },
+        ),
         Expanded(
-          child: ListView.builder(
-            itemCount: restaurants.length,
-            itemBuilder: (context, index) {
-              final restaurant = restaurants[index];
-              return ListTile(
-                title: Text(restaurant.name),
+          child: Consumer<RestaurantAPI>(
+            builder: (context, restaurantAPI, child) {
+              return ListView.builder(
+                itemCount: restaurantAPI.restaurants.length,
+                itemBuilder: (context, index) {
+                  final restaurant = restaurantAPI.restaurants[index];
+                  return ListTile(
+                    title: Text(restaurant.name),
+                  );
+                },
               );
             },
           ),
