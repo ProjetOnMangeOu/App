@@ -86,15 +86,15 @@ const RestaurantSchema = CollectionSchema(
       target: r'Price',
       single: true,
     ),
-    r'restaurantType': LinkSchema(
-      id: 217496890229569662,
-      name: r'restaurantType',
-      target: r'RestaurantType',
+    r'restaurantTypes': LinkSchema(
+      id: 9140333828943407781,
+      name: r'restaurantTypes',
+      target: r'RestaurantTypes',
       single: false,
     ),
-    r'restaurantServices': LinkSchema(
-      id: -596840168117337232,
-      name: r'restaurantServices',
+    r'restaurantService': LinkSchema(
+      id: 2301922967495093877,
+      name: r'restaurantService',
       target: r'RestaurantService',
       single: false,
     ),
@@ -210,8 +210,8 @@ Id _restaurantGetId(Restaurant object) {
 List<IsarLinkBase<dynamic>> _restaurantGetLinks(Restaurant object) {
   return [
     object.price,
-    object.restaurantType,
-    object.restaurantServices,
+    object.restaurantTypes,
+    object.restaurantService,
     object.restaurantHours
   ];
 }
@@ -219,10 +219,10 @@ List<IsarLinkBase<dynamic>> _restaurantGetLinks(Restaurant object) {
 void _restaurantAttach(IsarCollection<dynamic> col, Id id, Restaurant object) {
   object.id = id;
   object.price.attach(col, col.isar.collection<Price>(), r'price', id);
-  object.restaurantType.attach(
-      col, col.isar.collection<RestaurantType>(), r'restaurantType', id);
-  object.restaurantServices.attach(
-      col, col.isar.collection<RestaurantService>(), r'restaurantServices', id);
+  object.restaurantTypes.attach(
+      col, col.isar.collection<RestaurantTypes>(), r'restaurantTypes', id);
+  object.restaurantService.attach(
+      col, col.isar.collection<RestaurantService>(), r'restaurantService', id);
   object.restaurantHours.attach(
       col, col.isar.collection<RestaurantHours>(), r'restaurantHours', id);
 }
@@ -1503,56 +1503,57 @@ extension RestaurantQueryLinks
     });
   }
 
-  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> restaurantType(
-      FilterQuery<RestaurantType> q) {
+  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> restaurantTypes(
+      FilterQuery<RestaurantTypes> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'restaurantType');
+      return query.link(q, r'restaurantTypes');
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantTypeLengthEqualTo(int length) {
+      restaurantTypesLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'restaurantType', length, true, length, true);
+      return query.linkLength(r'restaurantTypes', length, true, length, true);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantTypeIsEmpty() {
+      restaurantTypesIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'restaurantType', 0, true, 0, true);
+      return query.linkLength(r'restaurantTypes', 0, true, 0, true);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantTypeIsNotEmpty() {
+      restaurantTypesIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'restaurantType', 0, false, 999999, true);
+      return query.linkLength(r'restaurantTypes', 0, false, 999999, true);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantTypeLengthLessThan(
+      restaurantTypesLengthLessThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'restaurantType', 0, true, length, include);
+      return query.linkLength(r'restaurantTypes', 0, true, length, include);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantTypeLengthGreaterThan(
+      restaurantTypesLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'restaurantType', length, include, 999999, true);
+      return query.linkLength(
+          r'restaurantTypes', length, include, 999999, true);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantTypeLengthBetween(
+      restaurantTypesLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1560,62 +1561,61 @@ extension RestaurantQueryLinks
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
-          r'restaurantType', lower, includeLower, upper, includeUpper);
+          r'restaurantTypes', lower, includeLower, upper, includeUpper);
     });
   }
 
-  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantServices(FilterQuery<RestaurantService> q) {
+  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> restaurantService(
+      FilterQuery<RestaurantService> q) {
     return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'restaurantServices');
+      return query.link(q, r'restaurantService');
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantServicesLengthEqualTo(int length) {
+      restaurantServiceLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(
-          r'restaurantServices', length, true, length, true);
+      return query.linkLength(r'restaurantService', length, true, length, true);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantServicesIsEmpty() {
+      restaurantServiceIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'restaurantServices', 0, true, 0, true);
+      return query.linkLength(r'restaurantService', 0, true, 0, true);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantServicesIsNotEmpty() {
+      restaurantServiceIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'restaurantServices', 0, false, 999999, true);
+      return query.linkLength(r'restaurantService', 0, false, 999999, true);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantServicesLengthLessThan(
+      restaurantServiceLengthLessThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'restaurantServices', 0, true, length, include);
+      return query.linkLength(r'restaurantService', 0, true, length, include);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantServicesLengthGreaterThan(
+      restaurantServiceLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
-          r'restaurantServices', length, include, 999999, true);
+          r'restaurantService', length, include, 999999, true);
     });
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
-      restaurantServicesLengthBetween(
+      restaurantServiceLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1623,7 +1623,7 @@ extension RestaurantQueryLinks
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(
-          r'restaurantServices', lower, includeLower, upper, includeUpper);
+          r'restaurantService', lower, includeLower, upper, includeUpper);
     });
   }
 

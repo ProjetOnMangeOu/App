@@ -1,9 +1,9 @@
 import 'package:isar/isar.dart';
 
-part 'restaurant_type.g.dart';
+part 'restaurant_types.g.dart';
 
 @collection
-class RestaurantType {
+class RestaurantTypes {
   Id id = Isar.autoIncrement;
   late final String _documentId;
   late final String _name;
@@ -13,7 +13,7 @@ class RestaurantType {
   String get name => _name;
 
   // Constructor
-  RestaurantType({
+  RestaurantTypes({
     required String documentId,
     required String name,
   }) {
@@ -22,8 +22,8 @@ class RestaurantType {
   }
 
   // Factory method to create a RestaurantType object from a Map
-  factory RestaurantType.fromMap(Map<String, dynamic> data) {
-    return RestaurantType(
+  factory RestaurantTypes.fromMap(Map<String, dynamic> data) {
+    return RestaurantTypes(
       documentId: data['\$id'],
       name: data['name'],
     );

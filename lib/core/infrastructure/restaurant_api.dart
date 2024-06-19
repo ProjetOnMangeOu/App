@@ -1,21 +1,20 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/foundation.dart';
-import 'package:isar/isar.dart';
-import 'package:onmangeou/core/domain/entities/metadata.dart';
+import 'package:isar/isar.dart' as Isar;
 import 'package:onmangeou/core/domain/entities/price.dart';
 import 'package:onmangeou/core/domain/entities/restaurant.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_hours.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_service.dart';
-import 'package:onmangeou/core/domain/entities/restaurant_type.dart';
-import 'package:onmangeou/shared/constants/app.dart';
+import 'package:onmangeou/core/domain/entities/restaurant_types.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class RestaurantAPI extends ChangeNotifier {
   Client client = Client();
   late final Databases database;
-  late final Isar isar;
+  late final Isar.Isar isar;
 
   // Constructor
   RestaurantAPI() {
@@ -34,9 +33,10 @@ class RestaurantAPI extends ChangeNotifier {
 
   // Initialize Isar
   Future<void> initIsar() async {
+    Utils.logDebug(message: '[RestaurantAPI] Initializing Isar...');
     final dir = await getApplicationDocumentsDirectory();
-    isar = await Isar.open(
-      [RestaurantSchema, PriceSchema, RestaurantTypeSchema, RestaurantServiceSchema, RestaurantHoursSchema, MetadataSchema],
+    isar = await Isar.Isar.open(
+      [RestaurantSchema, PriceSchema, RestaurantTypesSchema, RestaurantServiceSchema, RestaurantHoursSchema],
       directory: dir.path,
     );
   }
@@ -52,8 +52,8 @@ class RestaurantAPI extends ChangeNotifier {
           .map((doc) => Restaurant.fromMap(doc.data))
           .toList();
 
-      // Save fetched data to cache
-      await saveRestaurantsToCache(restaurants);
+
+      // TODO: Save fetched data to cache
 
       return restaurants;
     } on AppwriteException catch (e) {
@@ -61,54 +61,9 @@ class RestaurantAPI extends ChangeNotifier {
       return [];
     }
   }
-
-  // Method to get restaurants with caching logic
+  
   Future<List<Restaurant>> getRestaurants() async {
-    // Check if the cache is valid
-    if (await isCacheValid()) {
-      // Return cached data if valid
-      final cachedRestaurants = await fetchRestaurantsFromCache();
-      if (cachedRestaurants.isNotEmpty) {
-        return cachedRestaurants;
-      }
-    }
-    // Fetch from Appwrite if cache is invalid or empty
     return await fetchRestaurantsFromAppwrite();
   }
 
-  // Check if cache is valid based on the expiration duration
-  Future<bool> isCacheValid() async {
-    final lastUpdated = await getLastUpdatedTime();
-    if (lastUpdated == null) return false;
-    final now = DateTime.now();
-    return now.difference(lastUpdated) < AppConstants.cacheExpirationTime;
-  }
-
-  // Fetch restaurants from Isar cache
-  Future<List<Restaurant>> fetchRestaurantsFromCache() async {
-    return await isar.restaurants.where().findAll();
-  }
-
-  // Save fetched restaurants to Isar cache
-  Future<void> saveRestaurantsToCache(List<Restaurant> restaurants) async {
-    await isar.writeTxn(() async {
-      await isar.restaurants.clear();
-      await isar.restaurants.putAll(restaurants);
-      await putLastUpdatedTime(DateTime.now());
-    });
-  }
-
-  // Fetch last updated time from Metadata collection
-  Future<DateTime?> getLastUpdatedTime() async {
-    final meta = await isar.metadatas.where().findFirst();
-    return meta?.lastUpdated;
-  }
-
-  // Save last updated time to Metadata collection
-  Future<void> putLastUpdatedTime(DateTime time) async {
-    final meta = Metadata()..lastUpdated = time;
-    await isar.writeTxn(() async {
-      await isar.metadatas.put(meta);
-    });
-  }
 }

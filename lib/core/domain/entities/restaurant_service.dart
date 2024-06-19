@@ -8,25 +8,21 @@ class RestaurantService {
   late final String _documentId;
   late final String _name;
   late final List<String> _details;
-  late final String _restaurantId;
 
   // Getters
   String get documentId => _documentId;
   String get name => _name;
   List<String> get details => _details;
-  String get restaurantId => _restaurantId;
 
   // Constructor
   RestaurantService({
     required String documentId,
     required String name,
     required List<String> details,
-    required String restaurantId,
   }) {
     _documentId = documentId;
     _name = name;
     _details = details;
-    _restaurantId = restaurantId;
   }
 
   // Factory method to create a RestaurantService object from a Map
@@ -35,7 +31,6 @@ class RestaurantService {
       documentId: data['\$id'],
       name: data['name'],
       details: List<String>.from(data['details']),
-      restaurantId: data['restaurant'],
     );
   }
 
@@ -45,7 +40,6 @@ class RestaurantService {
       '\$id': _documentId,
       'name': _name,
       'details': _details,
-      'restaurant': _restaurantId,
     };
   }
 }

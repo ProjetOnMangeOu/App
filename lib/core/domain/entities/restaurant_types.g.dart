@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'restaurant_type.dart';
+part of 'restaurant_types.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,13 +9,13 @@ part of 'restaurant_type.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetRestaurantTypeCollection on Isar {
-  IsarCollection<RestaurantType> get restaurantTypes => this.collection();
+extension GetRestaurantTypesCollection on Isar {
+  IsarCollection<RestaurantTypes> get restaurantTypes => this.collection();
 }
 
-const RestaurantTypeSchema = CollectionSchema(
-  name: r'RestaurantType',
-  id: -5091970557785646966,
+const RestaurantTypesSchema = CollectionSchema(
+  name: r'RestaurantTypes',
+  id: -5260409386775660124,
   properties: {
     r'documentId': PropertySchema(
       id: 0,
@@ -28,22 +28,22 @@ const RestaurantTypeSchema = CollectionSchema(
       type: IsarType.string,
     )
   },
-  estimateSize: _restaurantTypeEstimateSize,
-  serialize: _restaurantTypeSerialize,
-  deserialize: _restaurantTypeDeserialize,
-  deserializeProp: _restaurantTypeDeserializeProp,
+  estimateSize: _restaurantTypesEstimateSize,
+  serialize: _restaurantTypesSerialize,
+  deserialize: _restaurantTypesDeserialize,
+  deserializeProp: _restaurantTypesDeserializeProp,
   idName: r'id',
   indexes: {},
   links: {},
   embeddedSchemas: {},
-  getId: _restaurantTypeGetId,
-  getLinks: _restaurantTypeGetLinks,
-  attach: _restaurantTypeAttach,
+  getId: _restaurantTypesGetId,
+  getLinks: _restaurantTypesGetLinks,
+  attach: _restaurantTypesAttach,
   version: '3.1.0+1',
 );
 
-int _restaurantTypeEstimateSize(
-  RestaurantType object,
+int _restaurantTypesEstimateSize(
+  RestaurantTypes object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -53,8 +53,8 @@ int _restaurantTypeEstimateSize(
   return bytesCount;
 }
 
-void _restaurantTypeSerialize(
-  RestaurantType object,
+void _restaurantTypesSerialize(
+  RestaurantTypes object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -63,13 +63,13 @@ void _restaurantTypeSerialize(
   writer.writeString(offsets[1], object.name);
 }
 
-RestaurantType _restaurantTypeDeserialize(
+RestaurantTypes _restaurantTypesDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = RestaurantType(
+  final object = RestaurantTypes(
     documentId: reader.readString(offsets[0]),
     name: reader.readString(offsets[1]),
   );
@@ -77,7 +77,7 @@ RestaurantType _restaurantTypeDeserialize(
   return object;
 }
 
-P _restaurantTypeDeserializeProp<P>(
+P _restaurantTypesDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -93,31 +93,31 @@ P _restaurantTypeDeserializeProp<P>(
   }
 }
 
-Id _restaurantTypeGetId(RestaurantType object) {
+Id _restaurantTypesGetId(RestaurantTypes object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _restaurantTypeGetLinks(RestaurantType object) {
+List<IsarLinkBase<dynamic>> _restaurantTypesGetLinks(RestaurantTypes object) {
   return [];
 }
 
-void _restaurantTypeAttach(
-    IsarCollection<dynamic> col, Id id, RestaurantType object) {
+void _restaurantTypesAttach(
+    IsarCollection<dynamic> col, Id id, RestaurantTypes object) {
   object.id = id;
 }
 
-extension RestaurantTypeQueryWhereSort
-    on QueryBuilder<RestaurantType, RestaurantType, QWhere> {
-  QueryBuilder<RestaurantType, RestaurantType, QAfterWhere> anyId() {
+extension RestaurantTypesQueryWhereSort
+    on QueryBuilder<RestaurantTypes, RestaurantTypes, QWhere> {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 }
 
-extension RestaurantTypeQueryWhere
-    on QueryBuilder<RestaurantType, RestaurantType, QWhereClause> {
-  QueryBuilder<RestaurantType, RestaurantType, QAfterWhereClause> idEqualTo(
+extension RestaurantTypesQueryWhere
+    on QueryBuilder<RestaurantTypes, RestaurantTypes, QWhereClause> {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterWhereClause> idEqualTo(
       Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
@@ -127,8 +127,8 @@ extension RestaurantTypeQueryWhere
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterWhereClause> idNotEqualTo(
-      Id id) {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterWhereClause>
+      idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -150,9 +150,8 @@ extension RestaurantTypeQueryWhere
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterWhereClause> idGreaterThan(
-      Id id,
-      {bool include = false}) {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterWhereClause>
+      idGreaterThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -160,7 +159,7 @@ extension RestaurantTypeQueryWhere
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterWhereClause> idLessThan(
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterWhereClause> idLessThan(
       Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
@@ -170,7 +169,7 @@ extension RestaurantTypeQueryWhere
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterWhereClause> idBetween(
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -187,9 +186,9 @@ extension RestaurantTypeQueryWhere
   }
 }
 
-extension RestaurantTypeQueryFilter
-    on QueryBuilder<RestaurantType, RestaurantType, QFilterCondition> {
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+extension RestaurantTypesQueryFilter
+    on QueryBuilder<RestaurantTypes, RestaurantTypes, QFilterCondition> {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -203,7 +202,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdGreaterThan(
     String value, {
     bool include = false,
@@ -219,7 +218,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdLessThan(
     String value, {
     bool include = false,
@@ -235,7 +234,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdBetween(
     String lower,
     String upper, {
@@ -255,7 +254,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -269,7 +268,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -283,7 +282,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -294,7 +293,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -305,7 +304,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -315,7 +314,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       documentIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -325,8 +324,8 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition> idEqualTo(
-      Id value) {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
+      idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -335,7 +334,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       idGreaterThan(
     Id value, {
     bool include = false,
@@ -349,7 +348,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       idLessThan(
     Id value, {
     bool include = false,
@@ -363,7 +362,8 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition> idBetween(
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
+      idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -380,7 +380,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -394,7 +394,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameGreaterThan(
     String value, {
     bool include = false,
@@ -410,7 +410,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameLessThan(
     String value, {
     bool include = false,
@@ -426,7 +426,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameBetween(
     String lower,
     String upper, {
@@ -446,7 +446,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameStartsWith(
     String value, {
     bool caseSensitive = true,
@@ -460,7 +460,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameEndsWith(
     String value, {
     bool caseSensitive = true,
@@ -474,7 +474,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -485,7 +485,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -496,7 +496,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -506,7 +506,7 @@ extension RestaurantTypeQueryFilter
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterFilterCondition>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterFilterCondition>
       nameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -517,92 +517,94 @@ extension RestaurantTypeQueryFilter
   }
 }
 
-extension RestaurantTypeQueryObject
-    on QueryBuilder<RestaurantType, RestaurantType, QFilterCondition> {}
+extension RestaurantTypesQueryObject
+    on QueryBuilder<RestaurantTypes, RestaurantTypes, QFilterCondition> {}
 
-extension RestaurantTypeQueryLinks
-    on QueryBuilder<RestaurantType, RestaurantType, QFilterCondition> {}
+extension RestaurantTypesQueryLinks
+    on QueryBuilder<RestaurantTypes, RestaurantTypes, QFilterCondition> {}
 
-extension RestaurantTypeQuerySortBy
-    on QueryBuilder<RestaurantType, RestaurantType, QSortBy> {
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy>
+extension RestaurantTypesQuerySortBy
+    on QueryBuilder<RestaurantTypes, RestaurantTypes, QSortBy> {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy>
       sortByDocumentId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'documentId', Sort.asc);
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy>
       sortByDocumentIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'documentId', Sort.desc);
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy> sortByName() {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy> sortByNameDesc() {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy>
+      sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
 }
 
-extension RestaurantTypeQuerySortThenBy
-    on QueryBuilder<RestaurantType, RestaurantType, QSortThenBy> {
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy>
+extension RestaurantTypesQuerySortThenBy
+    on QueryBuilder<RestaurantTypes, RestaurantTypes, QSortThenBy> {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy>
       thenByDocumentId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'documentId', Sort.asc);
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy>
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy>
       thenByDocumentIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'documentId', Sort.desc);
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy> thenById() {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy> thenByName() {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QAfterSortBy> thenByNameDesc() {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QAfterSortBy>
+      thenByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
 }
 
-extension RestaurantTypeQueryWhereDistinct
-    on QueryBuilder<RestaurantType, RestaurantType, QDistinct> {
-  QueryBuilder<RestaurantType, RestaurantType, QDistinct> distinctByDocumentId(
-      {bool caseSensitive = true}) {
+extension RestaurantTypesQueryWhereDistinct
+    on QueryBuilder<RestaurantTypes, RestaurantTypes, QDistinct> {
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QDistinct>
+      distinctByDocumentId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'documentId', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<RestaurantType, RestaurantType, QDistinct> distinctByName(
+  QueryBuilder<RestaurantTypes, RestaurantTypes, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
@@ -610,21 +612,21 @@ extension RestaurantTypeQueryWhereDistinct
   }
 }
 
-extension RestaurantTypeQueryProperty
-    on QueryBuilder<RestaurantType, RestaurantType, QQueryProperty> {
-  QueryBuilder<RestaurantType, int, QQueryOperations> idProperty() {
+extension RestaurantTypesQueryProperty
+    on QueryBuilder<RestaurantTypes, RestaurantTypes, QQueryProperty> {
+  QueryBuilder<RestaurantTypes, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<RestaurantType, String, QQueryOperations> documentIdProperty() {
+  QueryBuilder<RestaurantTypes, String, QQueryOperations> documentIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'documentId');
     });
   }
 
-  QueryBuilder<RestaurantType, String, QQueryOperations> nameProperty() {
+  QueryBuilder<RestaurantTypes, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
     });

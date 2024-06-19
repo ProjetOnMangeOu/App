@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onmangeou/core/domain/entities/restaurant.dart';
 import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:onmangeou/core/infrastructure/restaurant_api.dart';
+import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
@@ -18,6 +19,7 @@ class _HomeViewState extends State<HomeView> {
 
 
   void getRestaurants() async {
+    Utils.logDebug(message: '[Home] Getting restaurants...');
     restaurants = (await context.read<RestaurantAPI?>()?.getRestaurants()) ?? [];
   }
 
@@ -32,6 +34,7 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       body: Column(children: [
         const Text('Home'),
+        Text('Restaurants: ${restaurants.length}'),
         Expanded(
           child: ListView.builder(
             itemCount: restaurants.length,

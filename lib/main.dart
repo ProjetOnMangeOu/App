@@ -14,19 +14,19 @@ void main() {
       ChangeNotifierProxyProvider<AuthAPI, User?>(
         create: (_) => null,
         update: (_, auth, previousUser) {
-          if (auth.status == AuthStatus.authenticated) {
+          if (auth.status == AuthStatus.authenticated && previousUser == null) {
             return User(user: auth.currentUser);
           }
-          return null;
+          return previousUser;
         },
       ),
       ChangeNotifierProxyProvider<AuthAPI, RestaurantAPI?>(
         create: (_) => null,
         update: (_, auth, previousRestaurantAPI) {
-          if (auth.status == AuthStatus.authenticated) {
+          if (auth.status == AuthStatus.authenticated && previousRestaurantAPI == null) {
             return RestaurantAPI();
           }
-          return null;
+          return previousRestaurantAPI;
         },
       ),
     ],

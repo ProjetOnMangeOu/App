@@ -36,11 +36,6 @@ const RestaurantHoursSchema = CollectionSchema(
       id: 3,
       name: r'openingTime',
       type: IsarType.string,
-    ),
-    r'restaurantId': PropertySchema(
-      id: 4,
-      name: r'restaurantId',
-      type: IsarType.string,
     )
   },
   estimateSize: _restaurantHoursEstimateSize,
@@ -67,7 +62,6 @@ int _restaurantHoursEstimateSize(
   bytesCount += 3 + object.dayOfWeek.length * 3;
   bytesCount += 3 + object.documentId.length * 3;
   bytesCount += 3 + object.openingTime.length * 3;
-  bytesCount += 3 + object.restaurantId.length * 3;
   return bytesCount;
 }
 
@@ -81,7 +75,6 @@ void _restaurantHoursSerialize(
   writer.writeString(offsets[1], object.dayOfWeek);
   writer.writeString(offsets[2], object.documentId);
   writer.writeString(offsets[3], object.openingTime);
-  writer.writeString(offsets[4], object.restaurantId);
 }
 
 RestaurantHours _restaurantHoursDeserialize(
@@ -95,7 +88,6 @@ RestaurantHours _restaurantHoursDeserialize(
     dayOfWeek: reader.readString(offsets[1]),
     documentId: reader.readString(offsets[2]),
     openingTime: reader.readString(offsets[3]),
-    restaurantId: reader.readString(offsets[4]),
   );
   object.id = id;
   return object;
@@ -115,8 +107,6 @@ P _restaurantHoursDeserializeProp<P>(
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
-    case 4:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -817,142 +807,6 @@ extension RestaurantHoursQueryFilter
       ));
     });
   }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'restaurantId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'restaurantId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'restaurantId',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterFilterCondition>
-      restaurantIdIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'restaurantId',
-        value: '',
-      ));
-    });
-  }
 }
 
 extension RestaurantHoursQueryObject
@@ -1016,20 +870,6 @@ extension RestaurantHoursQuerySortBy
       sortByOpeningTimeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'openingTime', Sort.desc);
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterSortBy>
-      sortByRestaurantId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'restaurantId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterSortBy>
-      sortByRestaurantIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'restaurantId', Sort.desc);
     });
   }
 }
@@ -1103,20 +943,6 @@ extension RestaurantHoursQuerySortThenBy
       return query.addSortBy(r'openingTime', Sort.desc);
     });
   }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterSortBy>
-      thenByRestaurantId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'restaurantId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QAfterSortBy>
-      thenByRestaurantIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'restaurantId', Sort.desc);
-    });
-  }
 }
 
 extension RestaurantHoursQueryWhereDistinct
@@ -1146,13 +972,6 @@ extension RestaurantHoursQueryWhereDistinct
       distinctByOpeningTime({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'openingTime', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<RestaurantHours, RestaurantHours, QDistinct>
-      distinctByRestaurantId({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'restaurantId', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1188,13 +1007,6 @@ extension RestaurantHoursQueryProperty
       openingTimeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'openingTime');
-    });
-  }
-
-  QueryBuilder<RestaurantHours, String, QQueryOperations>
-      restaurantIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'restaurantId');
     });
   }
 }

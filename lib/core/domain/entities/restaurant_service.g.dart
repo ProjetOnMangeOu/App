@@ -31,11 +31,6 @@ const RestaurantServiceSchema = CollectionSchema(
       id: 2,
       name: r'name',
       type: IsarType.string,
-    ),
-    r'restaurantId': PropertySchema(
-      id: 3,
-      name: r'restaurantId',
-      type: IsarType.string,
     )
   },
   estimateSize: _restaurantServiceEstimateSize,
@@ -67,7 +62,6 @@ int _restaurantServiceEstimateSize(
   }
   bytesCount += 3 + object.documentId.length * 3;
   bytesCount += 3 + object.name.length * 3;
-  bytesCount += 3 + object.restaurantId.length * 3;
   return bytesCount;
 }
 
@@ -80,7 +74,6 @@ void _restaurantServiceSerialize(
   writer.writeStringList(offsets[0], object.details);
   writer.writeString(offsets[1], object.documentId);
   writer.writeString(offsets[2], object.name);
-  writer.writeString(offsets[3], object.restaurantId);
 }
 
 RestaurantService _restaurantServiceDeserialize(
@@ -93,7 +86,6 @@ RestaurantService _restaurantServiceDeserialize(
     details: reader.readStringList(offsets[0]) ?? [],
     documentId: reader.readString(offsets[1]),
     name: reader.readString(offsets[2]),
-    restaurantId: reader.readString(offsets[3]),
   );
   object.id = id;
   return object;
@@ -111,8 +103,6 @@ P _restaurantServiceDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
-    case 3:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -767,142 +757,6 @@ extension RestaurantServiceQueryFilter
       ));
     });
   }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'restaurantId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'restaurantId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'restaurantId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'restaurantId',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterFilterCondition>
-      restaurantIdIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'restaurantId',
-        value: '',
-      ));
-    });
-  }
 }
 
 extension RestaurantServiceQueryObject
@@ -938,20 +792,6 @@ extension RestaurantServiceQuerySortBy
       sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterSortBy>
-      sortByRestaurantId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'restaurantId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterSortBy>
-      sortByRestaurantIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'restaurantId', Sort.desc);
     });
   }
 }
@@ -998,20 +838,6 @@ extension RestaurantServiceQuerySortThenBy
       return query.addSortBy(r'name', Sort.desc);
     });
   }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterSortBy>
-      thenByRestaurantId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'restaurantId', Sort.asc);
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QAfterSortBy>
-      thenByRestaurantIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'restaurantId', Sort.desc);
-    });
-  }
 }
 
 extension RestaurantServiceQueryWhereDistinct
@@ -1034,13 +860,6 @@ extension RestaurantServiceQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<RestaurantService, RestaurantService, QDistinct>
-      distinctByRestaurantId({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'restaurantId', caseSensitive: caseSensitive);
     });
   }
 }
@@ -1070,13 +889,6 @@ extension RestaurantServiceQueryProperty
   QueryBuilder<RestaurantService, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
-    });
-  }
-
-  QueryBuilder<RestaurantService, String, QQueryOperations>
-      restaurantIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'restaurantId');
     });
   }
 }
