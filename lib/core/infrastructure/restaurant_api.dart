@@ -46,29 +46,41 @@ class RestaurantAPI extends ChangeNotifier {
   }
 
   // Fetch restaurants from Appwrite
-  Future<List<Restaurant>> fetchRestaurantsFromAppwrite() async {
+  Future<List<Restaurant>> fetchRestaurantsFromAppwrite({
+    required double minLat,
+    required double maxLat,
+    required double minLong,
+    required double maxLong
+  }) async {
     try {
       final response = await database.listDocuments(
         databaseId: AppWriteConstants.databaseId,
         collectionId: AppWriteConstants.restaurantCollectionId,
+        queries: [
+          Query.lessThanEqual('lat', maxLat),
+          Query.greaterThanEqual('lat', minLat),
+          Query.lessThanEqual('long', maxLong),
+          Query.greaterThanEqual('long', minLong),
+        ]
       );
       final restaurants = response.documents
           .map((doc) => Restaurant.fromMap(doc.data))
           .toList();
-
-      // TODO: Save fetched data to cache
-
       return restaurants;
     } on AppwriteException catch (e) {
       Utils.logError(message: '[RestaurantAPI] fetch restaurants failed', error: e);
       return [];
     }
   }
-  
+
+  // Get restaurants from Isar or Appwrite
   Future<void> getRestaurants({ required int searchKm }) async {
     Utils.logDebug(message: '[RestaurantAPI] Getting restaurants...');
     try {
+      // Get user's position
       Position userPosition = await determinePosition();
+
+      // Calculate bounding box and grid cells
       final boundingBox = calculateBoundingBox(position: userPosition, distanceKm: searchKm);
       final cells = calculateGridCells(
         minLat: boundingBox['minLat']!,
@@ -76,6 +88,23 @@ class RestaurantAPI extends ChangeNotifier {
         minLong: boundingBox['minLong']!,
         maxLong: boundingBox['maxLong']!,
       );
+
+      Utils.logDebug(message: '[RestaurantAPI] Cells: $cells');
+
+      // Fetch restaurants from Appwrite
+      for(var cell in cells) {
+
+        // If the cell is already in cache, fetch from cache
+        // TODO: Implement cache
+        // Otherwise, fetch from Appwrite
+        final fetchedRestaurants = await fetchRestaurantsFromAppwrite(
+          minLat: cell['minLat']!,
+          maxLat: cell['maxLat']!,
+          minLong: cell['minLong']!,
+          maxLong: cell['maxLong']!,
+        );
+        restaurants.addAll(fetchedRestaurants);
+      }
 
     } catch (e) {
       Utils.logError(message: '[RestaurantAPI] getRestaurants failed', error: e);

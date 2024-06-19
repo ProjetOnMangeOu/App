@@ -17,7 +17,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   void getRestaurants() {
     Utils.logDebug(message: '[Home] Getting restaurants...');
-    context.read<RestaurantAPI>().getRestaurants(searchKm: 5);
+    context.read<RestaurantAPI>().getRestaurants(searchKm: 1); //TODO: Implement search in 100 meters selection
   }
 
   @override
