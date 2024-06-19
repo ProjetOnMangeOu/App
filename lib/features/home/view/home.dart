@@ -17,8 +17,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   void getRestaurants() {
     Utils.logDebug(message: '[Home] Getting restaurants...');
-    context.read<RestaurantAPI>().getRestaurants();
-    // Trigger fetching restaurants with geo-location
+    context.read<RestaurantAPI>().getRestaurants(searchKm: 5);
   }
 
   @override

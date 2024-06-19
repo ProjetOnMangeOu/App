@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:isar/isar.dart' as Isar;
 import 'package:onmangeou/core/domain/entities/price.dart';
 import 'package:onmangeou/core/domain/entities/restaurant.dart';
@@ -7,6 +8,7 @@ import 'package:onmangeou/core/domain/entities/restaurant_hours.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_service.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_types.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
+import 'package:onmangeou/shared/geolocator.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -63,10 +65,23 @@ class RestaurantAPI extends ChangeNotifier {
     }
   }
   
-  Future<void> getRestaurants() async {
+  Future<void> getRestaurants({ required int searchKm }) async {
     Utils.logDebug(message: '[RestaurantAPI] Getting restaurants...');
-    restaurants = await fetchRestaurantsFromAppwrite();
-    notifyListeners();
+    try {
+      Position userPosition = await determinePosition();
+      final boundingBox = calculateBoundingBox(position: userPosition, distanceKm: searchKm);
+      final cells = calculateGridCells(
+        minLat: boundingBox['minLat']!,
+        maxLat: boundingBox['maxLat']!,
+        minLong: boundingBox['minLong']!,
+        maxLong: boundingBox['maxLong']!,
+      );
+
+    } catch (e) {
+      Utils.logError(message: '[RestaurantAPI] getRestaurants failed', error: e);
+    } finally {
+      notifyListeners();
+    }
   }
 
 }
