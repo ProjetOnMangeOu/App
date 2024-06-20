@@ -1,33 +1,40 @@
 import 'package:isar/isar.dart';
 import 'package:onmangeou/core/domain/entities/restaurant.dart';
 
+part 'geocell.g.dart';
+
 @collection
 class GeoCell {
   Id id = Isar.autoIncrement;
-  late double _minLatitude;
-  late double _maxLatitude;
-  late double _minLongitude;
-  late double _maxLongitude;
+
+  @Index()
+  late String minLatitude;
+  @Index()
+  late String maxLatitude;
+  @Index()
+  late String minLongitude;
+  @Index()
+  late String maxLongitude;
+
+  @Index(composite: [CompositeIndex('minLatitude'), CompositeIndex('maxLatitude'), CompositeIndex('minLongitude')])
+  late String maxLongitudeComposite;
 
   // Relationships
   final IsarLinks<Restaurant> restaurants = IsarLinks<Restaurant>();
 
-  // Getters
-  double get minLatitude => _minLatitude;
-  double get maxLatitude => _maxLatitude;
-  double get minLongitude => _minLongitude;
-  double get maxLongitude => _maxLongitude;
-
   // Constructor
   GeoCell({
-    required double minLatitude,
-    required double maxLatitude,
-    required double minLongitude,
-    required double maxLongitude,
+    required this.minLatitude,
+    required this.maxLatitude,
+    required this.minLongitude,
+    required this.maxLongitude,
   }) {
-    _minLatitude = minLatitude;
-    _maxLatitude = maxLatitude;
-    _minLongitude = minLongitude;
-    _maxLongitude = maxLongitude;
+    minLatitude = minLatitude;
+    maxLatitude = maxLatitude;
+    minLongitude = minLongitude;
+    maxLongitude = maxLongitude;
+
+    // Create a composite index string
+    maxLongitudeComposite = maxLongitude;
   }
 }
