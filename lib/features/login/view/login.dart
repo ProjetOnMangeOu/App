@@ -5,6 +5,8 @@ import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../../shared/Widget/buttons.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
@@ -46,12 +48,12 @@ class _LoginViewState extends State<LoginView> {
                 labelText: 'password',
               ),
             ),
-            ElevatedButton(
+            OMGUButtons(
+              text: 'LOGIN',
               onPressed: () {
                 signInWithPassword(
                     emailController.text, passwordController.text);
               },
-              child: const Text('login'),
             ),
             TextButton(
               onPressed: () {
