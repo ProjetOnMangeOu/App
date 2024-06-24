@@ -17,28 +17,33 @@ const GeoCellSchema = CollectionSchema(
   name: r'GeoCell',
   id: -8797212499892718396,
   properties: {
-    r'maxLatitude': PropertySchema(
+    r'maxCoordinates': PropertySchema(
       id: 0,
+      name: r'maxCoordinates',
+      type: IsarType.string,
+    ),
+    r'maxLatitude': PropertySchema(
+      id: 1,
       name: r'maxLatitude',
       type: IsarType.string,
     ),
     r'maxLongitude': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'maxLongitude',
       type: IsarType.string,
     ),
-    r'maxLongitudeComposite': PropertySchema(
-      id: 2,
-      name: r'maxLongitudeComposite',
+    r'minCoordinates': PropertySchema(
+      id: 3,
+      name: r'minCoordinates',
       type: IsarType.string,
     ),
     r'minLatitude': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'minLatitude',
       type: IsarType.string,
     ),
     r'minLongitude': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'minLongitude',
       type: IsarType.string,
     )
@@ -49,63 +54,42 @@ const GeoCellSchema = CollectionSchema(
   deserializeProp: _geoCellDeserializeProp,
   idName: r'id',
   indexes: {
-    r'minLatitude': IndexSchema(
-      id: -8970309205964384159,
-      name: r'minLatitude',
+    r'minCoordinates_maxLatitude_maxLongitude': IndexSchema(
+      id: -4227446243467228891,
+      name: r'minCoordinates_maxLatitude_maxLongitude',
       unique: false,
       replace: false,
       properties: [
         IndexPropertySchema(
-          name: r'minLatitude',
-          type: IndexType.hash,
-          caseSensitive: true,
-        )
-      ],
-    ),
-    r'maxLatitude': IndexSchema(
-      id: 412520304776113206,
-      name: r'maxLatitude',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'maxLatitude',
-          type: IndexType.hash,
-          caseSensitive: true,
-        )
-      ],
-    ),
-    r'minLongitude': IndexSchema(
-      id: 8435632708552677693,
-      name: r'minLongitude',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'minLongitude',
-          type: IndexType.hash,
-          caseSensitive: true,
-        )
-      ],
-    ),
-    r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude': IndexSchema(
-      id: 4883547757142263036,
-      name: r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'maxLongitudeComposite',
-          type: IndexType.hash,
-          caseSensitive: true,
-        ),
-        IndexPropertySchema(
-          name: r'minLatitude',
+          name: r'minCoordinates',
           type: IndexType.hash,
           caseSensitive: true,
         ),
         IndexPropertySchema(
           name: r'maxLatitude',
+          type: IndexType.hash,
+          caseSensitive: true,
+        ),
+        IndexPropertySchema(
+          name: r'maxLongitude',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    ),
+    r'maxCoordinates_minLatitude_minLongitude': IndexSchema(
+      id: -5989768724076754747,
+      name: r'maxCoordinates_minLatitude_minLongitude',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'maxCoordinates',
+          type: IndexType.hash,
+          caseSensitive: true,
+        ),
+        IndexPropertySchema(
+          name: r'minLatitude',
           type: IndexType.hash,
           caseSensitive: true,
         ),
@@ -138,9 +122,10 @@ int _geoCellEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.maxCoordinates.length * 3;
   bytesCount += 3 + object.maxLatitude.length * 3;
   bytesCount += 3 + object.maxLongitude.length * 3;
-  bytesCount += 3 + object.maxLongitudeComposite.length * 3;
+  bytesCount += 3 + object.minCoordinates.length * 3;
   bytesCount += 3 + object.minLatitude.length * 3;
   bytesCount += 3 + object.minLongitude.length * 3;
   return bytesCount;
@@ -152,11 +137,12 @@ void _geoCellSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.maxLatitude);
-  writer.writeString(offsets[1], object.maxLongitude);
-  writer.writeString(offsets[2], object.maxLongitudeComposite);
-  writer.writeString(offsets[3], object.minLatitude);
-  writer.writeString(offsets[4], object.minLongitude);
+  writer.writeString(offsets[0], object.maxCoordinates);
+  writer.writeString(offsets[1], object.maxLatitude);
+  writer.writeString(offsets[2], object.maxLongitude);
+  writer.writeString(offsets[3], object.minCoordinates);
+  writer.writeString(offsets[4], object.minLatitude);
+  writer.writeString(offsets[5], object.minLongitude);
 }
 
 GeoCell _geoCellDeserialize(
@@ -166,13 +152,14 @@ GeoCell _geoCellDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = GeoCell(
-    maxLatitude: reader.readString(offsets[0]),
-    maxLongitude: reader.readString(offsets[1]),
-    minLatitude: reader.readString(offsets[3]),
-    minLongitude: reader.readString(offsets[4]),
+    maxLatitude: reader.readString(offsets[1]),
+    maxLongitude: reader.readString(offsets[2]),
+    minLatitude: reader.readString(offsets[4]),
+    minLongitude: reader.readString(offsets[5]),
   );
   object.id = id;
-  object.maxLongitudeComposite = reader.readString(offsets[2]);
+  object.maxCoordinates = reader.readString(offsets[0]);
+  object.minCoordinates = reader.readString(offsets[3]);
   return object;
 }
 
@@ -192,6 +179,8 @@ P _geoCellDeserializeProp<P>(
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -286,135 +275,46 @@ extension GeoCellQueryWhere on QueryBuilder<GeoCell, GeoCell, QWhereClause> {
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause> minLatitudeEqualTo(
-      String minLatitude) {
+  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
+      minCoordinatesEqualToAnyMaxLatitudeMaxLongitude(String minCoordinates) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'minLatitude',
-        value: [minLatitude],
+        indexName: r'minCoordinates_maxLatitude_maxLongitude',
+        value: [minCoordinates],
       ));
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause> minLatitudeNotEqualTo(
-      String minLatitude) {
+  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
+      minCoordinatesNotEqualToAnyMaxLatitudeMaxLongitude(
+          String minCoordinates) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'minLatitude',
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
               lower: [],
-              upper: [minLatitude],
+              upper: [minCoordinates],
               includeUpper: false,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'minLatitude',
-              lower: [minLatitude],
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates],
               includeLower: false,
               upper: [],
             ));
       } else {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'minLatitude',
-              lower: [minLatitude],
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates],
               includeLower: false,
               upper: [],
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'minLatitude',
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
               lower: [],
-              upper: [minLatitude],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause> maxLatitudeEqualTo(
-      String maxLatitude) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'maxLatitude',
-        value: [maxLatitude],
-      ));
-    });
-  }
-
-  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause> maxLatitudeNotEqualTo(
-      String maxLatitude) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'maxLatitude',
-              lower: [],
-              upper: [maxLatitude],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'maxLatitude',
-              lower: [maxLatitude],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'maxLatitude',
-              lower: [maxLatitude],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'maxLatitude',
-              lower: [],
-              upper: [maxLatitude],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause> minLongitudeEqualTo(
-      String minLongitude) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'minLongitude',
-        value: [minLongitude],
-      ));
-    });
-  }
-
-  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause> minLongitudeNotEqualTo(
-      String minLongitude) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'minLongitude',
-              lower: [],
-              upper: [minLongitude],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'minLongitude',
-              lower: [minLongitude],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'minLongitude',
-              lower: [minLongitude],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'minLongitude',
-              lower: [],
-              upper: [minLongitude],
+              upper: [minCoordinates],
               includeUpper: false,
             ));
       }
@@ -422,51 +322,139 @@ extension GeoCellQueryWhere on QueryBuilder<GeoCell, GeoCell, QWhereClause> {
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
-      maxLongitudeCompositeEqualToAnyMinLatitudeMaxLatitudeMinLongitude(
-          String maxLongitudeComposite) {
+      minCoordinatesMaxLatitudeEqualToAnyMaxLongitude(
+          String minCoordinates, String maxLatitude) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName:
-            r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-        value: [maxLongitudeComposite],
+        indexName: r'minCoordinates_maxLatitude_maxLongitude',
+        value: [minCoordinates, maxLatitude],
       ));
     });
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
-      maxLongitudeCompositeNotEqualToAnyMinLatitudeMaxLatitudeMinLongitude(
-          String maxLongitudeComposite) {
+      minCoordinatesEqualToMaxLatitudeNotEqualToAnyMaxLongitude(
+          String minCoordinates, String maxLatitude) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [],
-              upper: [maxLongitudeComposite],
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates],
+              upper: [minCoordinates, maxLatitude],
               includeUpper: false,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite],
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates, maxLatitude],
+              includeLower: false,
+              upper: [minCoordinates],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates, maxLatitude],
+              includeLower: false,
+              upper: [minCoordinates],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates],
+              upper: [minCoordinates, maxLatitude],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
+      minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
+          String minCoordinates, String maxLatitude, String maxLongitude) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'minCoordinates_maxLatitude_maxLongitude',
+        value: [minCoordinates, maxLatitude, maxLongitude],
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
+      minCoordinatesMaxLatitudeEqualToMaxLongitudeNotEqualTo(
+          String minCoordinates, String maxLatitude, String maxLongitude) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates, maxLatitude],
+              upper: [minCoordinates, maxLatitude, maxLongitude],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates, maxLatitude, maxLongitude],
+              includeLower: false,
+              upper: [minCoordinates, maxLatitude],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates, maxLatitude, maxLongitude],
+              includeLower: false,
+              upper: [minCoordinates, maxLatitude],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'minCoordinates_maxLatitude_maxLongitude',
+              lower: [minCoordinates, maxLatitude],
+              upper: [minCoordinates, maxLatitude, maxLongitude],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
+      maxCoordinatesEqualToAnyMinLatitudeMinLongitude(String maxCoordinates) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'maxCoordinates_minLatitude_minLongitude',
+        value: [maxCoordinates],
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
+      maxCoordinatesNotEqualToAnyMinLatitudeMinLongitude(
+          String maxCoordinates) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [],
+              upper: [maxCoordinates],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates],
               includeLower: false,
               upper: [],
             ));
       } else {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite],
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates],
               includeLower: false,
               upper: [],
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
               lower: [],
-              upper: [maxLongitudeComposite],
+              upper: [maxCoordinates],
               includeUpper: false,
             ));
       }
@@ -474,51 +462,46 @@ extension GeoCellQueryWhere on QueryBuilder<GeoCell, GeoCell, QWhereClause> {
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
-      maxLongitudeCompositeMinLatitudeEqualToAnyMaxLatitudeMinLongitude(
-          String maxLongitudeComposite, String minLatitude) {
+      maxCoordinatesMinLatitudeEqualToAnyMinLongitude(
+          String maxCoordinates, String minLatitude) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName:
-            r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-        value: [maxLongitudeComposite, minLatitude],
+        indexName: r'maxCoordinates_minLatitude_minLongitude',
+        value: [maxCoordinates, minLatitude],
       ));
     });
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
-      maxLongitudeCompositeEqualToMinLatitudeNotEqualToAnyMaxLatitudeMinLongitude(
-          String maxLongitudeComposite, String minLatitude) {
+      maxCoordinatesEqualToMinLatitudeNotEqualToAnyMinLongitude(
+          String maxCoordinates, String minLatitude) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite],
-              upper: [maxLongitudeComposite, minLatitude],
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates],
+              upper: [maxCoordinates, minLatitude],
               includeUpper: false,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite, minLatitude],
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates, minLatitude],
               includeLower: false,
-              upper: [maxLongitudeComposite],
+              upper: [maxCoordinates],
             ));
       } else {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite, minLatitude],
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates, minLatitude],
               includeLower: false,
-              upper: [maxLongitudeComposite],
+              upper: [maxCoordinates],
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite],
-              upper: [maxLongitudeComposite, minLatitude],
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates],
+              upper: [maxCoordinates, minLatitude],
               includeUpper: false,
             ));
       }
@@ -526,133 +509,46 @@ extension GeoCellQueryWhere on QueryBuilder<GeoCell, GeoCell, QWhereClause> {
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
-      maxLongitudeCompositeMinLatitudeMaxLatitudeEqualToAnyMinLongitude(
-          String maxLongitudeComposite,
-          String minLatitude,
-          String maxLatitude) {
+      maxCoordinatesMinLatitudeMinLongitudeEqualTo(
+          String maxCoordinates, String minLatitude, String minLongitude) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName:
-            r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-        value: [maxLongitudeComposite, minLatitude, maxLatitude],
+        indexName: r'maxCoordinates_minLatitude_minLongitude',
+        value: [maxCoordinates, minLatitude, minLongitude],
       ));
     });
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
-      maxLongitudeCompositeMinLatitudeEqualToMaxLatitudeNotEqualToAnyMinLongitude(
-          String maxLongitudeComposite,
-          String minLatitude,
-          String maxLatitude) {
+      maxCoordinatesMinLatitudeEqualToMinLongitudeNotEqualTo(
+          String maxCoordinates, String minLatitude, String minLongitude) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite, minLatitude],
-              upper: [maxLongitudeComposite, minLatitude, maxLatitude],
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates, minLatitude],
+              upper: [maxCoordinates, minLatitude, minLongitude],
               includeUpper: false,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite, minLatitude, maxLatitude],
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates, minLatitude, minLongitude],
               includeLower: false,
-              upper: [maxLongitudeComposite, minLatitude],
+              upper: [maxCoordinates, minLatitude],
             ));
       } else {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite, minLatitude, maxLatitude],
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates, minLatitude, minLongitude],
               includeLower: false,
-              upper: [maxLongitudeComposite, minLatitude],
+              upper: [maxCoordinates, minLatitude],
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite, minLatitude],
-              upper: [maxLongitudeComposite, minLatitude, maxLatitude],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
-      maxLongitudeCompositeMinLatitudeMaxLatitudeMinLongitudeEqualTo(
-          String maxLongitudeComposite,
-          String minLatitude,
-          String maxLatitude,
-          String minLongitude) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName:
-            r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-        value: [maxLongitudeComposite, minLatitude, maxLatitude, minLongitude],
-      ));
-    });
-  }
-
-  QueryBuilder<GeoCell, GeoCell, QAfterWhereClause>
-      maxLongitudeCompositeMinLatitudeMaxLatitudeEqualToMinLongitudeNotEqualTo(
-          String maxLongitudeComposite,
-          String minLatitude,
-          String maxLatitude,
-          String minLongitude) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite, minLatitude, maxLatitude],
-              upper: [
-                maxLongitudeComposite,
-                minLatitude,
-                maxLatitude,
-                minLongitude
-              ],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [
-                maxLongitudeComposite,
-                minLatitude,
-                maxLatitude,
-                minLongitude
-              ],
-              includeLower: false,
-              upper: [maxLongitudeComposite, minLatitude, maxLatitude],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [
-                maxLongitudeComposite,
-                minLatitude,
-                maxLatitude,
-                minLongitude
-              ],
-              includeLower: false,
-              upper: [maxLongitudeComposite, minLatitude, maxLatitude],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName:
-                  r'maxLongitudeComposite_minLatitude_maxLatitude_minLongitude',
-              lower: [maxLongitudeComposite, minLatitude, maxLatitude],
-              upper: [
-                maxLongitudeComposite,
-                minLatitude,
-                maxLatitude,
-                minLongitude
-              ],
+              indexName: r'maxCoordinates_minLatitude_minLongitude',
+              lower: [maxCoordinates, minLatitude],
+              upper: [maxCoordinates, minLatitude, minLongitude],
               includeUpper: false,
             ));
       }
@@ -710,6 +606,140 @@ extension GeoCellQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> maxCoordinatesEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'maxCoordinates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
+      maxCoordinatesGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'maxCoordinates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> maxCoordinatesLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'maxCoordinates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> maxCoordinatesBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'maxCoordinates',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
+      maxCoordinatesStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'maxCoordinates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> maxCoordinatesEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'maxCoordinates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> maxCoordinatesContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'maxCoordinates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> maxCoordinatesMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'maxCoordinates',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
+      maxCoordinatesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'maxCoordinates',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
+      maxCoordinatesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'maxCoordinates',
+        value: '',
       ));
     });
   }
@@ -976,14 +1006,13 @@ extension GeoCellQueryFilter
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeEqualTo(
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> minCoordinatesEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -991,7 +1020,7 @@ extension GeoCellQueryFilter
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeGreaterThan(
+      minCoordinatesGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -999,15 +1028,14 @@ extension GeoCellQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeLessThan(
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> minCoordinatesLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1015,15 +1043,14 @@ extension GeoCellQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeBetween(
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> minCoordinatesBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1032,7 +1059,7 @@ extension GeoCellQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1043,50 +1070,50 @@ extension GeoCellQueryFilter
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeStartsWith(
+      minCoordinatesStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeEndsWith(
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> minCoordinatesEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> minCoordinatesContains(
+      String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> minCoordinatesMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
@@ -1094,20 +1121,20 @@ extension GeoCellQueryFilter
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeIsEmpty() {
+      minCoordinatesIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         value: '',
       ));
     });
   }
 
   QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
-      maxLongitudeCompositeIsNotEmpty() {
+      minCoordinatesIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'maxLongitudeComposite',
+        property: r'minCoordinates',
         value: '',
       ));
     });
@@ -1443,6 +1470,18 @@ extension GeoCellQueryLinks
 }
 
 extension GeoCellQuerySortBy on QueryBuilder<GeoCell, GeoCell, QSortBy> {
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> sortByMaxCoordinates() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'maxCoordinates', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> sortByMaxCoordinatesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'maxCoordinates', Sort.desc);
+    });
+  }
+
   QueryBuilder<GeoCell, GeoCell, QAfterSortBy> sortByMaxLatitude() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'maxLatitude', Sort.asc);
@@ -1467,16 +1506,15 @@ extension GeoCellQuerySortBy on QueryBuilder<GeoCell, GeoCell, QSortBy> {
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> sortByMaxLongitudeComposite() {
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> sortByMinCoordinates() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'maxLongitudeComposite', Sort.asc);
+      return query.addSortBy(r'minCoordinates', Sort.asc);
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterSortBy>
-      sortByMaxLongitudeCompositeDesc() {
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> sortByMinCoordinatesDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'maxLongitudeComposite', Sort.desc);
+      return query.addSortBy(r'minCoordinates', Sort.desc);
     });
   }
 
@@ -1519,6 +1557,18 @@ extension GeoCellQuerySortThenBy
     });
   }
 
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> thenByMaxCoordinates() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'maxCoordinates', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> thenByMaxCoordinatesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'maxCoordinates', Sort.desc);
+    });
+  }
+
   QueryBuilder<GeoCell, GeoCell, QAfterSortBy> thenByMaxLatitude() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'maxLatitude', Sort.asc);
@@ -1543,16 +1593,15 @@ extension GeoCellQuerySortThenBy
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> thenByMaxLongitudeComposite() {
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> thenByMinCoordinates() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'maxLongitudeComposite', Sort.asc);
+      return query.addSortBy(r'minCoordinates', Sort.asc);
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QAfterSortBy>
-      thenByMaxLongitudeCompositeDesc() {
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> thenByMinCoordinatesDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'maxLongitudeComposite', Sort.desc);
+      return query.addSortBy(r'minCoordinates', Sort.desc);
     });
   }
 
@@ -1583,6 +1632,14 @@ extension GeoCellQuerySortThenBy
 
 extension GeoCellQueryWhereDistinct
     on QueryBuilder<GeoCell, GeoCell, QDistinct> {
+  QueryBuilder<GeoCell, GeoCell, QDistinct> distinctByMaxCoordinates(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'maxCoordinates',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<GeoCell, GeoCell, QDistinct> distinctByMaxLatitude(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1597,10 +1654,10 @@ extension GeoCellQueryWhereDistinct
     });
   }
 
-  QueryBuilder<GeoCell, GeoCell, QDistinct> distinctByMaxLongitudeComposite(
+  QueryBuilder<GeoCell, GeoCell, QDistinct> distinctByMinCoordinates(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'maxLongitudeComposite',
+      return query.addDistinctBy(r'minCoordinates',
           caseSensitive: caseSensitive);
     });
   }
@@ -1628,6 +1685,12 @@ extension GeoCellQueryProperty
     });
   }
 
+  QueryBuilder<GeoCell, String, QQueryOperations> maxCoordinatesProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'maxCoordinates');
+    });
+  }
+
   QueryBuilder<GeoCell, String, QQueryOperations> maxLatitudeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'maxLatitude');
@@ -1640,10 +1703,9 @@ extension GeoCellQueryProperty
     });
   }
 
-  QueryBuilder<GeoCell, String, QQueryOperations>
-      maxLongitudeCompositeProperty() {
+  QueryBuilder<GeoCell, String, QQueryOperations> minCoordinatesProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'maxLongitudeComposite');
+      return query.addPropertyName(r'minCoordinates');
     });
   }
 

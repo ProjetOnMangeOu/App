@@ -7,17 +7,15 @@ part 'geocell.g.dart';
 class GeoCell {
   Id id = Isar.autoIncrement;
 
-  @Index()
   late String minLatitude;
-  @Index()
   late String maxLatitude;
-  @Index()
   late String minLongitude;
-  @Index()
   late String maxLongitude;
 
-  @Index(composite: [CompositeIndex('minLatitude'), CompositeIndex('maxLatitude'), CompositeIndex('minLongitude')])
-  late String maxLongitudeComposite;
+  @Index(composite: [CompositeIndex('maxLatitude'), CompositeIndex('maxLongitude')])
+  late String minCoordinates;
+  @Index(composite: [CompositeIndex('minLatitude'), CompositeIndex('minLongitude')])
+  late String maxCoordinates;
 
   // Relationships
   final IsarLinks<Restaurant> restaurants = IsarLinks<Restaurant>();
@@ -29,12 +27,8 @@ class GeoCell {
     required this.minLongitude,
     required this.maxLongitude,
   }) {
-    minLatitude = minLatitude;
-    maxLatitude = maxLatitude;
-    minLongitude = minLongitude;
-    maxLongitude = maxLongitude;
-
-    // Create a composite index string
-    maxLongitudeComposite = maxLongitude;
+    // Create composite index strings
+    minCoordinates = '$minLatitude,$minLongitude';
+    maxCoordinates = '$maxLatitude,$maxLongitude';
   }
 }

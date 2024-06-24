@@ -5,25 +5,24 @@ part 'price.g.dart';
 @collection
 class Price {
   Id id = Isar.autoIncrement;
-  late final String _documentId;
+  @Index()
+  late final String documentId;
   late final int _min;
   late final int _max;
   late final String _currency;
 
   // Getters
-  String get documentId => _documentId;
   int get min => _min;
   int get max => _max;
   String get currency => _currency;
 
   // Constructor
   Price({
-    required String documentId,
+    required this.documentId,
     required int min,
     required int max,
     required String currency,
   }) {
-    _documentId = documentId;
     _min = min;
     _max = max;
     _currency = currency;
@@ -42,7 +41,7 @@ class Price {
   // Method to convert a Price object to a Map
   Map<String, dynamic> toMap() {
     return {
-      '\$id': _documentId,
+      '\$id': documentId,
       'min': _min,
       'max': _max,
       'currency': _currency,

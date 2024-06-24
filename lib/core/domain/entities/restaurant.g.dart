@@ -121,10 +121,20 @@ int _restaurantEstimateSize(
   bytesCount += 3 + object.address.length * 3;
   bytesCount += 3 + object.documentId.length * 3;
   bytesCount += 3 + object.gmapLink.length * 3;
-  bytesCount += 3 + object.image.length * 3;
+  {
+    final value = object.image;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.phone.length * 3;
-  bytesCount += 3 + object.website.length * 3;
+  {
+    final value = object.website;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -158,12 +168,12 @@ Restaurant _restaurantDeserialize(
     documentId: reader.readString(offsets[1]),
     gmapLink: reader.readString(offsets[2]),
     googleMapRating: reader.readDouble(offsets[3]),
-    image: reader.readString(offsets[5]),
+    image: reader.readStringOrNull(offsets[5]),
     lat: reader.readDouble(offsets[6]),
     long: reader.readDouble(offsets[7]),
     name: reader.readString(offsets[8]),
     phone: reader.readString(offsets[9]),
-    website: reader.readString(offsets[10]),
+    website: reader.readStringOrNull(offsets[10]),
   );
   object.id = id;
   return object;
@@ -187,7 +197,7 @@ P _restaurantDeserializeProp<P>(
     case 4:
       return (reader.readBool(offset)) as P;
     case 5:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 6:
       return (reader.readDouble(offset)) as P;
     case 7:
@@ -197,7 +207,7 @@ P _restaurantDeserializeProp<P>(
     case 9:
       return (reader.readString(offset)) as P;
     case 10:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -836,8 +846,24 @@ extension RestaurantQueryFilter
     });
   }
 
+  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> imageIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'image',
+      ));
+    });
+  }
+
+  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> imageIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'image',
+      ));
+    });
+  }
+
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> imageEqualTo(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -850,7 +876,7 @@ extension RestaurantQueryFilter
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> imageGreaterThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -865,7 +891,7 @@ extension RestaurantQueryFilter
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> imageLessThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -880,8 +906,8 @@ extension RestaurantQueryFilter
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> imageBetween(
-    String lower,
-    String upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -1352,8 +1378,25 @@ extension RestaurantQueryFilter
     });
   }
 
+  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> websiteIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'website',
+      ));
+    });
+  }
+
+  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
+      websiteIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'website',
+      ));
+    });
+  }
+
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> websiteEqualTo(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1367,7 +1410,7 @@ extension RestaurantQueryFilter
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition>
       websiteGreaterThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -1382,7 +1425,7 @@ extension RestaurantQueryFilter
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> websiteLessThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -1397,8 +1440,8 @@ extension RestaurantQueryFilter
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> websiteBetween(
-    String lower,
-    String upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -2088,7 +2131,7 @@ extension RestaurantQueryProperty
     });
   }
 
-  QueryBuilder<Restaurant, String, QQueryOperations> imageProperty() {
+  QueryBuilder<Restaurant, String?, QQueryOperations> imageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'image');
     });
@@ -2118,7 +2161,7 @@ extension RestaurantQueryProperty
     });
   }
 
-  QueryBuilder<Restaurant, String, QQueryOperations> websiteProperty() {
+  QueryBuilder<Restaurant, String?, QQueryOperations> websiteProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'website');
     });

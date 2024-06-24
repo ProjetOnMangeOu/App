@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
-import 'package:onmangeou/shared/utils.dart';
 import 'price.dart';
 import 'restaurant_hours.dart';
 import 'restaurant_service.dart';
@@ -18,9 +17,9 @@ class Restaurant extends ChangeNotifier {
   late double _long;
   late String _phone;
   late double _googleMapRating;
-  late String _image;
+  late String? _image;
   late String _gmapLink;
-  late String _website;
+  late String? _website;
 
   // Relationships
   final IsarLink<Price> price = IsarLink<Price>();
@@ -36,9 +35,9 @@ class Restaurant extends ChangeNotifier {
   double get long => _long;
   String get phone => _phone;
   double get googleMapRating => _googleMapRating;
-  String get image => _image;
+  String? get image => _image;
   String get gmapLink => _gmapLink;
-  String get website => _website;
+  String? get website => _website;
 
   // Constructor
   Restaurant({
@@ -49,9 +48,9 @@ class Restaurant extends ChangeNotifier {
     required double long,
     required String phone,
     required double googleMapRating,
-    required String image,
+    String? image,
     required String gmapLink,
-    required String website,
+    String? website,
   }) {
     _documentId = documentId;
     _name = name;
@@ -67,7 +66,7 @@ class Restaurant extends ChangeNotifier {
   }
 
   // Factory method to create a Restaurant object from a Map
-  factory Restaurant.fromMap(Map<String, dynamic> data) {
+  factory Restaurant.fromMap(Map<String, dynamic> data, Isar isar) {
     final restaurant = Restaurant(
       documentId: data['\$id'],
       name: data['name'],
@@ -80,7 +79,22 @@ class Restaurant extends ChangeNotifier {
       gmapLink: data['gmapLink'],
       website: data['website'],
     );
-    restaurant.price.value = Price.fromMap(data['price']);
+
+    if(data['price'] != null){
+      isar.writeTxnSync(() {
+        final existingPrice = isar.prices.where().documentIdEqualTo(data['price']['\$id']).findFirstSync();
+        if (existingPrice == null) {
+          // If it doesn't exist, create a new Price object and put it in the database
+          final newPrice = Price.fromMap(data['price']);
+          isar.prices.putSync(newPrice);
+          restaurant.price.value = newPrice;
+        } else {
+          // If it exists, use the existing Price object
+          restaurant.price.value = existingPrice;
+        }
+      });
+    }
+
     restaurant.restaurantTypes.addAll(
       (data['restaurantTypes'] as List).map((e) => RestaurantTypes.fromMap(e)),
     );

@@ -12,7 +12,6 @@ import 'package:onmangeou/shared/constants/appwrite.dart';
 import 'package:onmangeou/shared/geolocator.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 
 class RestaurantAPI extends ChangeNotifier {
   Client client = Client();
@@ -67,12 +66,14 @@ class RestaurantAPI extends ChangeNotifier {
           Query.greaterThanEqual('long', minLong),
         ]
       );
+
+
       final restaurants = response.documents
-          .map((doc) => Restaurant.fromMap(doc.data))
+          .map((doc) => Restaurant.fromMap(doc.data, isar))
           .toList();
 
-      // Cache the cell with the restaurants
-      await cacheCellWithRestaurants(
+      // Cache the cell with the restaurants asynchrounously
+      cacheCellWithRestaurants(
         minLat: minLat,
         maxLat: maxLat,
         minLong: minLong,
@@ -103,19 +104,15 @@ class RestaurantAPI extends ChangeNotifier {
         maxLong: boundingBox['maxLong']!,
       );
 
-      Utils.logDebug(message: '[RestaurantAPI] Cells: $cells');
-
       // Fetch restaurants from Appwrite
       for(var cell in cells) {
-
         // If the cell is already in cache, fetch from cache
         final cellsInCache = await isar.geoCells.where()
-          .maxLongitudeCompositeMinLatitudeMaxLatitudeMinLongitudeEqualTo(
-            cell['maxLong'].toString(),
-            cell['minLat'].toString(),
-            cell['maxLat'].toString(),
-            cell['minLong'].toString(),
-          ).findFirst();
+            .minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
+              '${cell['minLat']},${cell['minLong']}',
+              cell['maxLat'].toString(),
+              cell['maxLong'].toString()
+            ).findFirst();
 
         if(cellsInCache != null) {
           // If the cell is in cache, fetch from cache
@@ -157,8 +154,8 @@ class RestaurantAPI extends ChangeNotifier {
       );
       cell.restaurants.addAll(restaurants);
 
-      await isar.writeTxn(() async {
-        await isar.geoCells.put(cell);
+      isar.writeTxnSync(() {
+        isar.geoCells.putSync(cell);
       });
     } catch (e) {
       Utils.logError(message: '[RestaurantAPI] cacheCellWithRestaurants failed', error: e);
