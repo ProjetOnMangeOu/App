@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onmangeou/core/infrastructure/auth_api.dart';
+import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:provider/provider.dart';
 
 class EmailVerificationView extends StatefulWidget {

@@ -44,10 +44,11 @@ Future<Position> determinePosition() async {
   return await Geolocator.getCurrentPosition();
 }
 
-Map<String, double> calculateBoundingBox({required Position position, required int distanceKm}){
+Map<String, double> calculateBoundingBox({required Position position, required int distanceMeters}){
   final double latRadians = position.latitude * (pi / 180);
   const degLatKm = 110.574235;
   final degLongKm = 110.572833 * cos(latRadians);
+  final distanceKm = distanceMeters / 1000;
   final deltaLat = distanceKm / degLatKm;
   final deltaLong = distanceKm / degLongKm;
 

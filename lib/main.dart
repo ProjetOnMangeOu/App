@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:onmangeou/app_router.dart';
-import 'package:onmangeou/core/infrastructure/auth_api.dart';
-import 'package:onmangeou/core/infrastructure/restaurant_api.dart';
+import 'package:onmangeou/core/domain/repositories/restaurant_repository.dart';
+import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
+import 'package:onmangeou/core/infrastructure/datasources/cache_api.dart';
+import 'package:onmangeou/core/infrastructure/datasources/restaurant_api.dart';
 import 'package:provider/provider.dart';
 import 'package:onmangeou/core/domain/entities/user.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(
-        create: (context) => AuthAPI(),
-      ),
+      ChangeNotifierProvider(create: (_) => CacheAPI()),
+      ChangeNotifierProvider(create: (_) => AuthAPI()),
       ChangeNotifierProxyProvider<AuthAPI, User?>(
         create: (_) => null,
         update: (_, auth, previousUser) {
@@ -28,6 +29,16 @@ void main() {
           }
           return previousRestaurantAPI;
         },
+      ),
+      ChangeNotifierProxyProvider2<RestaurantAPI, CacheAPI, RestaurantRepository?>(
+          create: (_) => null,
+          update: (_, restaurantAPI, cacheAPI, previousRepository) {
+            print('previousRepository: $previousRepository');
+            if (restaurantAPI.isInitialized && cacheAPI.isInitialized && previousRepository == null) {
+              return RestaurantRepository(restaurantAPI, cacheAPI);
+            }
+            return previousRepository;
+          }
       ),
     ],
     child: const AppRoot(),

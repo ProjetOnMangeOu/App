@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
+import 'package:onmangeou/core/infrastructure/datasources/cache_api.dart';
 import 'price.dart';
 import 'restaurant_hours.dart';
 import 'restaurant_service.dart';
@@ -66,7 +67,7 @@ class Restaurant extends ChangeNotifier {
   }
 
   // Factory method to create a Restaurant object from a Map
-  factory Restaurant.fromMap(Map<String, dynamic> data, Isar isar) {
+  factory Restaurant.fromMap(Map<String, dynamic> data, CacheAPI cacheAPI) {
     final restaurant = Restaurant(
       documentId: data['\$id'],
       name: data['name'],
@@ -81,18 +82,14 @@ class Restaurant extends ChangeNotifier {
     );
 
     if(data['price'] != null){
-      isar.writeTxnSync(() {
-        final existingPrice = isar.prices.where().documentIdEqualTo(data['price']['\$id']).findFirstSync();
-        if (existingPrice == null) {
-          // If it doesn't exist, create a new Price object and put it in the database
-          final newPrice = Price.fromMap(data['price']);
-          isar.prices.putSync(newPrice);
-          restaurant.price.value = newPrice;
-        } else {
-          // If it exists, use the existing Price object
-          restaurant.price.value = existingPrice;
-        }
-      });
+      final existingPrice = cacheAPI.fetchPriceByDocumentIdSync(documentId: data['price']['\$id']);
+      if(existingPrice != null) {
+        restaurant.price.value = existingPrice;
+      } else {
+        final newPrice = Price.fromMap(data['price']);
+        cacheAPI.writePriceSync(price: newPrice);
+        restaurant.price.value = newPrice;
+      }
     }
 
     restaurant.restaurantTypes.addAll(
@@ -125,29 +122,5 @@ class Restaurant extends ChangeNotifier {
       'restaurantService': restaurantService.map((service) => service.toMap()).toList(),
       'restaurantHours': restaurantHours.map((hours) => hours.toMap()).toList(),
     };
-  }
-
-  // Method to update a Restaurant object
-  void update(Restaurant updatedRestaurant) {
-    _name = updatedRestaurant.name;
-    _address = updatedRestaurant.address;
-    _lat = updatedRestaurant.lat;
-    _long = updatedRestaurant.long;
-    _phone = updatedRestaurant.phone;
-    _googleMapRating = updatedRestaurant.googleMapRating;
-    _image = updatedRestaurant.image;
-    _gmapLink = updatedRestaurant.gmapLink;
-    _website = updatedRestaurant.website;
-    price.value = updatedRestaurant.price.value;
-    // restaurantTypes.addAll(updatedRestaurant.restaurantTypes);
-    // restaurantService.clear();
-    // restaurantService.addAll(updatedRestaurant.restaurantService);
-    // restaurantHours.clear();
-    // restaurantHours.addAll(updatedRestaurant.restaurantHours);
-
-    // TODO: Implement the update method for the relationships
-
-
-    notifyListeners();
   }
 }

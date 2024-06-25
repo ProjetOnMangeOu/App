@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:onmangeou/core/domain/entities/restaurant.dart';
-import 'package:onmangeou/core/infrastructure/auth_api.dart';
-import 'package:onmangeou/core/infrastructure/restaurant_api.dart';
+import 'package:onmangeou/core/domain/repositories/restaurant_repository.dart';
+import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -15,15 +14,9 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  void getRestaurants() {
-    Utils.logDebug(message: '[Home] Getting restaurants...');
-    context.read<RestaurantAPI>().getRestaurants(searchKm: 1); //TODO: Implement search in 100 meters selection
-  }
-
   @override
   void initState() {
     super.initState();
-    getRestaurants();
   }
 
   @override
@@ -31,25 +24,10 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       body: Column(children: [
         const Text('Home'),
-        Consumer<RestaurantAPI>(
-          builder: (context, restaurantAPI, child) {
-            return Text('Restaurants: ${restaurantAPI.restaurants.length}');
+        Consumer<RestaurantRepository?>(
+          builder: (context, restaurantRepository, child) {
+            return Text('Restaurants: ${restaurantRepository?.watchedCells.map((cell) => cell.restaurants).length}');
           },
-        ),
-        Expanded(
-          child: Consumer<RestaurantAPI>(
-            builder: (context, restaurantAPI, child) {
-              return ListView.builder(
-                itemCount: restaurantAPI.restaurants.length,
-                itemBuilder: (context, index) {
-                  final restaurant = restaurantAPI.restaurants[index];
-                  return ListTile(
-                    title: Text(restaurant.name),
-                  );
-                },
-              );
-            },
-          ),
         ),
         ElevatedButton(
           onPressed: () {
