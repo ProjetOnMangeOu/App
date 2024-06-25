@@ -5,7 +5,7 @@ import 'package:onmangeou/core/infrastructure/auth_api.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../../../shared/Widget/buttons.dart';
+import 'package:onmangeou/shared/widget/buttons.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -54,20 +54,23 @@ class _LoginViewState extends State<LoginView> {
                 signInWithPassword(
                     emailController.text, passwordController.text);
               },
+              color: Colors.orangeAccent,
             ),
-            TextButton(
+            OMGUButtons(
+              text: 'register',
               onPressed: () {
                 context.go(
                     '/register'); // Go to register page while replacing stack
               },
-              child: const Text('REGISTER'),
+              color: Colors.grey,
             ),
-            TextButton(
+            OMGUButtons(
+              text: 'forgot password',
               onPressed: () {
                 context.push('/login/request-password');
               },
-              child: const Text('reset password'),
-            )
+              color: Colors.grey,
+            ),
           ]),
     );
   }
