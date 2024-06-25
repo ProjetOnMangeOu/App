@@ -33,7 +33,6 @@ void main() {
       ChangeNotifierProxyProvider2<RestaurantAPI, CacheAPI, RestaurantRepository?>(
           create: (_) => null,
           update: (_, restaurantAPI, cacheAPI, previousRepository) {
-            print('previousRepository: $previousRepository');
             if (restaurantAPI.isInitialized && cacheAPI.isInitialized && previousRepository == null) {
               return RestaurantRepository(restaurantAPI, cacheAPI);
             }

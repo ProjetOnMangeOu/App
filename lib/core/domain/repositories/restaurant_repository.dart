@@ -28,6 +28,7 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
   Future<void> init() async {
     Utils.logDebug(message: '[RestaurantRepository] Initializing...');
     await search(searchMeters: AppConstants.searchMeters);
+    initRestaurantStream();
     Utils.logDebug(message: '[RestaurantRepository] Initialized');
   }
 
