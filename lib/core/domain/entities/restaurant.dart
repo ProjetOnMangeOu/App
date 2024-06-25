@@ -139,11 +139,15 @@ class Restaurant extends ChangeNotifier {
     _gmapLink = updatedRestaurant.gmapLink;
     _website = updatedRestaurant.website;
     price.value = updatedRestaurant.price.value;
-    restaurantTypes.addAll(updatedRestaurant.restaurantTypes);
-    restaurantService.clear();
-    restaurantService.addAll(updatedRestaurant.restaurantService);
-    restaurantHours.clear();
-    restaurantHours.addAll(updatedRestaurant.restaurantHours);
+    // restaurantTypes.addAll(updatedRestaurant.restaurantTypes);
+    // restaurantService.clear();
+    // restaurantService.addAll(updatedRestaurant.restaurantService);
+    // restaurantHours.clear();
+    // restaurantHours.addAll(updatedRestaurant.restaurantHours);
+
+    // TODO: Implement the update method for the relationships
+
+
     notifyListeners();
   }
 }

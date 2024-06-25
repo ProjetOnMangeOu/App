@@ -8,6 +8,7 @@ import 'package:onmangeou/core/domain/entities/restaurant.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_hours.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_service.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_types.dart';
+import 'package:onmangeou/shared/constants/app.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
 import 'package:onmangeou/shared/geolocator.dart';
 import 'package:onmangeou/shared/utils.dart';
@@ -50,36 +51,29 @@ class RestaurantAPI extends ChangeNotifier {
 
   // Fetch restaurants from Appwrite
   Future<List<Restaurant>> fetchRestaurantsFromAppwrite({
-    required double minLat,
-    required double maxLat,
-    required double minLong,
-    required double maxLong
+    required List<Map<String, double>> cells,
   }) async {
     try {
-      final response = await database.listDocuments(
-        databaseId: AppWriteConstants.databaseId,
-        collectionId: AppWriteConstants.restaurantCollectionId,
-        queries: [
-          Query.lessThanEqual('lat', maxLat),
-          Query.greaterThanEqual('lat', minLat),
-          Query.lessThanEqual('long', maxLong),
-          Query.greaterThanEqual('long', minLong),
-        ]
-      );
 
+      final restaurantsPerCell = await Future.wait(cells.map((cell) async {
+        final response = await database.listDocuments(
+            databaseId: AppWriteConstants.databaseId,
+            collectionId: AppWriteConstants.restaurantCollectionId,
+            queries: [
+              Query.lessThanEqual('lat', cell['maxLat']),
+              Query.greaterThanEqual('lat', cell['minLat']),
+              Query.lessThanEqual('long', cell['maxLong']),
+              Query.greaterThanEqual('long', cell['minLong']),
+            ]
+        );
+        return response.documents
+            .map((doc) => Restaurant.fromMap(doc.data, isar))
+            .toList();
+      }));
 
-      final restaurants = response.documents
-          .map((doc) => Restaurant.fromMap(doc.data, isar))
-          .toList();
 
       // Cache the cell with the restaurants asynchrounously
-      cacheCellWithRestaurants(
-        minLat: minLat,
-        maxLat: maxLat,
-        minLong: minLong,
-        maxLong: maxLong,
-        restaurants: restaurants,
-      );
+      cacheCellsWithRestaurants(cells: cells.toList(), restaurantsPerCell: restaurantsPerCell);
 
       return restaurants;
     } on AppwriteException catch (e) {
@@ -104,31 +98,32 @@ class RestaurantAPI extends ChangeNotifier {
         maxLong: boundingBox['maxLong']!,
       );
 
-      // Fetch restaurants from Appwrite
-      for(var cell in cells) {
-        // If the cell is already in cache, fetch from cache
-        final cellsInCache = await isar.geoCells.where()
-            .minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
+      final cellsToUpdate = cells.map((cell) {
+
+        return isar.txnSync(() {
+          final cellInCache = isar.geoCells.where()
+              .minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
               '${cell['minLat']},${cell['minLong']}',
               cell['maxLat'].toString(),
               cell['maxLong'].toString()
-            ).findFirst();
+          ).findFirstSync();
 
-        if(cellsInCache != null) {
-          // If the cell is in cache, fetch from cache
-          final restaurantsInCell = cellsInCache.restaurants.toList();
-          restaurants.addAll(restaurantsInCell);
-          continue;
-        } else {
-          // Otherwise, fetch from Appwrite
-          final fetchedRestaurants = await fetchRestaurantsFromAppwrite(
-            minLat: cell['minLat']!,
-            maxLat: cell['maxLat']!,
-            minLong: cell['minLong']!,
-            maxLong: cell['maxLong']!,
-          );
-          restaurants.addAll(fetchedRestaurants);
-        }
+          if(cellInCache != null && cellInCache.expirationDate.isAfter(DateTime.now())) {
+            final restaurantsInCell = cellInCache.restaurants.toList();
+            restaurants.addAll(restaurantsInCell);
+            // TODO: restaurants.addAll(cellInCache.restaurants);
+            return {};
+          } else {
+            return cell;
+          }
+        });
+
+      }).where((element) => element.isNotEmpty).cast<Map<String, double>>().toList();
+
+      if(cellsToUpdate.isNotEmpty) {
+        // Fetch restaurants from Appwrite
+        final restaurantsFromAppwrite = await fetchRestaurantsFromAppwrite(cells: cellsToUpdate);
+        restaurants.addAll(restaurantsFromAppwrite);
       }
 
     } catch (e) {
@@ -138,27 +133,42 @@ class RestaurantAPI extends ChangeNotifier {
     }
   }
 
-  Future<void> cacheCellWithRestaurants ({
-    required double minLat,
-    required double maxLat,
-    required double minLong,
-    required double maxLong,
-    required List<Restaurant> restaurants
+  Future<void> cacheCellsWithRestaurants ({
+    required List<Map<String, double>> cells,
+    required List<List<Restaurant>> restaurantsPerCell
   }) async {
     try {
-      final cell = GeoCell(
-        minLatitude: minLat.toString(),
-        maxLatitude: maxLat.toString(),
-        minLongitude: minLong.toString(),
-        maxLongitude: maxLong.toString(),
-      );
-      cell.restaurants.addAll(restaurants);
+      print('cacheCellsWithRestaurants txn');
+      await isar.writeTxn(() async {
+        for (var i = 0; i < cells.length; i++) {
+          var cell = cells[i];
+          var restaurants = restaurantsPerCell[i];
+          final existingCell = await isar.geoCells.where()
+              .minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
+              '${cell['minLat']},${cell['minLong']}',
+              cell['maxLat'].toString(),
+              cell['maxLong'].toString()
+          ).findFirst();
 
-      isar.writeTxnSync(() {
-        isar.geoCells.putSync(cell);
+          if(existingCell != null) {
+            // If the cell exists, update the existing restaurants and add new ones and update expiration date
+            print('isar id ${restaurants[0].id}');
+          } else {
+            // If the cell does not exist, create a new cell and add it to the database
+            final newCell = GeoCell(
+              minLatitude: cell['minLat'].toString(),
+              maxLatitude: cell['maxLat'].toString(),
+              minLongitude: cell['minLong'].toString(),
+              maxLongitude: cell['maxLong'].toString(),
+            );
+            newCell.restaurants.addAll(restaurants);
+            newCell.expirationDate = DateTime.now().add(AppConstants.cacheExpirationTime);
+            isar.geoCells.put(newCell);
+          }
+        }
       });
     } catch (e) {
-      Utils.logError(message: '[RestaurantAPI] cacheCellWithRestaurants failed', error: e);
+      Utils.logError(message: '[RestaurantAPI] cacheCellsWithRestaurants failed', error: e);
     }
   }
 

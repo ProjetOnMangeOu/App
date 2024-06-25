@@ -1,5 +1,6 @@
 import 'package:isar/isar.dart';
 import 'package:onmangeou/core/domain/entities/restaurant.dart';
+import 'package:onmangeou/shared/constants/app.dart';
 
 part 'geocell.g.dart';
 
@@ -11,6 +12,7 @@ class GeoCell {
   late String maxLatitude;
   late String minLongitude;
   late String maxLongitude;
+  late DateTime expirationDate;
 
   @Index(composite: [CompositeIndex('maxLatitude'), CompositeIndex('maxLongitude')])
   late String minCoordinates;
@@ -30,5 +32,8 @@ class GeoCell {
     // Create composite index strings
     minCoordinates = '$minLatitude,$minLongitude';
     maxCoordinates = '$maxLatitude,$maxLongitude';
+
+    // Set expiration date to this cell
+    expirationDate = DateTime.now().add(AppConstants.cacheExpirationTime);
   }
 }

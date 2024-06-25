@@ -17,33 +17,38 @@ const GeoCellSchema = CollectionSchema(
   name: r'GeoCell',
   id: -8797212499892718396,
   properties: {
-    r'maxCoordinates': PropertySchema(
+    r'expirationDate': PropertySchema(
       id: 0,
+      name: r'expirationDate',
+      type: IsarType.dateTime,
+    ),
+    r'maxCoordinates': PropertySchema(
+      id: 1,
       name: r'maxCoordinates',
       type: IsarType.string,
     ),
     r'maxLatitude': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'maxLatitude',
       type: IsarType.string,
     ),
     r'maxLongitude': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'maxLongitude',
       type: IsarType.string,
     ),
     r'minCoordinates': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'minCoordinates',
       type: IsarType.string,
     ),
     r'minLatitude': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'minLatitude',
       type: IsarType.string,
     ),
     r'minLongitude': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'minLongitude',
       type: IsarType.string,
     )
@@ -137,12 +142,13 @@ void _geoCellSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.maxCoordinates);
-  writer.writeString(offsets[1], object.maxLatitude);
-  writer.writeString(offsets[2], object.maxLongitude);
-  writer.writeString(offsets[3], object.minCoordinates);
-  writer.writeString(offsets[4], object.minLatitude);
-  writer.writeString(offsets[5], object.minLongitude);
+  writer.writeDateTime(offsets[0], object.expirationDate);
+  writer.writeString(offsets[1], object.maxCoordinates);
+  writer.writeString(offsets[2], object.maxLatitude);
+  writer.writeString(offsets[3], object.maxLongitude);
+  writer.writeString(offsets[4], object.minCoordinates);
+  writer.writeString(offsets[5], object.minLatitude);
+  writer.writeString(offsets[6], object.minLongitude);
 }
 
 GeoCell _geoCellDeserialize(
@@ -152,14 +158,15 @@ GeoCell _geoCellDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = GeoCell(
-    maxLatitude: reader.readString(offsets[1]),
-    maxLongitude: reader.readString(offsets[2]),
-    minLatitude: reader.readString(offsets[4]),
-    minLongitude: reader.readString(offsets[5]),
+    maxLatitude: reader.readString(offsets[2]),
+    maxLongitude: reader.readString(offsets[3]),
+    minLatitude: reader.readString(offsets[5]),
+    minLongitude: reader.readString(offsets[6]),
   );
+  object.expirationDate = reader.readDateTime(offsets[0]);
   object.id = id;
-  object.maxCoordinates = reader.readString(offsets[0]);
-  object.minCoordinates = reader.readString(offsets[3]);
+  object.maxCoordinates = reader.readString(offsets[1]);
+  object.minCoordinates = reader.readString(offsets[4]);
   return object;
 }
 
@@ -171,7 +178,7 @@ P _geoCellDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
@@ -181,6 +188,8 @@ P _geoCellDeserializeProp<P>(
     case 4:
       return (reader.readString(offset)) as P;
     case 5:
+      return (reader.readString(offset)) as P;
+    case 6:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -558,6 +567,60 @@ extension GeoCellQueryWhere on QueryBuilder<GeoCell, GeoCell, QWhereClause> {
 
 extension GeoCellQueryFilter
     on QueryBuilder<GeoCell, GeoCell, QFilterCondition> {
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> expirationDateEqualTo(
+      DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'expirationDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition>
+      expirationDateGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'expirationDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> expirationDateLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'expirationDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> expirationDateBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'expirationDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<GeoCell, GeoCell, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1470,6 +1533,18 @@ extension GeoCellQueryLinks
 }
 
 extension GeoCellQuerySortBy on QueryBuilder<GeoCell, GeoCell, QSortBy> {
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> sortByExpirationDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'expirationDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> sortByExpirationDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'expirationDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<GeoCell, GeoCell, QAfterSortBy> sortByMaxCoordinates() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'maxCoordinates', Sort.asc);
@@ -1545,6 +1620,18 @@ extension GeoCellQuerySortBy on QueryBuilder<GeoCell, GeoCell, QSortBy> {
 
 extension GeoCellQuerySortThenBy
     on QueryBuilder<GeoCell, GeoCell, QSortThenBy> {
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> thenByExpirationDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'expirationDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GeoCell, GeoCell, QAfterSortBy> thenByExpirationDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'expirationDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<GeoCell, GeoCell, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1632,6 +1719,12 @@ extension GeoCellQuerySortThenBy
 
 extension GeoCellQueryWhereDistinct
     on QueryBuilder<GeoCell, GeoCell, QDistinct> {
+  QueryBuilder<GeoCell, GeoCell, QDistinct> distinctByExpirationDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'expirationDate');
+    });
+  }
+
   QueryBuilder<GeoCell, GeoCell, QDistinct> distinctByMaxCoordinates(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1682,6 +1775,12 @@ extension GeoCellQueryProperty
   QueryBuilder<GeoCell, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<GeoCell, DateTime, QQueryOperations> expirationDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'expirationDate');
     });
   }
 
