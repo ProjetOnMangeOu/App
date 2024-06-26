@@ -128,7 +128,12 @@ int _restaurantEstimateSize(
     }
   }
   bytesCount += 3 + object.name.length * 3;
-  bytesCount += 3 + object.phone.length * 3;
+  {
+    final value = object.phone;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   {
     final value = object.website;
     if (value != null) {
@@ -172,7 +177,7 @@ Restaurant _restaurantDeserialize(
     lat: reader.readDouble(offsets[6]),
     long: reader.readDouble(offsets[7]),
     name: reader.readString(offsets[8]),
-    phone: reader.readString(offsets[9]),
+    phone: reader.readStringOrNull(offsets[9]),
     website: reader.readStringOrNull(offsets[10]),
   );
   object.id = id;
@@ -205,7 +210,7 @@ P _restaurantDeserializeProp<P>(
     case 8:
       return (reader.readString(offset)) as P;
     case 9:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     default:
@@ -1247,8 +1252,24 @@ extension RestaurantQueryFilter
     });
   }
 
+  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> phoneIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'phone',
+      ));
+    });
+  }
+
+  QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> phoneIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'phone',
+      ));
+    });
+  }
+
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> phoneEqualTo(
-    String value, {
+    String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1261,7 +1282,7 @@ extension RestaurantQueryFilter
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> phoneGreaterThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -1276,7 +1297,7 @@ extension RestaurantQueryFilter
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> phoneLessThan(
-    String value, {
+    String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -1291,8 +1312,8 @@ extension RestaurantQueryFilter
   }
 
   QueryBuilder<Restaurant, Restaurant, QAfterFilterCondition> phoneBetween(
-    String lower,
-    String upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -2155,7 +2176,7 @@ extension RestaurantQueryProperty
     });
   }
 
-  QueryBuilder<Restaurant, String, QQueryOperations> phoneProperty() {
+  QueryBuilder<Restaurant, String?, QQueryOperations> phoneProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'phone');
     });

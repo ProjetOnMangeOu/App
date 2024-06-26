@@ -16,7 +16,7 @@ class Restaurant extends ChangeNotifier {
   late String _address;
   late double _lat;
   late double _long;
-  late String _phone;
+  late String? _phone;
   late double _googleMapRating;
   late String? _image;
   late String _gmapLink;
@@ -34,7 +34,7 @@ class Restaurant extends ChangeNotifier {
   String get address => _address;
   double get lat => _lat;
   double get long => _long;
-  String get phone => _phone;
+  String? get phone => _phone;
   double get googleMapRating => _googleMapRating;
   String? get image => _image;
   String get gmapLink => _gmapLink;
@@ -47,7 +47,7 @@ class Restaurant extends ChangeNotifier {
     required String address,
     required double lat,
     required double long,
-    required String phone,
+    String? phone,
     required double googleMapRating,
     String? image,
     required String gmapLink,
@@ -72,10 +72,10 @@ class Restaurant extends ChangeNotifier {
       documentId: data['\$id'],
       name: data['name'],
       address: data['address'],
-      lat: data['lat'],
-      long: data['long'],
+      lat: double.tryParse(data['lat'].toString()) ?? 0.0,
+      long: double.tryParse(data['long'].toString()) ?? 0.0,
       phone: data['phone'],
-      googleMapRating: data['googleMapRating'],
+      googleMapRating: double.tryParse(data['googleMapRating'].toString()) ?? 0.0,
       image: data['image'],
       gmapLink: data['gmapLink'],
       website: data['website'],

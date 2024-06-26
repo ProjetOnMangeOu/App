@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/foundation.dart';
+import 'package:onmangeou/core/domain/entities/geocell.dart';
 import 'package:onmangeou/core/domain/entities/restaurant.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
 import 'package:onmangeou/shared/utils.dart';
@@ -29,17 +30,17 @@ class RestaurantAPI extends ChangeNotifier {
 
   // Fetch restaurants from Appwrite
   Future<List<Map<String, dynamic>>> fetchRestaurantsByCell({
-    required Map<String, double> cell,
+    required GeoCell cell,
   }) async {
     try {
       final response = await database.listDocuments(
           databaseId: AppWriteConstants.databaseId,
           collectionId: AppWriteConstants.restaurantCollectionId,
           queries: [
-            Query.lessThanEqual('lat', cell['maxLat']),
-            Query.greaterThanEqual('lat', cell['minLat']),
-            Query.lessThanEqual('long', cell['maxLong']),
-            Query.greaterThanEqual('long', cell['minLong']),
+            Query.lessThanEqual('lat', double.parse(cell.maxLatitude)),
+            Query.greaterThanEqual('lat', double.parse(cell.minLatitude)),
+            Query.lessThanEqual('long', double.parse(cell.maxLongitude)),
+            Query.greaterThanEqual('long', double.parse(cell.minLongitude)),
           ]
       );
       return response.documents

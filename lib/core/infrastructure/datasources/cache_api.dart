@@ -34,7 +34,7 @@ class CacheAPI extends ChangeNotifier {
   }
   
   // Fetch cells from cache database
-  Future<List<GeoCell>> fetchCells({
+  Future<List<GeoCell?>> fetchCells({
     required List<Map<String, double>> cells,
   }) async {
     Utils.logDebug(message: '[CacheAPI] Fetching cells from cache...');
@@ -48,7 +48,7 @@ class CacheAPI extends ChangeNotifier {
             ).findFirst();
         return result;
       }));
-      return futureResult.where((cell) => cell != null).cast<GeoCell>().toList();
+      return futureResult;
     });
   }
 
@@ -56,7 +56,7 @@ class CacheAPI extends ChangeNotifier {
   Price? fetchPriceByDocumentIdSync({
     required String documentId,
   }) {
-    Utils.logDebug(message: '[CacheAPI] Fetching price from cache...');
+    // Utils.logDebug(message: '[CacheAPI] Fetching price from cache...');
     return isar.txnSync(() {
       return isar.prices.where().documentIdEqualTo(documentId).findFirstSync();
     });
@@ -66,47 +66,21 @@ class CacheAPI extends ChangeNotifier {
   void writePriceSync({
     required Price price,
   }) {
-    Utils.logDebug(message: '[CacheAPI] Writing price to cache...');
+    // Utils.logDebug(message: '[CacheAPI] Writing price to cache...');
     isar.writeTxnSync(() {
       isar.prices.putSync(price);
     });
   }
 
-  Future<void> cacheRestaurantsByCells({
-    required Map<
-        Map<String, double>,
-        List<Restaurant>
-    > cells,
-  }) async {
+  void cacheRestaurantsByCells({
+    required List<GeoCell> cells,
+  }) {
     try {
       Utils.logDebug(message: '[CacheAPI] Caching restaurants by cells...');
-      await isar.writeTxn(() async {
-        for(var i = 0; i < cells.length; i++) {
-          final cell = cells.keys.elementAt(i);
-          final restaurants = cells.values.elementAt(i);
-          final cellInCache = await isar.geoCells.where()
-              .minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
-              '${cell['minLat']},${cell['minLong']}',
-              cell['maxLat'].toString(),
-              cell['maxLong'].toString()
-          ).findFirst();
-
-          if(cellInCache != null) {
-            // If the cell exists, update the existing restaurants and add new ones and update expiration date on the cell
-          } else {
-            // If the cell does not exist, create a new cell and add it to the database
-            final newCell = GeoCell(
-              minLatitude: cell['minLat'].toString(),
-              maxLatitude: cell['maxLat'].toString(),
-              minLongitude: cell['minLong'].toString(),
-              maxLongitude: cell['maxLong'].toString(),
-            );
-            newCell.restaurants.addAll(restaurants);
-            newCell.expirationDate = DateTime.now().add(AppConstants.cacheExpirationTime);
-            isar.geoCells.put(newCell);
-          }
-        }
+      isar.writeTxnSync(() {
+        isar.geoCells.putAllSync(cells);
       });
+
     } catch (e) {
       Utils.logError(message: '[CacheAPI] cacheRestaurantsByCells failed', error: e);
     }
