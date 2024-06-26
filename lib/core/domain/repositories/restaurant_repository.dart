@@ -98,6 +98,7 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
         final restaurants = await restaurantAPI.fetchRestaurantsByCell(cell: cell);
         final toAddRestaurants = restaurants.map((restaurant) => Restaurant.fromMap(restaurant, cacheAPI)).toList();
         cell.restaurants.clear();
+        cacheAPI.resetCellRestaurantsLinks(cell: cell);
         cell.restaurants.addAll(toAddRestaurants);
         return cell;
       }));

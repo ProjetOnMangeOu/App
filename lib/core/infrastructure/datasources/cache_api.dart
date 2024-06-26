@@ -85,4 +85,17 @@ class CacheAPI extends ChangeNotifier {
       Utils.logError(message: '[CacheAPI] cacheRestaurantsByCells failed', error: e);
     }
   }
+
+  void resetCellRestaurantsLinks({
+    required GeoCell cell,
+  }) {
+    try {
+      isar.writeTxnSync(() {
+        cell.restaurants.resetSync();
+      });
+    } on IsarError catch (_) {
+      // Ignore isar error
+      // Utils.logError(message: '[CacheAPI] resetCellRestaurantsLinks failed', error: e);
+    }
+  }
 }
