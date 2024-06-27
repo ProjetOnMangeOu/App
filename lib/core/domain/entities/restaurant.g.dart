@@ -78,7 +78,21 @@ const RestaurantSchema = CollectionSchema(
   deserialize: _restaurantDeserialize,
   deserializeProp: _restaurantDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'documentId': IndexSchema(
+      id: 4187168439921340405,
+      name: r'documentId',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'documentId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
   links: {
     r'price': LinkSchema(
       id: -5134939375516090992,
@@ -315,6 +329,51 @@ extension RestaurantQueryWhere
         upper: upperId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<Restaurant, Restaurant, QAfterWhereClause> documentIdEqualTo(
+      String documentId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'documentId',
+        value: [documentId],
+      ));
+    });
+  }
+
+  QueryBuilder<Restaurant, Restaurant, QAfterWhereClause> documentIdNotEqualTo(
+      String documentId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'documentId',
+              lower: [],
+              upper: [documentId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'documentId',
+              lower: [documentId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'documentId',
+              lower: [documentId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'documentId',
+              lower: [],
+              upper: [documentId],
+              includeUpper: false,
+            ));
+      }
     });
   }
 }

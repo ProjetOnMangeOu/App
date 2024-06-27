@@ -38,7 +38,21 @@ const RestaurantServiceSchema = CollectionSchema(
   deserialize: _restaurantServiceDeserialize,
   deserializeProp: _restaurantServiceDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'documentId': IndexSchema(
+      id: 4187168439921340405,
+      name: r'documentId',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'documentId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {},
   getId: _restaurantServiceGetId,
@@ -199,6 +213,51 @@ extension RestaurantServiceQueryWhere
         upper: upperId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<RestaurantService, RestaurantService, QAfterWhereClause>
+      documentIdEqualTo(String documentId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'documentId',
+        value: [documentId],
+      ));
+    });
+  }
+
+  QueryBuilder<RestaurantService, RestaurantService, QAfterWhereClause>
+      documentIdNotEqualTo(String documentId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'documentId',
+              lower: [],
+              upper: [documentId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'documentId',
+              lower: [documentId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'documentId',
+              lower: [documentId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'documentId',
+              lower: [],
+              upper: [documentId],
+              includeUpper: false,
+            ));
+      }
     });
   }
 }

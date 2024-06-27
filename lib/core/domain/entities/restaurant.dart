@@ -11,7 +11,8 @@ part 'restaurant.g.dart';
 @collection
 class Restaurant extends ChangeNotifier {
   Id id = Isar.autoIncrement;
-  late String _documentId;
+  @Index()
+  late String documentId;
   late String _name;
   late String _address;
   late double _lat;
@@ -29,7 +30,6 @@ class Restaurant extends ChangeNotifier {
   final IsarLinks<RestaurantHours> restaurantHours = IsarLinks<RestaurantHours>();
 
   // Getters
-  String get documentId => _documentId;
   String get name => _name;
   String get address => _address;
   double get lat => _lat;
@@ -42,7 +42,7 @@ class Restaurant extends ChangeNotifier {
 
   // Constructor
   Restaurant({
-    required String documentId,
+    required this.documentId,
     required String name,
     required String address,
     required double lat,
@@ -53,7 +53,6 @@ class Restaurant extends ChangeNotifier {
     required String gmapLink,
     String? website,
   }) {
-    _documentId = documentId;
     _name = name;
     _address = address;
     _lat = lat;
@@ -68,46 +67,51 @@ class Restaurant extends ChangeNotifier {
 
   // Factory method to create a Restaurant object from a Map
   factory Restaurant.fromMap(Map<String, dynamic> data, CacheAPI cacheAPI) {
-    final restaurant = Restaurant(
-      documentId: data['\$id'],
-      name: data['name'],
-      address: data['address'],
-      lat: double.tryParse(data['lat'].toString()) ?? 0.0,
-      long: double.tryParse(data['long'].toString()) ?? 0.0,
-      phone: data['phone'],
-      googleMapRating: double.tryParse(data['googleMapRating'].toString()) ?? 0.0,
-      image: data['image'],
-      gmapLink: data['gmapLink'],
-      website: data['website'],
-    );
+    final existingRestaurant = cacheAPI.fetchRestaurantByDocumentIdSync(documentId: data['\$id']);
+    if(existingRestaurant != null) {
+      return existingRestaurant.update(data, cacheAPI);
+    } else {
+      final restaurant = Restaurant(
+        documentId: data['\$id'],
+        name: data['name'],
+        address: data['address'],
+        lat: double.tryParse(data['lat'].toString()) ?? 0.0,
+        long: double.tryParse(data['long'].toString()) ?? 0.0,
+        phone: data['phone'],
+        googleMapRating: double.tryParse(data['googleMapRating'].toString()) ?? 0.0,
+        image: data['image'],
+        gmapLink: data['gmapLink'],
+        website: data['website'],
+      );
 
-    if(data['price'] != null){
-      final existingPrice = cacheAPI.fetchPriceByDocumentIdSync(documentId: data['price']['\$id']);
-      if(existingPrice != null) {
-        restaurant.price.value = existingPrice;
-      } else {
-        final newPrice = Price.fromMap(data['price']);
-        cacheAPI.writePriceSync(price: newPrice);
-        restaurant.price.value = newPrice;
+      if(data['price'] != null){
+        final existingPrice = cacheAPI.fetchPriceByDocumentIdSync(documentId: data['price']['\$id']);
+        if(existingPrice != null) {
+          restaurant.price.value = existingPrice;
+        } else {
+          final newPrice = Price.fromMap(data['price']);
+          cacheAPI.writePriceSync(price: newPrice);
+          restaurant.price.value = newPrice;
+        }
       }
-    }
 
-    restaurant.restaurantTypes.addAll(
-      (data['restaurantTypes'] as List).map((e) => RestaurantTypes.fromMap(e)),
-    );
-    restaurant.restaurantService.addAll(
-      (data['restaurantService'] as List).map((e) => RestaurantService.fromMap(e)),
-    );
-    restaurant.restaurantHours.addAll(
-      (data['restaurantHours'] as List).map((e) => RestaurantHours.fromMap(e)),
-    );
-    return restaurant;
+      restaurant.restaurantTypes.addAll(
+        (data['restaurantTypes'] as List).map((e) => RestaurantTypes.fromMap(e, cacheAPI)),
+      );
+      restaurant.restaurantService.addAll(
+        (data['restaurantService'] as List).map((e) => RestaurantService.fromMap(e, cacheAPI)),
+      );
+      restaurant.restaurantHours.addAll(
+        (data['restaurantHours'] as List).map((e) => RestaurantHours.fromMap(e, cacheAPI)),
+      );
+      return restaurant;
+    }
   }
 
   // Method to convert a Restaurant object to a Map
   Map<String, dynamic> toMap() {
     return {
-      '\$id': _documentId,
+      '\$id': documentId,
       'name': _name,
       'address': _address,
       'lat': _lat,
@@ -123,4 +127,42 @@ class Restaurant extends ChangeNotifier {
       'restaurantHours': restaurantHours.map((hours) => hours.toMap()).toList(),
     };
   }
+
+  Restaurant update(Map<String, dynamic> data, CacheAPI cacheAPI) {
+    if (data.containsKey('name')) {
+      _name = data['name'];
+    }
+    if (data.containsKey('address')) {
+      _address = data['address'];
+    }
+    if (data.containsKey('lat')) {
+      _lat = double.tryParse(data['lat'].toString()) ?? 0.0;
+    }
+    if (data.containsKey('long')) {
+      _long = double.tryParse(data['long'].toString()) ?? 0.0;
+    }
+    if (data.containsKey('phone')) {
+      _phone = data['phone'];
+    }
+    if (data.containsKey('googleMapRating')) {
+      _googleMapRating = double.tryParse(data['googleMapRating'].toString()) ?? 0.0;
+    }
+    if (data.containsKey('image')) {
+      _image = data['image'];
+    }
+    if (data.containsKey('gmapLink')) {
+      _gmapLink = data['gmapLink'];
+    }
+    if (data.containsKey('website')) {
+      _website = data['website'];
+    }
+
+    //TODO: implement update for relationships
+    cacheAPI.resetRestaurantLinks(restaurant: this);
+    cacheAPI.writeRestaurant(restaurant: this);
+
+    notifyListeners();
+    return this;
+  }
+
 }

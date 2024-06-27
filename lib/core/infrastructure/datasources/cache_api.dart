@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:onmangeou/core/domain/entities/geocell.dart';
@@ -52,6 +54,16 @@ class CacheAPI extends ChangeNotifier {
     });
   }
 
+  // Fetch restaurant from cache database
+  Restaurant? fetchRestaurantByDocumentIdSync({
+    required String documentId,
+  }) {
+    // Utils.logDebug(message: '[CacheAPI] Fetching restaurant from cache...');
+    return isar.txnSync(() {
+      return isar.restaurants.where().documentIdEqualTo(documentId).findFirstSync();
+    });
+  }
+
   // Fetch price from cache database
   Price? fetchPriceByDocumentIdSync({
     required String documentId,
@@ -59,6 +71,36 @@ class CacheAPI extends ChangeNotifier {
     // Utils.logDebug(message: '[CacheAPI] Fetching price from cache...');
     return isar.txnSync(() {
       return isar.prices.where().documentIdEqualTo(documentId).findFirstSync();
+    });
+  }
+
+  // Fetch restaurant hours from cache database
+  RestaurantHours? fetchRestaurantHoursByDocumentIdSync({
+    required String documentId,
+  }) {
+    // Utils.logDebug(message: '[CacheAPI] Fetching restaurant hours from cache...');
+    return isar.txnSync(() {
+      return isar.restaurantHours.where().documentIdEqualTo(documentId).findFirstSync();
+    });
+  }
+
+  // Fetch restaurant service from cache database
+  RestaurantService? fetchRestaurantServiceByDocumentIdSync({
+    required String documentId,
+  }) {
+    // Utils.logDebug(message: '[CacheAPI] Fetching restaurant service from cache...');
+    return isar.txnSync(() {
+      return isar.restaurantServices.where().documentIdEqualTo(documentId).findFirstSync();
+    });
+  }
+
+  // Fetch restaurant types from cache database
+  RestaurantTypes? fetchRestaurantTypesByDocumentIdSync({
+    required String documentId,
+  }) {
+    // Utils.logDebug(message: '[CacheAPI] Fetching restaurant types from cache...');
+    return isar.txnSync(() {
+      return isar.restaurantTypes.where().documentIdEqualTo(documentId).findFirstSync();
     });
   }
 
@@ -72,7 +114,17 @@ class CacheAPI extends ChangeNotifier {
     });
   }
 
-  void cacheRestaurantsByCells({
+  // Write restaurant to cache database
+  void writeRestaurant({
+    required Restaurant restaurant,
+  }) {
+    // Utils.logDebug(message: '[CacheAPI] Writing restaurant to cache...');
+    isar.writeTxnSync(() {
+      isar.restaurants.putSync(restaurant);
+    });
+  }
+
+  void cacheRestaurantsByCellsSync({
     required List<GeoCell> cells,
   }) {
     try {
@@ -80,7 +132,7 @@ class CacheAPI extends ChangeNotifier {
       isar.writeTxnSync(() {
         isar.geoCells.putAllSync(cells);
       });
-
+      Utils.logDebug(message: '[CacheAPI] cacheRestaurantsByCells successful');
     } catch (e) {
       Utils.logError(message: '[CacheAPI] cacheRestaurantsByCells failed', error: e);
     }
@@ -96,6 +148,21 @@ class CacheAPI extends ChangeNotifier {
     } on IsarError catch (_) {
       // Ignore isar error
       // Utils.logError(message: '[CacheAPI] resetCellRestaurantsLinks failed', error: e);
+    }
+  }
+
+  void resetRestaurantLinks({
+    required Restaurant restaurant,
+  }) {
+    try {
+      isar.writeTxnSync(() {
+        restaurant.restaurantTypes.resetSync();
+        restaurant.restaurantService.resetSync();
+        restaurant.restaurantHours.resetSync();
+      });
+    } on IsarError catch (_) {
+      // Ignore isar error
+      // Utils.logError(message: '[CacheAPI] resetRestaurantLinks failed', error: e);
     }
   }
 }

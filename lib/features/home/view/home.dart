@@ -26,7 +26,8 @@ class _HomeViewState extends State<HomeView> {
         const Text('Home'),
         Consumer<RestaurantRepository?>(
           builder: (context, restaurantRepository, child) {
-            return Text('Restaurants: ${restaurantRepository?.watchedCells.map((cell) => cell.restaurants).length}');
+            var restaurants = restaurantRepository?.watchedCells.expand((cell) => cell.restaurants).toList() ?? [];
+            return Text('Restaurants: ${restaurants.length}');
           },
         ),
         ElevatedButton(

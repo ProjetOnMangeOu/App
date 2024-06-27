@@ -81,7 +81,7 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
 
       // Trigger updateWatchedCells
       updateWatchedCells();
-
+      Utils.logDebug(message: '[RestaurantRepository] Searched restaurants');
     } catch (e) {
       Utils.logError(message: '[RestaurantRepository] search failed', error: e);
     } finally {
@@ -93,7 +93,9 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
   Future<void> updateWatchedCells() async {
     Utils.logDebug(message: '[RestaurantRepository] Updating watched cells...');
     try {
-      final cells = await Future.wait(watchedCells.map((cell) async {
+      final cellsToUpdate = await Future.wait(watchedCells.map((cell) async {
+        // Check if cell is expired
+        if (cell.expirationDate.isAfter(DateTime.now())) return null;
         // Fetch restaurants from Appwrite
         final restaurants = await restaurantAPI.fetchRestaurantsByCell(cell: cell);
         final toAddRestaurants = restaurants.map((restaurant) => Restaurant.fromMap(restaurant, cacheAPI)).toList();
@@ -104,7 +106,8 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
       }));
 
       // Cache restaurants by cells
-      cacheAPI.cacheRestaurantsByCells(cells: cells);
+      cacheAPI.cacheRestaurantsByCellsSync(cells: cellsToUpdate.where((cell) => cell != null).toList().cast<GeoCell>());
+      Utils.logDebug(message: '[RestaurantRepository] Updated watched cells');
     } catch (e) {
       Utils.logError(message: '[RestaurantRepository] updateWatchedCells failed', error: e);
     } finally {
