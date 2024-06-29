@@ -33,6 +33,7 @@ class RestaurantAPI extends ChangeNotifier {
     required GeoCell cell,
   }) async {
     try {
+      Utils.logDebug(message: '[RestaurantAPI] Fetching restaurants by cell...');
       final response = await database.listDocuments(
           databaseId: AppWriteConstants.databaseId,
           collectionId: AppWriteConstants.restaurantCollectionId,
