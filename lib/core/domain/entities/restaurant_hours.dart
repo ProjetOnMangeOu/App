@@ -33,7 +33,7 @@ class RestaurantHours {
   factory RestaurantHours.fromMap(Map<String, dynamic> data, CacheAPI cacheAPI) {
     final existingRestaurantHours = cacheAPI.fetchRestaurantHoursByDocumentIdSync(documentId: data['\$id']);
     if(existingRestaurantHours != null) {
-      return existingRestaurantHours;
+      return existingRestaurantHours.update(data, cacheAPI);
     } else {
       return RestaurantHours(
         documentId: data['\$id'],
@@ -52,5 +52,13 @@ class RestaurantHours {
       'closingTime': _closingTime,
       'dayOfWeek': _dayOfWeek,
     };
+  }
+
+  RestaurantHours update(Map<String, dynamic> data, CacheAPI cacheAPI) {
+    _openingTime = data['openingTime'];
+    _closingTime = data['closingTime'];
+    _dayOfWeek = data['dayOfWeek'];
+    cacheAPI.writeRestaurantHoursSync(restaurantHours: this);
+    return this;
   }
 }

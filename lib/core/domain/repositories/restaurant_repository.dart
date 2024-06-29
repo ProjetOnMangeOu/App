@@ -11,14 +11,16 @@ import 'package:onmangeou/shared/utils.dart';
 abstract class RestaurantRepositoryClass extends ChangeNotifier {
   Future<void> search();
   Future<void> updateWatchedCells();
+  Future<void> queryWatchedCells();
 }
 
 class RestaurantRepository extends ChangeNotifier implements RestaurantRepositoryClass {
+  bool isInitialized = false;
   var searchMeters = AppConstants.searchMeters;
   late final RestaurantAPI restaurantAPI;
   late final CacheAPI cacheAPI;
   late List<GeoCell> watchedCells;
-  late Stream<void> restaurantStream;
+  late Stream<void> watchedCellsStream;
 
   // Constructor
   RestaurantRepository(this.restaurantAPI, this.cacheAPI) {
@@ -29,15 +31,16 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
   Future<void> init() async {
     Utils.logDebug(message: '[RestaurantRepository] Initializing...');
     await search();
-    initRestaurantStream();
+    initWatchedCellsStream();
+    isInitialized = true;
     Utils.logDebug(message: '[RestaurantRepository] Initialized');
   }
 
-  void initRestaurantStream() {
-    restaurantStream = cacheAPI.isar.restaurants.watchLazy();
-    restaurantStream.listen((_) {
-      Utils.logDebug(message: '[RestaurantRepository] Restaurant stream updated');
-      // TODO: Implement a way to update watchedCells when a restaurant is updated
+  void initWatchedCellsStream() {
+    watchedCellsStream = cacheAPI.isar.geoCells.watchLazy();
+    watchedCellsStream.listen((_) {
+      Utils.logDebug(message: '[RestaurantRepository] Cell stream updated');
+      queryWatchedCells();
     });
   }
 
@@ -96,6 +99,7 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
       final cellsToUpdate = await Future.wait(watchedCells.map((cell) async {
         // Check if cell is expired
         if (cell.expirationDate.isAfter(DateTime.now())) return null;
+        cell.expirationDate = DateTime.now().add(AppConstants.cacheExpirationTime);
         // Fetch restaurants from Appwrite
         final restaurants = await restaurantAPI.fetchRestaurantsByCell(cell: cell);
         final toAddRestaurants = restaurants.map((restaurant) => Restaurant.fromMap(restaurant, cacheAPI)).toList();
@@ -110,6 +114,20 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
       Utils.logDebug(message: '[RestaurantRepository] Updated watched cells');
     } catch (e) {
       Utils.logError(message: '[RestaurantRepository] updateWatchedCells failed', error: e);
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  @override
+  Future<void> queryWatchedCells() async {
+    Utils.logDebug(message: '[RestaurantRepository] Querying watched cells...');
+    try {
+      final cellsResult = await cacheAPI.fetchWatchedCellsWithLinks(cells: watchedCells);
+      watchedCells = cellsResult.where((cell) => cell != null).toList().cast<GeoCell>();
+      Utils.logDebug(message: '[RestaurantRepository] Queried watched cells');
+    } catch (e) {
+      Utils.logError(message: '[RestaurantRepository] queryWatchedCells failed', error: e);
     } finally {
       notifyListeners();
     }

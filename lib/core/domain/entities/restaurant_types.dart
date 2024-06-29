@@ -25,7 +25,7 @@ class RestaurantTypes {
   factory RestaurantTypes.fromMap(Map<String, dynamic> data, CacheAPI cacheAPI) {
     final existingRestaurantType = cacheAPI.fetchRestaurantTypesByDocumentIdSync(documentId: data['\$id']);
     if(existingRestaurantType != null) {
-      return existingRestaurantType;
+      return existingRestaurantType.update(data, cacheAPI);
     } else {
       return RestaurantTypes(
         documentId: data['\$id'],
@@ -40,5 +40,11 @@ class RestaurantTypes {
       '\$id': documentId,
       'name': _name,
     };
+  }
+
+  RestaurantTypes update(Map<String, dynamic> data, CacheAPI cacheAPI) {
+    _name = data['name'];
+    cacheAPI.writeRestaurantTypesSync(restaurantTypes: this);
+    return this;
   }
 }

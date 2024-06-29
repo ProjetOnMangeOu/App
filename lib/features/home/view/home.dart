@@ -27,7 +27,18 @@ class _HomeViewState extends State<HomeView> {
         Consumer<RestaurantRepository?>(
           builder: (context, restaurantRepository, child) {
             var restaurants = restaurantRepository?.watchedCells.expand((cell) => cell.restaurants).toList() ?? [];
-            return Text('Restaurants: ${restaurants.length}');
+            return Expanded(
+              child: ListView.builder(
+                itemCount: restaurants.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: restaurants[index].image != null ? Image.network(restaurants[index].image!) : null,
+                    title: Text(restaurants[index].name),
+                    subtitle: Text('${restaurants[index].address} - ${restaurants[index].restaurantTypes.map((type) => type.name).join(', ')}'),
+                  );
+                },
+              ),
+            );
           },
         ),
         ElevatedButton(

@@ -157,10 +157,20 @@ class Restaurant extends ChangeNotifier {
       _website = data['website'];
     }
 
-    //TODO: implement update for relationships
+    restaurantTypes.clear();
+    restaurantTypes.addAll(
+      (data['restaurantTypes'] as List).map((e) => RestaurantTypes.fromMap(e, cacheAPI)),
+    );
+    restaurantService.clear();
+    restaurantService.addAll(
+      (data['restaurantService'] as List).map((e) => RestaurantService.fromMap(e, cacheAPI)),
+    );
+    restaurantHours.clear();
+    restaurantHours.addAll(
+      (data['restaurantHours'] as List).map((e) => RestaurantHours.fromMap(e, cacheAPI)),
+    );
     cacheAPI.resetRestaurantLinks(restaurant: this);
     cacheAPI.writeRestaurant(restaurant: this);
-
     notifyListeners();
     return this;
   }

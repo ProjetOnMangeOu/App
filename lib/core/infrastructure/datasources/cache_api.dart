@@ -54,6 +54,32 @@ class CacheAPI extends ChangeNotifier {
     });
   }
 
+  // Fetch watched cells from cache database
+  Future<List<GeoCell?>> fetchWatchedCellsWithLinks({required List<GeoCell> cells}) async {
+    Utils.logDebug(message: '[CacheAPI] Fetching watched cells from cache...');
+    return await isar.txn(() async {
+      final futureResult = await Future.wait(cells.map((cell) async {
+        final result = await isar.geoCells.where().minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
+          '${cell.minLatitude},${cell.minLongitude}',
+          cell.maxLatitude,
+          cell.maxLongitude
+        ).findFirst();
+
+        // if (result != null) {
+        //   result.restaurants.load();
+        //   result.restaurants.forEach((restaurant) {
+        //     restaurant.restaurantTypes.load();
+        //     restaurant.restaurantService.load();
+        //     restaurant.restaurantHours.load();
+        //   });
+        // }
+
+        return result;
+      }));
+      return futureResult;
+    });
+  }
+
   // Fetch restaurant from cache database
   Restaurant? fetchRestaurantByDocumentIdSync({
     required String documentId,
@@ -124,6 +150,36 @@ class CacheAPI extends ChangeNotifier {
     });
   }
 
+  // Write restaurantHours to cache database
+  void writeRestaurantHoursSync({
+    required RestaurantHours restaurantHours,
+  }) {
+    // Utils.logDebug(message: '[CacheAPI] Writing restaurant hours to cache...');
+    isar.writeTxnSync(() {
+      isar.restaurantHours.putSync(restaurantHours);
+    });
+  }
+
+  // Write restaurantService to cache database
+  void writeRestaurantServiceSync({
+    required RestaurantService restaurantService,
+  }) {
+    // Utils.logDebug(message: '[CacheAPI] Writing restaurant service to cache...');
+    isar.writeTxnSync(() {
+      isar.restaurantServices.putSync(restaurantService);
+    });
+  }
+
+  // Write restaurantTypes to cache database
+  void writeRestaurantTypesSync({
+    required RestaurantTypes restaurantTypes,
+  }) {
+    // Utils.logDebug(message: '[CacheAPI] Writing restaurant types to cache...');
+    isar.writeTxnSync(() {
+      isar.restaurantTypes.putSync(restaurantTypes);
+    });
+  }
+
   void cacheRestaurantsByCellsSync({
     required List<GeoCell> cells,
   }) {
@@ -132,9 +188,9 @@ class CacheAPI extends ChangeNotifier {
       isar.writeTxnSync(() {
         isar.geoCells.putAllSync(cells);
       });
-      Utils.logDebug(message: '[CacheAPI] cacheRestaurantsByCells successful');
+      Utils.logDebug(message: '[CacheAPI] Caching restaurants by cells successful');
     } catch (e) {
-      Utils.logError(message: '[CacheAPI] cacheRestaurantsByCells failed', error: e);
+      Utils.logError(message: '[CacheAPI] Caching restaurants by cells failed', error: e);
     }
   }
 
