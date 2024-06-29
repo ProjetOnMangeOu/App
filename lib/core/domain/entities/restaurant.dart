@@ -157,6 +157,8 @@ class Restaurant extends ChangeNotifier {
       _website = data['website'];
     }
 
+    cacheAPI.resetRestaurantLinks(restaurant: this);
+
     restaurantTypes.clear();
     restaurantTypes.addAll(
       (data['restaurantTypes'] as List).map((e) => RestaurantTypes.fromMap(e, cacheAPI)),
@@ -169,8 +171,7 @@ class Restaurant extends ChangeNotifier {
     restaurantHours.addAll(
       (data['restaurantHours'] as List).map((e) => RestaurantHours.fromMap(e, cacheAPI)),
     );
-    cacheAPI.resetRestaurantLinks(restaurant: this);
-    cacheAPI.writeRestaurant(restaurant: this);
+    cacheAPI.writeRestaurantSync(restaurant: this);
     notifyListeners();
     return this;
   }

@@ -33,7 +33,7 @@ class RestaurantHours {
   factory RestaurantHours.fromMap(Map<String, dynamic> data, CacheAPI cacheAPI) {
     final existingRestaurantHours = cacheAPI.fetchRestaurantHoursByDocumentIdSync(documentId: data['\$id']);
     if(existingRestaurantHours != null) {
-      return existingRestaurantHours.update(data, cacheAPI);
+      return existingRestaurantHours;
     } else {
       return RestaurantHours(
         documentId: data['\$id'],

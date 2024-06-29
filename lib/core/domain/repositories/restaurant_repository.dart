@@ -123,7 +123,7 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
   Future<void> queryWatchedCells() async {
     Utils.logDebug(message: '[RestaurantRepository] Querying watched cells...');
     try {
-      final cellsResult = await cacheAPI.fetchWatchedCellsWithLinks(cells: watchedCells);
+      final cellsResult = await cacheAPI.fetchWatchedCells(cells: watchedCells);
       watchedCells = cellsResult.where((cell) => cell != null).toList().cast<GeoCell>();
       Utils.logDebug(message: '[RestaurantRepository] Queried watched cells');
     } catch (e) {

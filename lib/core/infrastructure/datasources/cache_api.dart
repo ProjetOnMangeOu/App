@@ -55,7 +55,7 @@ class CacheAPI extends ChangeNotifier {
   }
 
   // Fetch watched cells from cache database
-  Future<List<GeoCell?>> fetchWatchedCellsWithLinks({required List<GeoCell> cells}) async {
+  Future<List<GeoCell?>> fetchWatchedCells({required List<GeoCell> cells}) async {
     Utils.logDebug(message: '[CacheAPI] Fetching watched cells from cache...');
     return await isar.txn(() async {
       final futureResult = await Future.wait(cells.map((cell) async {
@@ -64,15 +64,6 @@ class CacheAPI extends ChangeNotifier {
           cell.maxLatitude,
           cell.maxLongitude
         ).findFirst();
-
-        // if (result != null) {
-        //   result.restaurants.load();
-        //   result.restaurants.forEach((restaurant) {
-        //     restaurant.restaurantTypes.load();
-        //     restaurant.restaurantService.load();
-        //     restaurant.restaurantHours.load();
-        //   });
-        // }
 
         return result;
       }));
@@ -141,12 +132,13 @@ class CacheAPI extends ChangeNotifier {
   }
 
   // Write restaurant to cache database
-  void writeRestaurant({
+  void writeRestaurantSync({
     required Restaurant restaurant,
   }) {
     // Utils.logDebug(message: '[CacheAPI] Writing restaurant to cache...');
     isar.writeTxnSync(() {
       isar.restaurants.putSync(restaurant);
+      restaurant.restaurantTypes.saveSync();
     });
   }
 

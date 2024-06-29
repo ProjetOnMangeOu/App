@@ -31,10 +31,12 @@ class _HomeViewState extends State<HomeView> {
               child: ListView.builder(
                 itemCount: restaurants.length,
                 itemBuilder: (context, index) {
+                  final restaurant = restaurants[index];
+                  final types = restaurant.restaurantTypes.map((type) => type.name).join(', ');
                   return ListTile(
-                    leading: restaurants[index].image != null ? Image.network(restaurants[index].image!) : null,
-                    title: Text(restaurants[index].name),
-                    subtitle: Text('${restaurants[index].address} - ${restaurants[index].restaurantTypes.map((type) => type.name).join(', ')}'),
+                    leading: restaurant.image != null ? Image.network(restaurant.image!) : null,
+                    title: Text(restaurant.name),
+                    subtitle: Text('${restaurant.address} - $types'),
                   );
                 },
               ),
