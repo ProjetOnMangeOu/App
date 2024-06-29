@@ -19,7 +19,7 @@ class OMGUButtons extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.black,
-          backgroundColor: this.color, // Text color
+          backgroundColor: color, // Text color
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),

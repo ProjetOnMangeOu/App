@@ -4,6 +4,7 @@ import 'package:onmangeou/core/domain/repositories/restaurant_repository.dart';
 import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:onmangeou/core/infrastructure/datasources/cache_api.dart';
 import 'package:onmangeou/core/infrastructure/datasources/restaurant_api.dart';
+import 'package:onmangeou/shared/theme/theme_data.dart';
 import 'package:provider/provider.dart';
 import 'package:onmangeou/core/domain/entities/user.dart';
 
@@ -59,11 +60,7 @@ class AppRoot extends StatelessWidget {
     return MaterialApp.router(
       title: 'On Mange Où ?',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
-        fontFamily: 'Inter',
-        useMaterial3: true,
-      ),
+      theme: ThemeClass.lightTheme,
       routerConfig: router,
     );
   }

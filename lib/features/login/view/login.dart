@@ -5,7 +5,7 @@ import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:provider/provider.dart';
 
-import 'package:onmangeou/shared/widget/buttons.dart';
+import 'package:onmangeou/shared/widgets/buttons.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
