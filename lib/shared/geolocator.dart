@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:onmangeou/shared/utils.dart';
 
 /// Determine the current position of the device.
 ///

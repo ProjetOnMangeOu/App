@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:onmangeou/core/domain/entities/geocell.dart';
@@ -8,7 +6,6 @@ import 'package:onmangeou/core/domain/entities/restaurant.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_hours.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_service.dart';
 import 'package:onmangeou/core/domain/entities/restaurant_types.dart';
-import 'package:onmangeou/shared/constants/app.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:path_provider/path_provider.dart';
 

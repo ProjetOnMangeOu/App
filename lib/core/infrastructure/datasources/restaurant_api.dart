@@ -1,7 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/foundation.dart';
 import 'package:onmangeou/core/domain/entities/geocell.dart';
-import 'package:onmangeou/core/domain/entities/restaurant.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
 import 'package:onmangeou/shared/utils.dart';
 
