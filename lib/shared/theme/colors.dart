@@ -15,4 +15,34 @@ class AppColors {
     900: Color(0xFF9D490F),
     950: Color(0xFF441C06),
   });
+
+  static const int secondaryColor = 0xFFFF4D58;
+  static const secondarySwatch = MaterialColor(secondaryColor, <int, Color>{
+    50: Color(0xFFFFF1F2),
+    100: Color(0xFFFFDFE1),
+    200: Color(0xFFFFC5C9),
+    300: Color(0xFFFF9DA3),
+    400: Color(0xFFFF646E),
+    500: Color(secondaryColor),
+    600: Color(0xFFED1522),
+    700: Color(0xFFC80D19),
+    800: Color(0xFFA50F18),
+    900: Color(0xFF88141B),
+    950: Color(0xFF4B0408),
+  });
+
+  static const int accentColor = 0xFF38AEFE;
+  static const accentSwatch = MaterialColor(accentColor, <int, Color>{
+    50: Color(0xFFF0F8FF),
+    100: Color(0xFFDFEFFF),
+    200: Color(0xFFB8E0FF),
+    300: Color(0xFF79C7FF),
+    400: Color(accentColor),
+    500: Color(0xFF0791F0),
+    600: Color(0xFF0072CD),
+    700: Color(0xFF005AA6),
+    800: Color(0xFF034D89),
+    900: Color(0xFF094171),
+    950: Color(0xFF06284B),
+  });
 }
