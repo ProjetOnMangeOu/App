@@ -26,9 +26,11 @@ class RestaurantService {
   }
 
   // Factory method to create a RestaurantService object from a Map
-  factory RestaurantService.fromMap(Map<String, dynamic> data, CacheAPI cacheAPI) {
-    final existingRestaurantService = cacheAPI.fetchRestaurantServiceByDocumentIdSync(documentId: data['\$id']);
-    if(existingRestaurantService != null) {
+  factory RestaurantService.fromMap(
+      Map<String, dynamic> data, CacheAPI cacheAPI) {
+    final existingRestaurantService = cacheAPI
+        .fetchRestaurantServiceByDocumentIdSync(documentId: data['\$id']);
+    if (existingRestaurantService != null) {
       return existingRestaurantService;
     } else {
       return RestaurantService(

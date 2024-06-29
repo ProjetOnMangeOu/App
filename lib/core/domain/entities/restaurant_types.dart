@@ -22,9 +22,11 @@ class RestaurantTypes {
   }
 
   // Factory method to create a RestaurantType object from a Map
-  factory RestaurantTypes.fromMap(Map<String, dynamic> data, CacheAPI cacheAPI) {
-    final existingRestaurantType = cacheAPI.fetchRestaurantTypesByDocumentIdSync(documentId: data['\$id']);
-    if(existingRestaurantType != null) {
+  factory RestaurantTypes.fromMap(
+      Map<String, dynamic> data, CacheAPI cacheAPI) {
+    final existingRestaurantType =
+        cacheAPI.fetchRestaurantTypesByDocumentIdSync(documentId: data['\$id']);
+    if (existingRestaurantType != null) {
       return existingRestaurantType;
     } else {
       return RestaurantTypes(

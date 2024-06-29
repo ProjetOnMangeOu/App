@@ -26,7 +26,14 @@ class CacheAPI extends ChangeNotifier {
     Utils.logDebug(message: '[CacheAPI] Initializing Isar...');
     final dir = await getApplicationDocumentsDirectory();
     isar = await Isar.open(
-      [RestaurantSchema, PriceSchema, RestaurantTypesSchema, RestaurantServiceSchema, RestaurantHoursSchema, GeoCellSchema],
+      [
+        RestaurantSchema,
+        PriceSchema,
+        RestaurantTypesSchema,
+        RestaurantServiceSchema,
+        RestaurantHoursSchema,
+        GeoCellSchema
+      ],
       directory: dir.path,
       inspector: kReleaseMode ? false : true,
     );
@@ -34,7 +41,7 @@ class CacheAPI extends ChangeNotifier {
     Utils.logDebug(message: '[CacheAPI] Isar initialized');
     notifyListeners();
   }
-  
+
   // Fetch cells from cache database
   Future<List<GeoCell?>> fetchCells({
     required List<Map<String, double>> cells,
@@ -42,12 +49,13 @@ class CacheAPI extends ChangeNotifier {
     Utils.logDebug(message: '[CacheAPI] Fetching cells from cache...');
     return await isar.txn(() async {
       final futureResult = await Future.wait(cells.map((cell) async {
-        final result = await isar.geoCells.where()
+        final result = await isar.geoCells
+            .where()
             .minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
-              '${cell['minLat']},${cell['minLong']}',
-              cell['maxLat'].toString(),
-              cell['maxLong'].toString()
-            ).findFirst();
+                '${cell['minLat']},${cell['minLong']}',
+                cell['maxLat'].toString(),
+                cell['maxLong'].toString())
+            .findFirst();
         return result;
       }));
       return futureResult;
@@ -55,15 +63,18 @@ class CacheAPI extends ChangeNotifier {
   }
 
   // Fetch watched cells from cache database
-  Future<List<GeoCell?>> fetchWatchedCells({required List<GeoCell> cells}) async {
+  Future<List<GeoCell?>> fetchWatchedCells(
+      {required List<GeoCell> cells}) async {
     Utils.logDebug(message: '[CacheAPI] Fetching watched cells from cache...');
     return await isar.txn(() async {
       final futureResult = await Future.wait(cells.map((cell) async {
-        final result = await isar.geoCells.where().minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
-          '${cell.minLatitude},${cell.minLongitude}',
-          cell.maxLatitude,
-          cell.maxLongitude
-        ).findFirst();
+        final result = await isar.geoCells
+            .where()
+            .minCoordinatesMaxLatitudeMaxLongitudeEqualTo(
+                '${cell.minLatitude},${cell.minLongitude}',
+                cell.maxLatitude,
+                cell.maxLongitude)
+            .findFirst();
 
         return result;
       }));
@@ -77,7 +88,10 @@ class CacheAPI extends ChangeNotifier {
   }) {
     // Utils.logDebug(message: '[CacheAPI] Fetching restaurant from cache...');
     return isar.txnSync(() {
-      return isar.restaurants.where().documentIdEqualTo(documentId).findFirstSync();
+      return isar.restaurants
+          .where()
+          .documentIdEqualTo(documentId)
+          .findFirstSync();
     });
   }
 
@@ -97,7 +111,10 @@ class CacheAPI extends ChangeNotifier {
   }) {
     // Utils.logDebug(message: '[CacheAPI] Fetching restaurant hours from cache...');
     return isar.txnSync(() {
-      return isar.restaurantHours.where().documentIdEqualTo(documentId).findFirstSync();
+      return isar.restaurantHours
+          .where()
+          .documentIdEqualTo(documentId)
+          .findFirstSync();
     });
   }
 
@@ -107,7 +124,10 @@ class CacheAPI extends ChangeNotifier {
   }) {
     // Utils.logDebug(message: '[CacheAPI] Fetching restaurant service from cache...');
     return isar.txnSync(() {
-      return isar.restaurantServices.where().documentIdEqualTo(documentId).findFirstSync();
+      return isar.restaurantServices
+          .where()
+          .documentIdEqualTo(documentId)
+          .findFirstSync();
     });
   }
 
@@ -117,7 +137,10 @@ class CacheAPI extends ChangeNotifier {
   }) {
     // Utils.logDebug(message: '[CacheAPI] Fetching restaurant types from cache...');
     return isar.txnSync(() {
-      return isar.restaurantTypes.where().documentIdEqualTo(documentId).findFirstSync();
+      return isar.restaurantTypes
+          .where()
+          .documentIdEqualTo(documentId)
+          .findFirstSync();
     });
   }
 
@@ -180,9 +203,11 @@ class CacheAPI extends ChangeNotifier {
       isar.writeTxnSync(() {
         isar.geoCells.putAllSync(cells);
       });
-      Utils.logDebug(message: '[CacheAPI] Caching restaurants by cells successful');
+      Utils.logDebug(
+          message: '[CacheAPI] Caching restaurants by cells successful');
     } catch (e) {
-      Utils.logError(message: '[CacheAPI] Caching restaurants by cells failed', error: e);
+      Utils.logError(
+          message: '[CacheAPI] Caching restaurants by cells failed', error: e);
     }
   }
 

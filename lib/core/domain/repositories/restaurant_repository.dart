@@ -15,7 +15,8 @@ abstract class RestaurantRepositoryClass extends ChangeNotifier {
   Future<void> queryWatchedCells();
 }
 
-class RestaurantRepository extends ChangeNotifier implements RestaurantRepositoryClass {
+class RestaurantRepository extends ChangeNotifier
+    implements RestaurantRepositoryClass {
   bool isInitialized = false;
   var searchMeters = AppConstants.searchMeters;
   late final RestaurantAPI restaurantAPI;
@@ -48,12 +49,13 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
   @override
   Future<void> search() async {
     Utils.logDebug(message: '[RestaurantRepository] Searching restaurants...');
-    try{
+    try {
       // Get user's position
       Position userPosition = await determinePosition();
 
       // Calculate bounding box and grid cells
-      final boundingBox = calculateBoundingBox(position: userPosition, distanceMeters: searchMeters);
+      final boundingBox = calculateBoundingBox(
+          position: userPosition, distanceMeters: searchMeters);
       final cells = calculateGridCells(
         minLat: boundingBox['minLat']!,
         maxLat: boundingBox['maxLat']!,
@@ -100,10 +102,14 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
       final cellsToUpdate = await Future.wait(watchedCells.map((cell) async {
         // Check if cell is expired
         if (cell.expirationDate.isAfter(DateTime.now())) return null;
-        cell.expirationDate = DateTime.now().add(AppConstants.cacheExpirationTime);
+        cell.expirationDate =
+            DateTime.now().add(AppConstants.cacheExpirationTime);
         // Fetch restaurants from Appwrite
-        final restaurants = await restaurantAPI.fetchRestaurantsByCell(cell: cell);
-        final toAddRestaurants = restaurants.map((restaurant) => Restaurant.fromMap(restaurant, cacheAPI)).toList();
+        final restaurants =
+            await restaurantAPI.fetchRestaurantsByCell(cell: cell);
+        final toAddRestaurants = restaurants
+            .map((restaurant) => Restaurant.fromMap(restaurant, cacheAPI))
+            .toList();
         cell.restaurants.clear();
         cacheAPI.resetCellRestaurantsLinks(cell: cell);
         cell.restaurants.addAll(toAddRestaurants);
@@ -111,10 +117,16 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
       }));
 
       // Cache restaurants by cells
-      cacheAPI.cacheRestaurantsByCellsSync(cells: cellsToUpdate.where((cell) => cell != null).toList().cast<GeoCell>());
+      cacheAPI.cacheRestaurantsByCellsSync(
+          cells: cellsToUpdate
+              .where((cell) => cell != null)
+              .toList()
+              .cast<GeoCell>());
       Utils.logDebug(message: '[RestaurantRepository] Updated watched cells');
     } catch (e) {
-      Utils.logError(message: '[RestaurantRepository] updateWatchedCells failed', error: e);
+      Utils.logError(
+          message: '[RestaurantRepository] updateWatchedCells failed',
+          error: e);
     } finally {
       notifyListeners();
     }
@@ -125,10 +137,12 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
     Utils.logDebug(message: '[RestaurantRepository] Querying watched cells...');
     try {
       final cellsResult = await cacheAPI.fetchWatchedCells(cells: watchedCells);
-      watchedCells = cellsResult.where((cell) => cell != null).toList().cast<GeoCell>();
+      watchedCells =
+          cellsResult.where((cell) => cell != null).toList().cast<GeoCell>();
       Utils.logDebug(message: '[RestaurantRepository] Queried watched cells');
     } catch (e) {
-      Utils.logError(message: '[RestaurantRepository] queryWatchedCells failed', error: e);
+      Utils.logError(
+          message: '[RestaurantRepository] queryWatchedCells failed', error: e);
     } finally {
       notifyListeners();
     }
@@ -139,7 +153,4 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
     searchMeters = meters;
     return search();
   }
-
-
-
 }

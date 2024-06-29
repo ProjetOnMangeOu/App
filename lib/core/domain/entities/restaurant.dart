@@ -25,9 +25,12 @@ class Restaurant extends ChangeNotifier {
 
   // Relationships
   final IsarLink<Price> price = IsarLink<Price>();
-  final IsarLinks<RestaurantTypes> restaurantTypes = IsarLinks<RestaurantTypes>();
-  final IsarLinks<RestaurantService> restaurantService = IsarLinks<RestaurantService>();
-  final IsarLinks<RestaurantHours> restaurantHours = IsarLinks<RestaurantHours>();
+  final IsarLinks<RestaurantTypes> restaurantTypes =
+      IsarLinks<RestaurantTypes>();
+  final IsarLinks<RestaurantService> restaurantService =
+      IsarLinks<RestaurantService>();
+  final IsarLinks<RestaurantHours> restaurantHours =
+      IsarLinks<RestaurantHours>();
 
   // Getters
   String get name => _name;
@@ -67,8 +70,9 @@ class Restaurant extends ChangeNotifier {
 
   // Factory method to create a Restaurant object from a Map
   factory Restaurant.fromMap(Map<String, dynamic> data, CacheAPI cacheAPI) {
-    final existingRestaurant = cacheAPI.fetchRestaurantByDocumentIdSync(documentId: data['\$id']);
-    if(existingRestaurant != null) {
+    final existingRestaurant =
+        cacheAPI.fetchRestaurantByDocumentIdSync(documentId: data['\$id']);
+    if (existingRestaurant != null) {
       return existingRestaurant.update(data, cacheAPI);
     } else {
       final restaurant = Restaurant(
@@ -78,15 +82,17 @@ class Restaurant extends ChangeNotifier {
         lat: double.tryParse(data['lat'].toString()) ?? 0.0,
         long: double.tryParse(data['long'].toString()) ?? 0.0,
         phone: data['phone'],
-        googleMapRating: double.tryParse(data['googleMapRating'].toString()) ?? 0.0,
+        googleMapRating:
+            double.tryParse(data['googleMapRating'].toString()) ?? 0.0,
         image: data['image'],
         gmapLink: data['gmapLink'],
         website: data['website'],
       );
 
-      if(data['price'] != null){
-        final existingPrice = cacheAPI.fetchPriceByDocumentIdSync(documentId: data['price']['\$id']);
-        if(existingPrice != null) {
+      if (data['price'] != null) {
+        final existingPrice = cacheAPI.fetchPriceByDocumentIdSync(
+            documentId: data['price']['\$id']);
+        if (existingPrice != null) {
           restaurant.price.value = existingPrice;
         } else {
           final newPrice = Price.fromMap(data['price']);
@@ -96,13 +102,16 @@ class Restaurant extends ChangeNotifier {
       }
 
       restaurant.restaurantTypes.addAll(
-        (data['restaurantTypes'] as List).map((e) => RestaurantTypes.fromMap(e, cacheAPI)),
+        (data['restaurantTypes'] as List)
+            .map((e) => RestaurantTypes.fromMap(e, cacheAPI)),
       );
       restaurant.restaurantService.addAll(
-        (data['restaurantService'] as List).map((e) => RestaurantService.fromMap(e, cacheAPI)),
+        (data['restaurantService'] as List)
+            .map((e) => RestaurantService.fromMap(e, cacheAPI)),
       );
       restaurant.restaurantHours.addAll(
-        (data['restaurantHours'] as List).map((e) => RestaurantHours.fromMap(e, cacheAPI)),
+        (data['restaurantHours'] as List)
+            .map((e) => RestaurantHours.fromMap(e, cacheAPI)),
       );
       return restaurant;
     }
@@ -123,7 +132,8 @@ class Restaurant extends ChangeNotifier {
       'website': _website,
       'price': price.value?.toMap(),
       'restaurantTypes': restaurantTypes.map((type) => type.toMap()).toList(),
-      'restaurantService': restaurantService.map((service) => service.toMap()).toList(),
+      'restaurantService':
+          restaurantService.map((service) => service.toMap()).toList(),
       'restaurantHours': restaurantHours.map((hours) => hours.toMap()).toList(),
     };
   }
@@ -145,7 +155,8 @@ class Restaurant extends ChangeNotifier {
       _phone = data['phone'];
     }
     if (data.containsKey('googleMapRating')) {
-      _googleMapRating = double.tryParse(data['googleMapRating'].toString()) ?? 0.0;
+      _googleMapRating =
+          double.tryParse(data['googleMapRating'].toString()) ?? 0.0;
     }
     if (data.containsKey('image')) {
       _image = data['image'];
@@ -161,19 +172,21 @@ class Restaurant extends ChangeNotifier {
 
     restaurantTypes.clear();
     restaurantTypes.addAll(
-      (data['restaurantTypes'] as List).map((e) => RestaurantTypes.fromMap(e, cacheAPI)),
+      (data['restaurantTypes'] as List)
+          .map((e) => RestaurantTypes.fromMap(e, cacheAPI)),
     );
     restaurantService.clear();
     restaurantService.addAll(
-      (data['restaurantService'] as List).map((e) => RestaurantService.fromMap(e, cacheAPI)),
+      (data['restaurantService'] as List)
+          .map((e) => RestaurantService.fromMap(e, cacheAPI)),
     );
     restaurantHours.clear();
     restaurantHours.addAll(
-      (data['restaurantHours'] as List).map((e) => RestaurantHours.fromMap(e, cacheAPI)),
+      (data['restaurantHours'] as List)
+          .map((e) => RestaurantHours.fromMap(e, cacheAPI)),
     );
     cacheAPI.writeRestaurantSync(restaurant: this);
     notifyListeners();
     return this;
   }
-
 }

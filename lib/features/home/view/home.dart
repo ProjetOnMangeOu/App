@@ -26,15 +26,22 @@ class _HomeViewState extends State<HomeView> {
         const Text('Home'),
         Consumer<RestaurantRepository?>(
           builder: (context, restaurantRepository, child) {
-            var restaurants = restaurantRepository?.watchedCells.expand((cell) => cell.restaurants).toList() ?? [];
+            var restaurants = restaurantRepository?.watchedCells
+                    .expand((cell) => cell.restaurants)
+                    .toList() ??
+                [];
             return Expanded(
               child: ListView.builder(
                 itemCount: restaurants.length,
                 itemBuilder: (context, index) {
                   final restaurant = restaurants[index];
-                  final types = restaurant.restaurantTypes.map((type) => type.name).join(', ');
+                  final types = restaurant.restaurantTypes
+                      .map((type) => type.name)
+                      .join(', ');
                   return ListTile(
-                    leading: restaurant.image != null ? Image.network(restaurant.image!) : null,
+                    leading: restaurant.image != null
+                        ? Image.network(restaurant.image!)
+                        : null,
                     title: Text(restaurant.name),
                     subtitle: Text('${restaurant.address} - $types'),
                   );

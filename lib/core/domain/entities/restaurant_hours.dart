@@ -30,9 +30,11 @@ class RestaurantHours {
   }
 
   // Factory method to create a RestaurantHours object from a Map
-  factory RestaurantHours.fromMap(Map<String, dynamic> data, CacheAPI cacheAPI) {
-    final existingRestaurantHours = cacheAPI.fetchRestaurantHoursByDocumentIdSync(documentId: data['\$id']);
-    if(existingRestaurantHours != null) {
+  factory RestaurantHours.fromMap(
+      Map<String, dynamic> data, CacheAPI cacheAPI) {
+    final existingRestaurantHours =
+        cacheAPI.fetchRestaurantHoursByDocumentIdSync(documentId: data['\$id']);
+    if (existingRestaurantHours != null) {
       return existingRestaurantHours;
     } else {
       return RestaurantHours(

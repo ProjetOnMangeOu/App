@@ -14,9 +14,15 @@ class GeoCell {
   late String maxLongitude;
   late DateTime expirationDate;
 
-  @Index(composite: [CompositeIndex('maxLatitude'), CompositeIndex('maxLongitude')])
+  @Index(composite: [
+    CompositeIndex('maxLatitude'),
+    CompositeIndex('maxLongitude')
+  ])
   late String minCoordinates;
-  @Index(composite: [CompositeIndex('minLatitude'), CompositeIndex('minLongitude')])
+  @Index(composite: [
+    CompositeIndex('minLatitude'),
+    CompositeIndex('minLongitude')
+  ])
   late String maxCoordinates;
 
   // Relationships

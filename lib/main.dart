@@ -24,21 +24,24 @@ void main() {
       ChangeNotifierProxyProvider<AuthAPI, RestaurantAPI?>(
         create: (_) => null,
         update: (_, auth, previousRestaurantAPI) {
-          if (auth.status == AuthStatus.authenticated && previousRestaurantAPI == null) {
+          if (auth.status == AuthStatus.authenticated &&
+              previousRestaurantAPI == null) {
             return RestaurantAPI();
           }
           return previousRestaurantAPI;
         },
       ),
-      ChangeNotifierProxyProvider2<RestaurantAPI, CacheAPI, RestaurantRepository?>(
+      ChangeNotifierProxyProvider2<RestaurantAPI, CacheAPI,
+              RestaurantRepository?>(
           create: (_) => null,
           update: (_, restaurantAPI, cacheAPI, previousRepository) {
-            if (restaurantAPI.isInitialized && cacheAPI.isInitialized && previousRepository == null) {
+            if (restaurantAPI.isInitialized &&
+                cacheAPI.isInitialized &&
+                previousRepository == null) {
               return RestaurantRepository(restaurantAPI, cacheAPI);
             }
             return previousRepository;
-          }
-      ),
+          }),
     ],
     child: const AppRoot(),
   ));

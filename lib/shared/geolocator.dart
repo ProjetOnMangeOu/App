@@ -44,7 +44,8 @@ Future<Position> determinePosition() async {
   return await Geolocator.getCurrentPosition();
 }
 
-Map<String, double> calculateBoundingBox({required Position position, required int distanceMeters}){
+Map<String, double> calculateBoundingBox(
+    {required Position position, required int distanceMeters}) {
   final double latRadians = position.latitude * (pi / 180);
   const degLatKm = 110.574235;
   final degLongKm = 110.572833 * cos(latRadians);
@@ -71,8 +72,12 @@ List<Map<String, double>> calculateGridCells({
   List<Map<String, double>> gridCells = [];
 
   // Itération sur les cellules de la grille
-  for (double lat = (minLat / cellSize).floor() * cellSize; lat < maxLat; lat += cellSize) {
-    for (double long = (minLong / cellSize).floor() * cellSize; long < maxLong; long += cellSize) {
+  for (double lat = (minLat / cellSize).floor() * cellSize;
+      lat < maxLat;
+      lat += cellSize) {
+    for (double long = (minLong / cellSize).floor() * cellSize;
+        long < maxLong;
+        long += cellSize) {
       // Coordonnées de la cellule
       double cellMinLat = double.parse(lat.toStringAsFixed(1));
       double cellMaxLat = double.parse((lat + cellSize).toStringAsFixed(1));
@@ -80,7 +85,10 @@ List<Map<String, double>> calculateGridCells({
       double cellMaxLong = double.parse((long + cellSize).toStringAsFixed(1));
 
       // Vérification d'intersection avec le bounding box
-      if (!(cellMaxLat <= minLat || cellMinLat >= maxLat || cellMaxLong <= minLong || cellMinLong >= maxLong)) {
+      if (!(cellMaxLat <= minLat ||
+          cellMinLat >= maxLat ||
+          cellMaxLong <= minLong ||
+          cellMinLong >= maxLong)) {
         // Si la cellule intersecte le bounding box, l'ajouter à la liste
         gridCells.add({
           'minLat': cellMinLat,

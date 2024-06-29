@@ -33,7 +33,8 @@ class RestaurantAPI extends ChangeNotifier {
     required GeoCell cell,
   }) async {
     try {
-      Utils.logDebug(message: '[RestaurantAPI] Fetching restaurants by cell...');
+      Utils.logDebug(
+          message: '[RestaurantAPI] Fetching restaurants by cell...');
       final response = await database.listDocuments(
           databaseId: AppWriteConstants.databaseId,
           collectionId: AppWriteConstants.restaurantCollectionId,
@@ -42,13 +43,11 @@ class RestaurantAPI extends ChangeNotifier {
             Query.greaterThanEqual('lat', double.parse(cell.minLatitude)),
             Query.lessThanEqual('long', double.parse(cell.maxLongitude)),
             Query.greaterThanEqual('long', double.parse(cell.minLongitude)),
-          ]
-      );
-      return response.documents
-          .map((doc) => doc.data)
-          .toList();
+          ]);
+      return response.documents.map((doc) => doc.data).toList();
     } on AppwriteException catch (e) {
-      Utils.logError(message: '[RestaurantAPI] fetch restaurants failed', error: e);
+      Utils.logError(
+          message: '[RestaurantAPI] fetch restaurants failed', error: e);
       return [];
     }
   }
