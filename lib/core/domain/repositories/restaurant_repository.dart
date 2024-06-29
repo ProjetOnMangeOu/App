@@ -9,6 +9,7 @@ import 'package:onmangeou/shared/geolocator.dart';
 import 'package:onmangeou/shared/utils.dart';
 
 abstract class RestaurantRepositoryClass extends ChangeNotifier {
+  Future<void> updateSearchMeters(int meters);
   Future<void> search();
   Future<void> updateWatchedCells();
   Future<void> queryWatchedCells();
@@ -132,5 +133,13 @@ class RestaurantRepository extends ChangeNotifier implements RestaurantRepositor
       notifyListeners();
     }
   }
+
+  @override
+  Future<void> updateSearchMeters(int meters) {
+    searchMeters = meters;
+    return search();
+  }
+
+
 
 }
