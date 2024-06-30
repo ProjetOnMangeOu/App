@@ -15,7 +15,6 @@ class CustomScaffold extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double circleSize = screenWidth * 3;
-    double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       body: Stack(
@@ -33,16 +32,18 @@ class CustomScaffold extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: padding,
-                right: padding,
-                top: padding + statusBarHeight,
-                bottom: padding,
-              ),
-              child: Column(
-                children: children,
-              ),
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: padding,
+                  right: padding,
+                  top: padding,
+                  bottom: padding,
+                ),
+                child: Column(
+                  children: children,
+                ),
+              )
             ),
           )
         ],
