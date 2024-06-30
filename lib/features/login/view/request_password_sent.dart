@@ -110,7 +110,7 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
                     // resend email
                     requestPasswordReset();
                   },
-                  child: Text('resend email (${remainingTime.inSeconds})'),
+                  child: Text('resend email (${remainingTime.inSeconds}s)'),
                 ),
                 ElevatedButton(
                   onPressed: () {

@@ -2,7 +2,11 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
+import 'package:onmangeou/shared/theme/app_shadows.dart';
+import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
+import 'package:onmangeou/shared/widgets/elements/logo_hero.dart';
+import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
 import 'package:provider/provider.dart';
 
 class RegisterView extends StatefulWidget {
@@ -52,44 +56,86 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+    return CustomScaffold(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const LogoHero(),
+
+          Container(
+            padding: EdgeInsets.all(Theme.of(context)
+                .extension<AppSizes>()!
+                .padding),
+            decoration: BoxDecoration(
+              color: Theme.of(context)
+                  .colorScheme
+                  .surface,
+              borderRadius: BorderRadius.circular(Theme.of(context)
+                  .extension<AppSizes>()!
+                  .borderRadius),
+              boxShadow: [
+                Theme.of(context)
+                    .extension<AppShadows>()!
+                    .shadow,
+              ],
+
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Register Account',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                TextField(
+                  controller: usernameController,
+                  decoration: const InputDecoration(
+                    labelText: 'username',
+                  ),
+                ),
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'email',
+                  ),
+                ),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'password',
+                  ),
+                ),
+                TextField(
+                  controller: passwordConfirmController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'confirm password',
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    registerAccount(usernameController.text, emailController.text,
+                        passwordController.text, passwordConfirmController.text);
+                  },
+                  child: const Text('register'),
+                ),
+              ],
+            ),
+          ),
+
+          Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-          TextField(
-            controller: usernameController,
-            decoration: const InputDecoration(
-              labelText: 'username',
-            ),
-          ),
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              labelText: 'email',
-            ),
-          ),
-          TextField(
-            controller: passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'password',
-            ),
-          ),
-          TextField(
-            controller: passwordConfirmController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'confirm password',
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              registerAccount(usernameController.text, emailController.text,
-                  passwordController.text, passwordConfirmController.text);
-            },
-            child: const Text('register'),
-          ),
-        ]));
+              const Text('Already have an account ?'),
+              TextButton(
+                onPressed: () {
+                  GoRouter.of(context).go('/login');
+                },
+                child: const Text('LOGIN'),
+              ),
+            ],
+          )
+        ]
+    );
   }
 }
