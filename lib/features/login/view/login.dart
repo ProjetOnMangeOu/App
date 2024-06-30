@@ -38,24 +38,16 @@ class _LoginViewState extends State<LoginView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
-
           Container(
-            padding: EdgeInsets.all(Theme.of(context)
-                .extension<AppSizes>()!
-                .padding),
+            padding: EdgeInsets.all(
+                Theme.of(context).extension<AppSizes>()!.padding),
             decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .colorScheme
-                  .surface,
-              borderRadius: BorderRadius.circular(Theme.of(context)
-                  .extension<AppSizes>()!
-                  .borderRadius),
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(
+                  Theme.of(context).extension<AppSizes>()!.borderRadius),
               boxShadow: [
-                Theme.of(context)
-                    .extension<AppShadows>()!
-                    .shadow,
+                Theme.of(context).extension<AppShadows>()!.shadow,
               ],
-
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,7 +80,6 @@ class _LoginViewState extends State<LoginView> {
               ],
             ),
           ),
-
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -99,7 +90,6 @@ class _LoginViewState extends State<LoginView> {
                 },
                 child: const Text('REGISTER'),
               ),
-
               const Text('Forgot your password ?'),
               TextButton(
                 onPressed: () {
@@ -109,7 +99,6 @@ class _LoginViewState extends State<LoginView> {
               ),
             ],
           )
-        ]
-    );
+        ]);
   }
 }

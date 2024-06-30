@@ -38,22 +38,21 @@ class CustomScaffold extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-              child: SafeArea(
-                child: SingleChildScrollView(
-                    child: Container(
-                      height: screenHeight - topBarHeight,
-                      child: Padding(
-                        padding: EdgeInsets.all(
-                            Theme.of(context).extension<AppSizes>()!.padding),
-                        child: Column(
-                          mainAxisAlignment: mainAxisAlignment,
-                          crossAxisAlignment: crossAxisAlignment,
-                          children: children,
-                        ),
-                      ),
-                    )
+            child: SafeArea(
+              child: SingleChildScrollView(
+                  child: Container(
+                height: screenHeight - topBarHeight,
+                child: Padding(
+                  padding: EdgeInsets.all(
+                      Theme.of(context).extension<AppSizes>()!.padding),
+                  child: Column(
+                    mainAxisAlignment: mainAxisAlignment,
+                    crossAxisAlignment: crossAxisAlignment,
+                    children: children,
+                  ),
                 ),
-              ),
+              )),
+            ),
           ),
         ],
       ),

@@ -60,24 +60,16 @@ class _RegisterViewState extends State<RegisterView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
-
           Container(
-            padding: EdgeInsets.all(Theme.of(context)
-                .extension<AppSizes>()!
-                .padding),
+            padding: EdgeInsets.all(
+                Theme.of(context).extension<AppSizes>()!.padding),
             decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .colorScheme
-                  .surface,
-              borderRadius: BorderRadius.circular(Theme.of(context)
-                  .extension<AppSizes>()!
-                  .borderRadius),
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(
+                  Theme.of(context).extension<AppSizes>()!.borderRadius),
               boxShadow: [
-                Theme.of(context)
-                    .extension<AppShadows>()!
-                    .shadow,
+                Theme.of(context).extension<AppShadows>()!.shadow,
               ],
-
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,15 +106,17 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    registerAccount(usernameController.text, emailController.text,
-                        passwordController.text, passwordConfirmController.text);
+                    registerAccount(
+                        usernameController.text,
+                        emailController.text,
+                        passwordController.text,
+                        passwordConfirmController.text);
                   },
                   child: const Text('register'),
                 ),
               ],
             ),
           ),
-
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -135,7 +129,6 @@ class _RegisterViewState extends State<RegisterView> {
               ),
             ],
           )
-        ]
-    );
+        ]);
   }
 }

@@ -36,54 +36,45 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      const LogoHero(),
-
-      Container(
-        padding: EdgeInsets.all(Theme.of(context)
-            .extension<AppSizes>()!
-            .padding),
-        decoration: BoxDecoration(
-          color: Theme.of(context)
-              .colorScheme
-              .surface,
-          borderRadius: BorderRadius.circular(Theme.of(context)
-              .extension<AppSizes>()!
-              .borderRadius),
-          boxShadow: [
-            Theme.of(context)
-                .extension<AppShadows>()!
-                .shadow,
-          ],
-
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Image(image: AssetImage('assets/images/mail-dynamic-color.png')),
-            Text(
-              'We are verifying your email...',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const CircularProgressIndicator()
-          ],
-        ),
-      ),
-
-      Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Already have an account ?'),
-          TextButton(
-            onPressed: () {
-              GoRouter.of(context).go('/login');
-            },
-            child: const Text('LOGIN'),
+          const LogoHero(),
+          Container(
+            padding: EdgeInsets.all(
+                Theme.of(context).extension<AppSizes>()!.padding),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(
+                  Theme.of(context).extension<AppSizes>()!.borderRadius),
+              boxShadow: [
+                Theme.of(context).extension<AppShadows>()!.shadow,
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Image(
+                    image: AssetImage('assets/images/mail-dynamic-color.png')),
+                Text(
+                  'We are verifying your email...',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const CircularProgressIndicator()
+              ],
+            ),
           ),
-        ],
-      )
-    ]
-    );
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Already have an account ?'),
+              TextButton(
+                onPressed: () {
+                  GoRouter.of(context).go('/login');
+                },
+                child: const Text('LOGIN'),
+              ),
+            ],
+          )
+        ]);
   }
 }

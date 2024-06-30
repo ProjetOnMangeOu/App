@@ -72,29 +72,22 @@ class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
-
           Container(
-            padding: EdgeInsets.all(Theme.of(context)
-                .extension<AppSizes>()!
-                .padding),
+            padding: EdgeInsets.all(
+                Theme.of(context).extension<AppSizes>()!.padding),
             decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .colorScheme
-                  .surface,
-              borderRadius: BorderRadius.circular(Theme.of(context)
-                  .extension<AppSizes>()!
-                  .borderRadius),
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(
+                  Theme.of(context).extension<AppSizes>()!.borderRadius),
               boxShadow: [
-                Theme.of(context)
-                    .extension<AppShadows>()!
-                    .shadow,
+                Theme.of(context).extension<AppShadows>()!.shadow,
               ],
-
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Image(image: AssetImage('assets/images/mail-dynamic-color.png')),
+                const Image(
+                    image: AssetImage('assets/images/mail-dynamic-color.png')),
                 Text(
                   'We sent you an email',
                   style: Theme.of(context).textTheme.titleLarge,
@@ -118,7 +111,6 @@ class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
               ],
             ),
           ),
-
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -131,7 +123,6 @@ class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
               ),
             ],
           )
-        ]
-    );
+        ]);
   }
 }

@@ -51,29 +51,22 @@ class _RequestPasswordResetViewState extends State<RequestPasswordResetView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
-
           Container(
-            padding: EdgeInsets.all(Theme.of(context)
-                .extension<AppSizes>()!
-                .padding),
+            padding: EdgeInsets.all(
+                Theme.of(context).extension<AppSizes>()!.padding),
             decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .colorScheme
-                  .surface,
-              borderRadius: BorderRadius.circular(Theme.of(context)
-                  .extension<AppSizes>()!
-                  .borderRadius),
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(
+                  Theme.of(context).extension<AppSizes>()!.borderRadius),
               boxShadow: [
-                Theme.of(context)
-                    .extension<AppShadows>()!
-                    .shadow,
+                Theme.of(context).extension<AppShadows>()!.shadow,
               ],
-
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Image(image: AssetImage('assets/images/key-dynamic-color.png')),
+                const Image(
+                    image: AssetImage('assets/images/key-dynamic-color.png')),
                 Text(
                   'Reset Password',
                   style: Theme.of(context).textTheme.titleLarge,
@@ -99,7 +92,6 @@ class _RequestPasswordResetViewState extends State<RequestPasswordResetView> {
               ],
             ),
           ),
-
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -112,7 +104,6 @@ class _RequestPasswordResetViewState extends State<RequestPasswordResetView> {
               ),
             ],
           )
-        ]
-    );
+        ]);
   }
 }
