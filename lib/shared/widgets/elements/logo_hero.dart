@@ -28,7 +28,6 @@ class LogoHero extends StatelessWidget {
           'On Mange Où ?',
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
           ),
         )
       ],

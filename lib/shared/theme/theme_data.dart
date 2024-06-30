@@ -14,7 +14,7 @@ class ThemeClass {
     error: Colors.red,
     onPrimary: Colors.white,
     onSecondary: Colors.white,
-    onSurface: Colors.black,
+    onSurface: const Color(AppColors.neutral),
     onError: Colors.white,
     brightness: Brightness.light,
   );

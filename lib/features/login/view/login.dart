@@ -33,41 +33,35 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(children: [
-      const LogoHero(),
-      TextField(
-        controller: emailController,
-        decoration: const InputDecoration(
-          labelText: 'email',
-        ),
-      ),
-      TextField(
-        controller: passwordController,
-        obscureText: true,
-        decoration: const InputDecoration(
-          labelText: 'password',
-        ),
-      ),
-      OMGUButtons(
-        text: 'LOGIN',
-        onPressed: () {
-          signInWithPassword(emailController.text, passwordController.text);
-        },
-        color: Colors.orangeAccent,
-      ),
-      OMGUButtons(
-        text: 'register',
-        onPressed: () {
-          context.go('/register'); // Go to register page while replacing stack
-        },
-        color: Colors.grey,
-      ),
-      OMGUButtons(
-        text: 'forgot password',
-        onPressed: () {
-          context.push('/login/request-password');
-        },
-        color: Colors.grey,
-      ),
+        const LogoHero(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Login Account',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                labelText: 'email',
+              ),
+            ),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'password',
+              ),
+            ),
+            OMGUButtons(
+              text: 'LOGIN',
+              onPressed: () {
+                signInWithPassword(emailController.text, passwordController.text);
+              },
+              color: Colors.orangeAccent,
+            ),
+          ],
+        )
     ]);
   }
 }
