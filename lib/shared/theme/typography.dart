@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTypography {
   static TextTheme textTheme = GoogleFonts.interTextTheme().copyWith(
-
     headlineLarge: GoogleFonts.inter(
       fontSize: 32,
       fontWeight: FontWeight.w600,
@@ -16,7 +15,6 @@ class AppTypography {
       fontSize: 24,
       fontWeight: FontWeight.w600,
     ),
-
     titleLarge: GoogleFonts.inter(
       fontSize: 24,
       fontWeight: FontWeight.w600,
@@ -29,7 +27,17 @@ class AppTypography {
       fontSize: 16,
       fontWeight: FontWeight.w600,
     ),
-
-
+    bodyLarge: GoogleFonts.inter(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+    ),
+    bodyMedium: GoogleFonts.inter(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+    ),
+    bodySmall: GoogleFonts.inter(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+    ),
   );
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onmangeou/shared/theme/app_shadows.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/theme/button_themes.dart';
 import 'package:onmangeou/shared/theme/colors.dart';
@@ -10,7 +11,7 @@ class ThemeClass {
     primaryContainer: AppColors.primarySwatch[400]!,
     secondary: const Color(AppColors.secondaryColor),
     secondaryContainer: AppColors.secondarySwatch[400]!,
-    surface: Colors.white,
+    surface: const Color(AppColors.backgroundColor),
     error: Colors.red,
     onPrimary: Colors.white,
     onSecondary: Colors.white,
@@ -28,6 +29,6 @@ class ThemeClass {
     elevatedButtonTheme: AppButtonThemes.elevatedButtonTheme,
     textButtonTheme: AppButtonThemes.textButtonTheme,
     outlinedButtonTheme: AppButtonThemes.outlinedButtonTheme,
-    extensions: const [AppSizes.defaultSizes],
+    extensions: const [AppSizes.defaultSizes, AppShadows.defaultShadows],
   );
 }

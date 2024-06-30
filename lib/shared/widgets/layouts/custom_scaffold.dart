@@ -4,11 +4,16 @@ import 'package:onmangeou/shared/theme/app_sizes.dart';
 class CustomScaffold extends StatelessWidget {
   final double circlePosition;
   final List<Widget> children;
-  const CustomScaffold(
-      {super.key,
-      required this.children,
-      this.circlePosition = 0.75,
-      });
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
+
+  const CustomScaffold({
+    super.key,
+    required this.children,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.circlePosition = 0.75,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +38,15 @@ class CustomScaffold extends StatelessWidget {
           ),
           Positioned.fill(
             child: SafeArea(
-              child: Padding(
-                padding: EdgeInsets.all(Theme.of(context).extension<AppSizes>()!.padding),
-                child: Column(
-                  children: children,
-                ),
-              )
-            ),
+                child: Padding(
+              padding: EdgeInsets.all(
+                  Theme.of(context).extension<AppSizes>()!.padding),
+              child: Column(
+                mainAxisAlignment: mainAxisAlignment,
+                crossAxisAlignment: crossAxisAlignment,
+                children: children,
+              ),
+            )),
           )
         ],
       ),

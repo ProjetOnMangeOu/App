@@ -16,8 +16,8 @@ class LogoHero extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(
-              left: leftPadding,
-              bottom: Theme.of(context).extension<AppSizes>()!.padding,
+            left: leftPadding,
+            bottom: Theme.of(context).extension<AppSizes>()!.padding,
           ),
           child: SvgPicture.asset(
             'assets/images/logo.svg',
@@ -27,8 +27,8 @@ class LogoHero extends StatelessWidget {
         Text(
           'On Mange Où ?',
           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-            color: Colors.white,
-          ),
+                color: Colors.white,
+              ),
         )
       ],
     );

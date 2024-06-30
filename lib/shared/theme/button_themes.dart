@@ -12,6 +12,7 @@ class AppButtonThemes {
   static final textButtonTheme = TextButtonThemeData(
     style: TextButton.styleFrom(
       foregroundColor: AppColors.primarySwatch[400],
+      padding: EdgeInsets.zero,
     ),
   );
 
