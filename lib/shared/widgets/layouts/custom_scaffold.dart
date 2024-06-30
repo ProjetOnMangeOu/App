@@ -19,6 +19,7 @@ class CustomScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    double topBarHeight = MediaQuery.of(context).viewPadding.top;
     double circleSize = screenWidth * 3;
 
     return Scaffold(
@@ -37,17 +38,23 @@ class CustomScaffold extends StatelessWidget {
             ),
           ),
           Positioned.fill(
-            child: SafeArea(
-                child: Padding(
-              padding: EdgeInsets.all(
-                  Theme.of(context).extension<AppSizes>()!.padding),
-              child: Column(
-                mainAxisAlignment: mainAxisAlignment,
-                crossAxisAlignment: crossAxisAlignment,
-                children: children,
+              child: SafeArea(
+                child: SingleChildScrollView(
+                    child: Container(
+                      height: screenHeight - topBarHeight,
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                            Theme.of(context).extension<AppSizes>()!.padding),
+                        child: Column(
+                          mainAxisAlignment: mainAxisAlignment,
+                          crossAxisAlignment: crossAxisAlignment,
+                          children: children,
+                        ),
+                      ),
+                    )
+                ),
               ),
-            )),
-          )
+          ),
         ],
       ),
     );

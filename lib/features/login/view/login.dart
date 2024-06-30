@@ -95,7 +95,7 @@ class _LoginViewState extends State<LoginView> {
               const Text('Don’t have an account ?'),
               TextButton(
                 onPressed: () {
-                  GoRouter.of(context).go('/register');
+                  GoRouter.of(context).push('/register');
                 },
                 child: const Text('REGISTER'),
               ),
@@ -103,7 +103,7 @@ class _LoginViewState extends State<LoginView> {
               const Text('Forgot your password ?'),
               TextButton(
                 onPressed: () {
-                  GoRouter.of(context).go('/forgot-password');
+                  GoRouter.of(context).push('/login/request-password');
                 },
                 child: const Text('RESET PASSWORD'),
               ),
