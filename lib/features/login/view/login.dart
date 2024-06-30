@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:onmangeou/shared/utils.dart';
+import 'package:onmangeou/shared/widgets/elements/logo_hero.dart';
 import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +33,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(children: [
+      const LogoHero(),
       TextField(
         controller: emailController,
         decoration: const InputDecoration(

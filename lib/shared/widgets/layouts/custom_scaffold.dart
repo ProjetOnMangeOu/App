@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:onmangeou/shared/theme/app_sizes.dart';
 
 class CustomScaffold extends StatelessWidget {
   final double circlePosition;
-  final double padding;
   final List<Widget> children;
   const CustomScaffold(
       {super.key,
       required this.children,
       this.circlePosition = 0.75,
-      this.padding = 20});
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +34,7 @@ class CustomScaffold extends StatelessWidget {
           Positioned.fill(
             child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.only(
-                  left: padding,
-                  right: padding,
-                  top: padding,
-                  bottom: padding,
-                ),
+                padding: EdgeInsets.all(Theme.of(context).extension<AppSizes>()!.padding),
                 child: Column(
                   children: children,
                 ),
