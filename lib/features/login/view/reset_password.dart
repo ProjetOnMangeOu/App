@@ -2,7 +2,11 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
+import 'package:onmangeou/shared/theme/app_shadows.dart';
+import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
+import 'package:onmangeou/shared/widgets/elements/logo_hero.dart';
+import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
 import 'package:provider/provider.dart';
 
 class ResetPasswordView extends StatefulWidget {
@@ -50,36 +54,78 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return CustomScaffold(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Reset password'),
-          TextField(
-            controller: passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'password',
+          const LogoHero(),
+
+          Container(
+            padding: EdgeInsets.all(Theme.of(context)
+                .extension<AppSizes>()!
+                .padding),
+            decoration: BoxDecoration(
+              color: Theme.of(context)
+                  .colorScheme
+                  .surface,
+              borderRadius: BorderRadius.circular(Theme.of(context)
+                  .extension<AppSizes>()!
+                  .borderRadius),
+              boxShadow: [
+                Theme.of(context)
+                    .extension<AppShadows>()!
+                    .shadow,
+              ],
+
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Image(image: AssetImage('assets/images/key-dynamic-color.png')),
+                Text(
+                  'Reset Password',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'password',
+                  ),
+                ),
+                TextField(
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'confirm password',
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    resetPassword(
+                        password: passwordController.text,
+                        confirmPassword: confirmPasswordController.text,
+                        userId: widget.userId,
+                        secret: widget.secret);
+                  },
+                  child: const Text('reset password'),
+                ),
+              ],
             ),
           ),
-          TextField(
-            controller: confirmPasswordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'confirm password',
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              resetPassword(
-                  password: passwordController.text,
-                  confirmPassword: confirmPasswordController.text,
-                  userId: widget.userId,
-                  secret: widget.secret);
-            },
-            child: const Text('reset password'),
-          ),
-        ],
-      ),
+
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Don’t have an account ?'),
+              TextButton(
+                onPressed: () {
+                  GoRouter.of(context).go('/register');
+                },
+                child: const Text('REGISTER'),
+              ),
+            ],
+          )
+        ]
     );
   }
 }

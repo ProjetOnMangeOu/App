@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
+import 'package:onmangeou/shared/theme/app_shadows.dart';
+import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
+import 'package:onmangeou/shared/widgets/elements/logo_hero.dart';
+import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
 import 'package:provider/provider.dart';
 
 class RequestPasswordResetView extends StatefulWidget {
@@ -43,30 +47,72 @@ class _RequestPasswordResetViewState extends State<RequestPasswordResetView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return CustomScaffold(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Request password reset'),
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              labelText: 'email',
+          const LogoHero(),
+
+          Container(
+            padding: EdgeInsets.all(Theme.of(context)
+                .extension<AppSizes>()!
+                .padding),
+            decoration: BoxDecoration(
+              color: Theme.of(context)
+                  .colorScheme
+                  .surface,
+              borderRadius: BorderRadius.circular(Theme.of(context)
+                  .extension<AppSizes>()!
+                  .borderRadius),
+              boxShadow: [
+                Theme.of(context)
+                    .extension<AppShadows>()!
+                    .shadow,
+              ],
+
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Image(image: AssetImage('assets/images/key-dynamic-color.png')),
+                Text(
+                  'Reset Password',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'email',
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    requestPasswordReset(emailController.text);
+                  },
+                  child: const Text('send email'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.pop();
+                  },
+                  child: const Text('cancel'),
+                ),
+              ],
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              requestPasswordReset(emailController.text);
-            },
-            child: const Text('send email'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              context.pop();
-            },
-            child: const Text('cancel'),
-          ),
-        ],
-      ),
+
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Don’t have an account ?'),
+              TextButton(
+                onPressed: () {
+                  GoRouter.of(context).go('/register');
+                },
+                child: const Text('REGISTER'),
+              ),
+            ],
+          )
+        ]
     );
   }
 }

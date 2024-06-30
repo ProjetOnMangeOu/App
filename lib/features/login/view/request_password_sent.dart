@@ -6,7 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:onmangeou/shared/constants/app.dart';
 import 'package:onmangeou/shared/constants/appwrite.dart';
+import 'package:onmangeou/shared/theme/app_shadows.dart';
+import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
+import 'package:onmangeou/shared/widgets/elements/logo_hero.dart';
+import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
 import 'package:provider/provider.dart';
 
 class RequestPasswordSentView extends StatefulWidget {
@@ -66,24 +70,71 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return CustomScaffold(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Request password reset sent'),
-          ElevatedButton(
-            onPressed: () {
-              // resend email
-            },
-            child: Text('send email again (${remainingTime.inSeconds})'),
+          const LogoHero(),
+
+          Container(
+            padding: EdgeInsets.all(Theme.of(context)
+                .extension<AppSizes>()!
+                .padding),
+            decoration: BoxDecoration(
+              color: Theme.of(context)
+                  .colorScheme
+                  .surface,
+              borderRadius: BorderRadius.circular(Theme.of(context)
+                  .extension<AppSizes>()!
+                  .borderRadius),
+              boxShadow: [
+                Theme.of(context)
+                    .extension<AppShadows>()!
+                    .shadow,
+              ],
+
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Image(image: AssetImage('assets/images/mail-dynamic-color.png')),
+                Text(
+                  'We sent you an email',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                Text(
+                  'Password reset link sent! Check your email to regain access and continue discovering amazing restaurants near you. 🍽️',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // resend email
+                    requestPasswordReset();
+                  },
+                  child: Text('resend email (${remainingTime.inSeconds})'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.pop();
+                  },
+                  child: const Text('cancel'),
+                ),
+              ],
+            ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              context.pop();
-            },
-            child: const Text('cancel'),
-          ),
-        ],
-      ),
+
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Don’t have an account ?'),
+              TextButton(
+                onPressed: () {
+                  GoRouter.of(context).go('/register');
+                },
+                child: const Text('REGISTER'),
+              ),
+            ],
+          )
+        ]
     );
   }
 }

@@ -95,7 +95,7 @@ class _LoginViewState extends State<LoginView> {
               const Text('Don’t have an account ?'),
               TextButton(
                 onPressed: () {
-                  GoRouter.of(context).push('/register');
+                  GoRouter.of(context).go('/register');
                 },
                 child: const Text('REGISTER'),
               ),
@@ -109,6 +109,7 @@ class _LoginViewState extends State<LoginView> {
               ),
             ],
           )
-        ]);
+        ]
+    );
   }
 }
