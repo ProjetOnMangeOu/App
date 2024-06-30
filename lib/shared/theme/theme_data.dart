@@ -23,7 +23,7 @@ class ThemeClass {
     colorScheme: colorScheme,
     textTheme: AppTypography.textTheme,
     primarySwatch: AppColors.primarySwatch,
-    scaffoldBackgroundColor: const Color(0xFFFFFBF4),
+    scaffoldBackgroundColor: const Color(AppColors.backgroundColor),
     elevatedButtonTheme: AppButtonThemes.elevatedButtonTheme,
     textButtonTheme: AppButtonThemes.textButtonTheme,
     outlinedButtonTheme: AppButtonThemes.outlinedButtonTheme,

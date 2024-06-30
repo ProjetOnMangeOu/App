@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const int backgroundColor = 0xFFFFFBF4;
+
   static const int primaryColor = 0xFFFFB84C;
   static const primarySwatch = MaterialColor(primaryColor, <int, Color>{
     50: Color(0xFFFFFAED),

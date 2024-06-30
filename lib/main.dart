@@ -13,45 +13,44 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => CacheAPI()),
-            ChangeNotifierProvider(create: (_) => AuthAPI()),
-            ChangeNotifierProxyProvider<AuthAPI, User?>(
-              create: (_) => null,
-              update: (_, auth, previousUser) {
-                if (auth.status == AuthStatus.authenticated && previousUser == null) {
-                  return User(user: auth.currentUser);
-                }
-                return previousUser;
-              },
-            ),
-            ChangeNotifierProxyProvider<AuthAPI, RestaurantAPI?>(
-              create: (_) => null,
-              update: (_, auth, previousRestaurantAPI) {
-                if (auth.status == AuthStatus.authenticated &&
-                    previousRestaurantAPI == null) {
-                  return RestaurantAPI();
-                }
-                return previousRestaurantAPI;
-              },
-            ),
-            ChangeNotifierProxyProvider2<RestaurantAPI, CacheAPI,
-                    RestaurantRepository?>(
+      .then((value) => runApp(MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => CacheAPI()),
+              ChangeNotifierProvider(create: (_) => AuthAPI()),
+              ChangeNotifierProxyProvider<AuthAPI, User?>(
                 create: (_) => null,
-                update: (_, restaurantAPI, cacheAPI, previousRepository) {
-                  if (restaurantAPI.isInitialized &&
-                      cacheAPI.isInitialized &&
-                      previousRepository == null) {
-                    return RestaurantRepository(restaurantAPI, cacheAPI);
+                update: (_, auth, previousUser) {
+                  if (auth.status == AuthStatus.authenticated &&
+                      previousUser == null) {
+                    return User(user: auth.currentUser);
                   }
-                  return previousRepository;
-                }),
-          ],
-          child: const AppRoot(),
-        )
-      ));
+                  return previousUser;
+                },
+              ),
+              ChangeNotifierProxyProvider<AuthAPI, RestaurantAPI?>(
+                create: (_) => null,
+                update: (_, auth, previousRestaurantAPI) {
+                  if (auth.status == AuthStatus.authenticated &&
+                      previousRestaurantAPI == null) {
+                    return RestaurantAPI();
+                  }
+                  return previousRestaurantAPI;
+                },
+              ),
+              ChangeNotifierProxyProvider2<RestaurantAPI, CacheAPI,
+                      RestaurantRepository?>(
+                  create: (_) => null,
+                  update: (_, restaurantAPI, cacheAPI, previousRepository) {
+                    if (restaurantAPI.isInitialized &&
+                        cacheAPI.isInitialized &&
+                        previousRepository == null) {
+                      return RestaurantRepository(restaurantAPI, cacheAPI);
+                    }
+                    return previousRepository;
+                  }),
+            ],
+            child: const AppRoot(),
+          )));
 }
 
 class AppRoot extends StatelessWidget {
