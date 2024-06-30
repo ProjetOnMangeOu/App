@@ -40,7 +40,7 @@ class CustomScaffold extends StatelessWidget {
           Positioned.fill(
               child: SafeArea(
                 child: SingleChildScrollView(
-                    child: Container(
+                    child: SizedBox(
                       height: screenHeight - topBarHeight,
                       child: Padding(
                         padding: EdgeInsets.all(
