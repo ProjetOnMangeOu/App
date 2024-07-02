@@ -5,8 +5,10 @@ import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:onmangeou/shared/theme/app_shadows.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
+import 'package:onmangeou/shared/widgets/elements/custom_text_field.dart';
 import 'package:onmangeou/shared/widgets/elements/logo_hero.dart';
 import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
+import 'package:onmangeou/shared/widgets/sections/auth_form.dart';
 import 'package:provider/provider.dart';
 
 class ResetPasswordView extends StatefulWidget {
@@ -23,6 +25,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   resetPassword(
       {required String password,
@@ -58,52 +61,51 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
-          Container(
-            padding: EdgeInsets.all(
-                Theme.of(context).extension<AppSizes>()!.padding),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(
-                  Theme.of(context).extension<AppSizes>()!.borderRadius),
-              boxShadow: [
-                Theme.of(context).extension<AppShadows>()!.shadow,
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Image(
-                    image: AssetImage('assets/images/key-dynamic-color.png')),
-                Text(
-                  'Reset Password',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'password',
-                  ),
-                ),
-                TextField(
-                  controller: confirmPasswordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'confirm password',
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    resetPassword(
-                        password: passwordController.text,
-                        confirmPassword: confirmPasswordController.text,
-                        userId: widget.userId,
-                        secret: widget.secret);
-                  },
-                  child: const Text('reset password'),
-                ),
-              ],
-            ),
+          AuthForm(
+            formKey: _formKey,
+            fields: [
+              const Image(image: AssetImage('assets/images/key-dynamic-color.png')),
+              Text(
+                'Reset Password',
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              CustomTextField(
+                controller: passwordController,
+                labelText: 'password',
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your new password';
+                  }
+                  return null;
+                },
+              ),
+              CustomTextField(
+                controller: confirmPasswordController,
+                labelText: 'confirm password',
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty || value != passwordController.text) {
+                    return 'Passwords do not match';
+                  }
+                  return null;
+                },
+              ),
+            ],
+            onSubmit: () {
+              if (_formKey.currentState!.validate()) {
+                resetPassword(
+                  password: passwordController.text,
+                  confirmPassword: confirmPasswordController.text,
+                  userId: widget.userId,
+                  secret: widget.secret);
+              }
+            },
+            submitButtonText: 'reset password',
+            onCancel: () {
+              context.pop();
+            },
+            cancelButtonText: 'cancel',
           ),
           Column(
             mainAxisSize: MainAxisSize.min,

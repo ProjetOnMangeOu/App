@@ -9,6 +9,7 @@ import 'package:onmangeou/shared/constants/appwrite.dart';
 import 'package:onmangeou/shared/theme/app_shadows.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
+import 'package:onmangeou/shared/widgets/elements/custom_button.dart';
 import 'package:onmangeou/shared/widgets/elements/logo_hero.dart';
 import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
 import 'package:provider/provider.dart';
@@ -70,6 +71,22 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> addGaps(List<Widget> widgets) {
+      return widgets.asMap().entries.map((entry) {
+        int idx = entry.key;
+        Widget widget = entry.value;
+
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: idx < widgets.length - 1
+                ? Theme.of(context).extension<AppSizes>()!.padding
+                : 0,
+          ),
+          child: widget,
+        );
+      }).toList();
+    }
+
     return CustomScaffold(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -87,31 +104,29 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+              children: addGaps([
                 const Image(
                     image: AssetImage('assets/images/mail-dynamic-color.png')),
                 Text(
                   'We sent you an email',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 Text(
                   'Password reset link sent! Check your email to regain access and continue discovering amazing restaurants near you. 🍽️',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    // resend email
-                    requestPasswordReset();
-                  },
-                  child: Text('resend email (${remainingTime.inSeconds}s)'),
+                CustomButton(
+                  text: 'resend email (${remainingTime.inSeconds}s)',
+                  onPressed: requestPasswordReset,
                 ),
-                ElevatedButton(
+                CustomButton(
+                  text: 'cancel',
                   onPressed: () {
                     context.pop();
                   },
-                  child: const Text('cancel'),
-                ),
-              ],
+                  type: ButtonType.ghost,
+                )
+              ]),
             ),
           ),
           Column(
