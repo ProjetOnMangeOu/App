@@ -57,7 +57,7 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
                     image: AssetImage('assets/images/mail-dynamic-color.png')),
                 Text(
                   'We are verifying your email...',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 const CircularProgressIndicator()
               ],

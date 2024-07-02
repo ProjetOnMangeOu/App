@@ -9,6 +9,7 @@ import 'package:onmangeou/shared/constants/appwrite.dart';
 import 'package:onmangeou/shared/theme/app_shadows.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
+import 'package:onmangeou/shared/widgets/elements/custom_button.dart';
 import 'package:onmangeou/shared/widgets/elements/logo_hero.dart';
 import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
 import 'package:provider/provider.dart';
@@ -90,24 +91,23 @@ class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
                     image: AssetImage('assets/images/mail-dynamic-color.png')),
                 Text(
                   'We sent you an email',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 Text(
                   'You\'re almost in! Check your email to verify your account and start discovering amazing restaurants near you. 🍽️',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    resendEmail();
-                  },
-                  child: Text('resend email (${remainingTime.inSeconds}s)'),
+                CustomButton(
+                  text: 'resend email (${remainingTime.inSeconds}s)',
+                  onPressed: resendEmail,
                 ),
-                ElevatedButton(
+                CustomButton(
+                  text: 'cancel',
                   onPressed: () {
                     context.pop();
                   },
-                  child: const Text('cancel'),
-                ),
+                  type: ButtonType.ghost,
+                )
               ],
             ),
           ),

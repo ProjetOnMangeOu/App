@@ -5,8 +5,10 @@ import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:onmangeou/shared/theme/app_shadows.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
+import 'package:onmangeou/shared/widgets/elements/custom_text_field.dart';
 import 'package:onmangeou/shared/widgets/elements/logo_hero.dart';
 import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
+import 'package:onmangeou/shared/widgets/sections/auth_form.dart';
 import 'package:provider/provider.dart';
 
 class RegisterView extends StatefulWidget {
@@ -22,6 +24,7 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController passwordConfirmController =
       TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   registerAccount(
       String username, String email, String password, String passwordConfirm) {
@@ -60,62 +63,67 @@ class _RegisterViewState extends State<RegisterView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
-          Container(
-            padding: EdgeInsets.all(
-                Theme.of(context).extension<AppSizes>()!.padding),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(
-                  Theme.of(context).extension<AppSizes>()!.borderRadius),
-              boxShadow: [
-                Theme.of(context).extension<AppShadows>()!.shadow,
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Register Account',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                TextField(
-                  controller: usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'username',
-                  ),
-                ),
-                TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'email',
-                  ),
-                ),
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'password',
-                  ),
-                ),
-                TextField(
-                  controller: passwordConfirmController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'confirm password',
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    registerAccount(
-                        usernameController.text,
-                        emailController.text,
-                        passwordController.text,
-                        passwordConfirmController.text);
-                  },
-                  child: const Text('register'),
-                ),
-              ],
-            ),
+          AuthForm(
+            formKey: _formKey,
+            fields: [
+              const Image(image: AssetImage('assets/images/key-dynamic-color.png')),
+              Text(
+                'Register Account',
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              CustomTextField(
+                controller: usernameController,
+                labelText: 'username',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a username';
+                  }
+                  return null;
+                },
+              ),
+              CustomTextField(
+                controller: emailController,
+                labelText: 'email',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Enter a valid email';
+                  }
+                  return null;
+                },
+              ),
+              CustomTextField(
+                controller: passwordController,
+                labelText: 'password',
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a password';
+                  }
+                  return null;
+                },
+              ),
+              CustomTextField(
+                controller: passwordConfirmController,
+                labelText: 'confirm password',
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty || value != passwordController.text) {
+                    return 'Your passwords do not match';
+                  }
+                  return null;
+                },
+              ),
+            ],
+            onSubmit: () {
+              if (_formKey.currentState!.validate()) {
+                  registerAccount(
+                      usernameController.text,
+                      emailController.text,
+                      passwordController.text,
+                      passwordConfirmController.text);
+              }
+            },
+            submitButtonText: 'register',
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
