@@ -2,7 +2,6 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
-import 'package:onmangeou/shared/theme/app_shadows.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:onmangeou/shared/widgets/elements/custom_text_field.dart';
@@ -65,7 +64,8 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
           AuthForm(
             formKey: _formKey,
             fields: [
-              const Image(image: AssetImage('assets/images/key-dynamic-color.png')),
+              const Image(
+                  image: AssetImage('assets/images/key-dynamic-color.png')),
               Text(
                 'Reset Password',
                 style: Theme.of(context).textTheme.headlineLarge,
@@ -86,7 +86,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                 labelText: 'confirm password',
                 obscureText: true,
                 validator: (value) {
-                  if (value == null || value.isEmpty || value != passwordController.text) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      value != passwordController.text) {
                     return 'Passwords do not match';
                   }
                   return null;
@@ -96,10 +98,10 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
             onSubmit: () {
               if (_formKey.currentState!.validate()) {
                 resetPassword(
-                  password: passwordController.text,
-                  confirmPassword: confirmPasswordController.text,
-                  userId: widget.userId,
-                  secret: widget.secret);
+                    password: passwordController.text,
+                    confirmPassword: confirmPasswordController.text,
+                    userId: widget.userId,
+                    secret: widget.secret);
               }
             },
             submitButtonText: 'reset password',

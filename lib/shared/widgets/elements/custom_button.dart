@@ -44,11 +44,7 @@ class CustomButton extends StatelessWidget {
               : null,
         ),
         onPressed: onPressed,
-        child: Text(text,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-          ),
+        child: Text(text, style: Theme.of(context).textTheme.titleMedium!),
       ),
     );
   }

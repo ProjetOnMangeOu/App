@@ -23,8 +23,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-      style: Theme.of(context)
-          .textTheme.bodySmall!,
+      style: Theme.of(context).textTheme.bodySmall!,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(999),

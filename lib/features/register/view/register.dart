@@ -2,7 +2,6 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
-import 'package:onmangeou/shared/theme/app_shadows.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/utils.dart';
 import 'package:onmangeou/shared/widgets/elements/custom_text_field.dart';
@@ -67,7 +66,8 @@ class _RegisterViewState extends State<RegisterView> {
           AuthForm(
             formKey: _formKey,
             fields: [
-              const Image(image: AssetImage('assets/images/key-dynamic-color.png')),
+              const Image(
+                  image: AssetImage('assets/images/key-dynamic-color.png')),
               Text(
                 'Register Account',
                 style: Theme.of(context).textTheme.headlineLarge,
@@ -108,7 +108,9 @@ class _RegisterViewState extends State<RegisterView> {
                 labelText: 'confirm password',
                 obscureText: true,
                 validator: (value) {
-                  if (value == null || value.isEmpty || value != passwordController.text) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      value != passwordController.text) {
                     return 'Your passwords do not match';
                   }
                   return null;
@@ -117,11 +119,8 @@ class _RegisterViewState extends State<RegisterView> {
             ],
             onSubmit: () {
               if (_formKey.currentState!.validate()) {
-                  registerAccount(
-                      usernameController.text,
-                      emailController.text,
-                      passwordController.text,
-                      passwordConfirmController.text);
+                registerAccount(usernameController.text, emailController.text,
+                    passwordController.text, passwordConfirmController.text);
               }
             },
             submitButtonText: 'register',
