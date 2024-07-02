@@ -61,6 +61,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           AuthForm(
             formKey: _formKey,
             fields: [
@@ -107,6 +108,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
             },
             cancelButtonText: 'cancel',
           ),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [

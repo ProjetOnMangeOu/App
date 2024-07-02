@@ -39,6 +39,7 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           Container(
             padding: EdgeInsets.all(
                 Theme.of(context).extension<AppSizes>()!.padding),
@@ -63,6 +64,7 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
               ],
             ),
           ),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [

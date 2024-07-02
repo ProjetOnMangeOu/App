@@ -63,6 +63,7 @@ class _RegisterViewState extends State<RegisterView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           AuthForm(
             formKey: _formKey,
             fields: [
@@ -125,6 +126,7 @@ class _RegisterViewState extends State<RegisterView> {
             },
             submitButtonText: 'register',
           ),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [

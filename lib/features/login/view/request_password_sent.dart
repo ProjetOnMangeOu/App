@@ -91,6 +91,7 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           Container(
             padding: EdgeInsets.all(
                 Theme.of(context).extension<AppSizes>()!.padding),
@@ -129,6 +130,7 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
               ]),
             ),
           ),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [

@@ -41,7 +41,9 @@ class CustomScaffold extends StatelessWidget {
             child: SafeArea(
               child: SingleChildScrollView(
                   child: Container(
-                height: screenHeight - topBarHeight,
+                constraints: BoxConstraints(
+                  minHeight: screenHeight - topBarHeight,
+                ),
                 child: Padding(
                   padding: EdgeInsets.all(
                       Theme.of(context).extension<AppSizes>()!.padding),

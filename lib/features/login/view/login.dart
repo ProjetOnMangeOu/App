@@ -40,6 +40,7 @@ class _LoginViewState extends State<LoginView> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const LogoHero(),
+        SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
         AuthForm(
           formKey: _formKey,
           fields: [
@@ -76,6 +77,7 @@ class _LoginViewState extends State<LoginView> {
           },
           submitButtonText: 'login',
         ),
+        SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [

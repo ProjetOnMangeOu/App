@@ -73,6 +73,7 @@ class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           Container(
             padding: EdgeInsets.all(
                 Theme.of(context).extension<AppSizes>()!.padding),
@@ -111,6 +112,7 @@ class EmailVerificationSentViewState extends State<EmailVerificationSentView> {
               ],
             ),
           ),
+          SizedBox(height: Theme.of(context).extension<AppSizes>()!.padding),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
