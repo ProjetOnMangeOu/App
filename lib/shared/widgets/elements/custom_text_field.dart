@@ -23,6 +23,8 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
+      style: Theme.of(context)
+          .textTheme.bodySmall!,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(999),
@@ -60,6 +62,7 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
         labelText: labelText,
+        labelStyle: Theme.of(context).textTheme.bodySmall!,
         floatingLabelStyle: TextStyle(
           color: AppColors.neutralSwatch[700],
         ),

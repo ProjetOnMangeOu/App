@@ -45,11 +45,11 @@ class _LoginViewState extends State<LoginView> {
           fields: [
             Text(
               'Login Account',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
             CustomTextField(
               controller: emailController,
-              labelText: 'Email',
+              labelText: 'email',
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
@@ -59,7 +59,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             CustomTextField(
               controller: passwordController,
-              labelText: 'Password',
+              labelText: 'password',
               obscureText: true,
               validator: (value) {
                 if (value == null || value.isEmpty) {
