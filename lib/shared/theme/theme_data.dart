@@ -11,6 +11,8 @@ class ThemeClass {
     primaryContainer: AppColors.primarySwatch[400]!,
     secondary: const Color(AppColors.secondaryColor),
     secondaryContainer: AppColors.secondarySwatch[400]!,
+    tertiary: const Color(AppColors.accentColor),
+    tertiaryContainer: AppColors.accentSwatch[400]!,
     surface: const Color(AppColors.backgroundColor),
     error: Colors.red,
     onPrimary: Colors.white,

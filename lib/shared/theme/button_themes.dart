@@ -5,7 +5,10 @@ class AppButtonThemes {
   static final elevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: AppColors.primarySwatch[400],
-      foregroundColor: Colors.white,
+      elevation: 0,
+      foregroundColor: const Color(AppColors.neutral),
+      shadowColor: Colors.transparent,
+      overlayColor: Colors.white,
     ),
   );
 
