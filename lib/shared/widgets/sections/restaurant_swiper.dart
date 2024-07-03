@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:go_router/go_router.dart';
 import 'package:onmangeou/shared/widgets/elements/restaurant_card.dart';
 import 'package:provider/provider.dart';
 import 'package:onmangeou/core/domain/repositories/restaurant_repository.dart';
@@ -42,6 +43,9 @@ class RestaurantSwiper extends StatelessWidget {
               print(
                 'The card $previousIndex was swiped to the ${direction.name}. Now the card $currentIndex is on top',
               );
+              if(direction == CardSwiperDirection.top) {
+                context.push('/match?restaurantId=${restaurants[currentIndex!].documentId}');
+              }
               return true;
             },
             onEnd: () {

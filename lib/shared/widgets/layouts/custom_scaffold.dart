@@ -3,6 +3,7 @@ import 'package:onmangeou/shared/theme/app_sizes.dart';
 
 class CustomScaffold extends StatelessWidget {
   final double circlePosition;
+  final bool gradientBackground;
   final List<Widget> children;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
@@ -13,6 +14,7 @@ class CustomScaffold extends StatelessWidget {
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.circlePosition = 0.75,
+    this.gradientBackground = false,
   });
 
   @override
@@ -25,7 +27,7 @@ class CustomScaffold extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned(
+          if(!gradientBackground) Positioned(
             top: -(screenHeight * circlePosition),
             left: (screenWidth * 0.5) - (circleSize / 2),
             child: Container(
@@ -37,6 +39,22 @@ class CustomScaffold extends StatelessWidget {
               ),
             ),
           ),
+
+          if(gradientBackground) Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Theme.of(context).colorScheme.secondary,
+                    Theme.of(context).colorScheme.primary,
+                  ],
+                ),
+              ),
+            ),
+          ),
+
           Positioned.fill(
             child: SafeArea(
               child: SingleChildScrollView(

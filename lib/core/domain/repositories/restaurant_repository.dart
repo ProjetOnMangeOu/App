@@ -153,4 +153,10 @@ class RestaurantRepository extends ChangeNotifier
     searchMeters = meters;
     return search();
   }
+
+  Restaurant getRestaurantByDocumentId(String documentId) {
+    return watchedCells
+        .expand((cell) => cell.restaurants)
+        .firstWhere((restaurant) => restaurant.documentId == documentId);
+  }
 }

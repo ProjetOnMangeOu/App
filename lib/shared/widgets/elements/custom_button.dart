@@ -33,18 +33,17 @@ class CustomButton extends StatelessWidget {
                         ? AppColors.neutralSwatch[700]!.withOpacity(0.4)
                         : AppColors.secondarySwatch[600]!,
           ),
-          foregroundColor: WidgetStateProperty.all<Color>(
-            (type == ButtonType.primary) || (type == ButtonType.background)
-                ? Theme.of(context).colorScheme.onSurface
-                : AppColors.neutralSwatch[50]!,
-          ),
           overlayColor: type == ButtonType.background
               ? WidgetStateProperty.all<Color>(
                   AppColors.neutralSwatch[400]!.withOpacity(0.4))
               : null,
         ),
         onPressed: onPressed,
-        child: Text(text, style: Theme.of(context).textTheme.titleMedium!),
+        child: Text(text, style: Theme.of(context).textTheme.titleMedium!.copyWith(
+          color: type == ButtonType.primary || type == ButtonType.background
+              ? Theme.of(context).colorScheme.onSurface
+              : AppColors.neutralSwatch[50],
+        )),
       ),
     );
   }
