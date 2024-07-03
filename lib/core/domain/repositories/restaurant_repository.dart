@@ -101,7 +101,7 @@ class RestaurantRepository extends ChangeNotifier
     try {
       final cellsToUpdate = await Future.wait(watchedCells.map((cell) async {
         // Check if cell is expired
-        if (cell.expirationDate.isAfter(DateTime.now())) return null;
+        if (cell.expirationDate.isAfter(DateTime.now()) && cell.restaurants.isNotEmpty) return null;
         cell.expirationDate =
             DateTime.now().add(AppConstants.cacheExpirationTime);
         // Fetch restaurants from Appwrite
