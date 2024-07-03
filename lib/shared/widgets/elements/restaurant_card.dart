@@ -3,6 +3,7 @@ import 'package:onmangeou/core/domain/entities/restaurant.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/widgets/elements/Pill.dart';
 import 'package:onmangeou/shared/widgets/elements/distance_text.dart';
+import 'package:onmangeou/shared/widgets/elements/stars.dart';
 
 class RestaurantCard extends StatelessWidget {
   final Restaurant restaurant;
@@ -72,19 +73,17 @@ class RestaurantCard extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: Theme.of(context).extension<AppSizes>()!.cardGap),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: Theme.of(context).extension<AppSizes>()!.cardGap,
-                    runSpacing: Theme.of(context).extension<AppSizes>()!.cardGap,
+                  Row(
                     children: [
                       DistanceText(
                         lat: restaurant.lat,
                         long: restaurant.long,
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Colors.white),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
                       ),
+                      SizedBox(width: Theme.of(context).extension<AppSizes>()!.cardGap),
+                      Stars(rating: restaurant.googleMapRating)
                     ],
                   )
-
                 ],
               ),
             ),
