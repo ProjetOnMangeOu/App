@@ -102,4 +102,24 @@ List<Map<String, double>> calculateGridCells({
   return gridCells;
 }
 
-//TODO: ajouter une méthode qui calcule la distance en mètres entre deux points GPS
+double calculateDistanceInKm({
+  required double lat,
+  required double long,
+  required Position position,
+}) {
+  const double earthRadius = 6371.0;
+
+  final double lat1 = position.latitude * (pi / 180);
+  final double long1 = position.longitude * (pi / 180);
+  final double lat2 = lat * (pi / 180);
+  final double long2 = long * (pi / 180);
+
+  final double dLat = lat2 - lat1;
+  final double dLong = long2 - long1;
+
+  final double a = pow(sin(dLat / 2), 2) +
+      cos(lat1) * cos(lat2) * pow(sin(dLong / 2), 2);
+  final double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+  return earthRadius * c;
+}

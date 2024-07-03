@@ -26,7 +26,7 @@ class _HomeViewState extends State<HomeView> {
       circlePosition: 1,
       children: [
         const Text('Home'),
-        RestaurantSwiper(),
+        const RestaurantSwiper(),
         ElevatedButton(
           onPressed: () {
             context.read<AuthAPI>().logout();

@@ -1,62 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:onmangeou/core/domain/entities/restaurant.dart';
+import 'package:onmangeou/shared/theme/app_sizes.dart';
+import 'package:onmangeou/shared/widgets/elements/Pill.dart';
+import 'package:onmangeou/shared/widgets/elements/distance_text.dart';
 
 class RestaurantCard extends StatelessWidget {
-  final String name;
-  final String address;
-  final String types;
-  final String? imageUrl;
+  final Restaurant restaurant;
+  final List<String> types;
+  final double height;
+  final double width;
 
   const RestaurantCard({
     super.key,
-    required this.name,
-    required this.address,
+    required this.restaurant,
     required this.types,
-    this.imageUrl,
+    required this.height,
+    required this.width,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (imageUrl != null)
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(15.0)),
-              child: Image.network(
-                imageUrl!,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 200,
+    return Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(Theme.of(context).extension<AppSizes>()!.borderRadius),
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(Theme.of(context).extension<AppSizes>()!.borderRadius),
+                child: Image.network(
+                  restaurant.image ?? 'https://picsum.photos/500',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: Theme.of(context).textTheme.headlineLarge,
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(Theme.of(context).extension<AppSizes>()!.borderRadius),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withOpacity(0.35),
+                    Colors.transparent,
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
                 ),
-                const SizedBox(height: 8.0),
-                Text(
-                  address,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 8.0),
-                Text(
-                  types,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
-      ),
+            Padding(
+              padding: EdgeInsets.all(Theme.of(context).extension<AppSizes>()!.padding),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: Theme.of(context).extension<AppSizes>()!.cardGap,
+                    runSpacing: Theme.of(context).extension<AppSizes>()!.cardGap,
+                    children: [
+                      Text(
+                        restaurant.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(color: Colors.white),
+                      ),
+                      for(var type in types) Pill(type: type),
+                    ],
+                  ),
+                  SizedBox(height: Theme.of(context).extension<AppSizes>()!.cardGap),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: Theme.of(context).extension<AppSizes>()!.cardGap,
+                    runSpacing: Theme.of(context).extension<AppSizes>()!.cardGap,
+                    children: [
+                      DistanceText(
+                        lat: restaurant.lat,
+                        long: restaurant.long,
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Colors.white),
+                      ),
+                    ],
+                  )
+
+                ],
+              ),
+            ),
+          ],
+        ),
     );
   }
 }

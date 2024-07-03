@@ -9,6 +9,10 @@ class RestaurantSwiper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final cardHeight = (screenHeight / 3) * 2; // 2/3 of the screen height
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Consumer<RestaurantRepository?>(
       builder: (context, restaurantRepository, child) {
         var restaurants = restaurantRepository?.watchedCells
@@ -20,27 +24,21 @@ class RestaurantSwiper extends StatelessWidget {
         }
 
         return SizedBox(
-          height: 800,
+          height: cardHeight,
           child: CardSwiper(
             cardsCount: restaurants.length,
             cardBuilder: (context, index, percentThresholdX, percentThresholdY) {
               final restaurant = restaurants[index];
-              final types = restaurant.restaurantTypes
-                  .map((type) => type.name)
-                  .join(', ');
+              final types = restaurant.restaurantTypes.map((type) => type.name).toList();
 
               return RestaurantCard(
-                name: restaurant.name,
-                address: restaurant.address,
+                restaurant: restaurant,
                 types: types,
-                imageUrl: restaurant.image,
+                height: cardHeight,
+                width: screenWidth,
               );
             },
-            onSwipe: (
-                int previousIndex,
-                int? currentIndex,
-                CardSwiperDirection direction,
-                ) {
+            onSwipe: (int previousIndex, int? currentIndex, CardSwiperDirection direction) {
               print(
                 'The card $previousIndex was swiped to the ${direction.name}. Now the card $currentIndex is on top',
               );
@@ -49,7 +47,7 @@ class RestaurantSwiper extends StatelessWidget {
             onEnd: () {
               print('No more cards left');
             },
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            allowedSwipeDirection: const AllowedSwipeDirection.only(up: true, down: false, left: true, right: true),
           ),
         );
       },
