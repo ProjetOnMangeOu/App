@@ -40,10 +40,12 @@ class Avatar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: displayBorder ? Border.all(
-          color: Colors.white,
-          width: 2,
-        ) : null,
+        border: displayBorder
+            ? Border.all(
+                color: Colors.white,
+                width: 2,
+              )
+            : null,
         boxShadow: [Theme.of(context).extension<AppShadows>()!.shadow],
       ),
       child: imageWidget,

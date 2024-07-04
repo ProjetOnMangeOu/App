@@ -31,13 +31,24 @@ class _HomeViewState extends State<HomeView> {
       children: [
         Row(
           children: [
-            Avatar(image: Image.asset('assets/images/boy-dynamic-color.png'), size: 50, displayBorder: false),
+            Avatar(
+                image: Image.asset('assets/images/boy-dynamic-color.png'),
+                size: 50,
+                displayBorder: false),
             SizedBox(width: Theme.of(context).extension<AppSizes>()!.padding),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Hi, $username', style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: AppColors.neutralSwatch[50])),
-                Text('where do you wanna eat ?', style: Theme.of(context).textTheme.labelSmall!.copyWith(color: AppColors.neutralSwatch[50])),
+                Text('Hi, $username',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: AppColors.neutralSwatch[50])),
+                Text('where do you wanna eat ?',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelSmall!
+                        .copyWith(color: AppColors.neutralSwatch[50])),
               ],
             ),
           ],
