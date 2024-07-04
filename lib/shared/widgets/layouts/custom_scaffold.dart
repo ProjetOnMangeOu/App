@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/widgets/layouts/custom_navbar.dart';
 
@@ -51,8 +52,7 @@ class _CustomScaffold extends State<CustomScaffold> {
         ),
         onPressed: () => _onItemTapped(2),
         tooltip: 'Home',
-        child: const Image(
-            image: AssetImage('assets/icons/home.png')),
+        child: const Icon(TablerIcons.smart_home, size: 30),
       ) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 

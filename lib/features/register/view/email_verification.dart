@@ -36,6 +36,7 @@ class _EmailVerificationViewState extends State<EmailVerificationView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+        hideAppBar: true,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),

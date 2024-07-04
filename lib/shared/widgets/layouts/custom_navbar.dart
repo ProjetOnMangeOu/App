@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:onmangeou/shared/widgets/elements/CustomNotchedShape.dart';
 
 class CustomNavbar extends StatelessWidget {
@@ -24,18 +25,16 @@ class CustomNavbar extends StatelessWidget {
         children: <Widget>[
           Column(
             children: [
-              const Image(
-                  image: AssetImage('assets/icons/list.png')),
+              const Icon(TablerIcons.clipboard_list, size: 25),
 
               Text('List', style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10) )
             ],
           ),
           Column(
             children: [
-              const Image(
-                  image: AssetImage('assets/icons/list.png')),
+              const Icon(TablerIcons.thumb_up, size: 25),
 
-              Text('List', style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10) )
+              Text('Likes', style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10) )
             ],
           ),
           Container(
@@ -44,18 +43,16 @@ class CustomNavbar extends StatelessWidget {
           ),
           Column(
             children: [
-              const Image(
-                  image: AssetImage('assets/icons/list.png')),
+              const Icon(TablerIcons.users, size: 25),
 
-              Text('List', style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10) )
+              Text('Groups', style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10) )
             ],
           ),
           Column(
             children: [
-              const Image(
-                  image: AssetImage('assets/icons/list.png')),
+              const Icon(TablerIcons.user_circle, size: 25),
 
-              Text('List', style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10) )
+              Text('Account', style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10) )
             ],
           )
         ],
