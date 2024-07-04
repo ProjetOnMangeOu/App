@@ -11,7 +11,7 @@ class User extends ChangeNotifier {
   late String _username;
   late String _id;
   late String _email;
-  late Position? _position;
+  Position? _position;
 
   //Getters
   models.User get user => _user;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onmangeou/core/domain/entities/restaurant.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
-import 'package:onmangeou/shared/widgets/elements/Pill.dart';
+import 'package:onmangeou/shared/widgets/elements/pill.dart';
 import 'package:onmangeou/shared/widgets/elements/distance_text.dart';
 import 'package:onmangeou/shared/widgets/elements/stars.dart';
 

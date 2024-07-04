@@ -8,6 +8,7 @@ import 'package:onmangeou/features/login/view/request_password_reset.dart';
 import 'package:onmangeou/features/login/view/request_password_sent.dart';
 import 'package:onmangeou/features/login/view/reset_password.dart';
 import 'package:onmangeou/features/match/view/match.dart';
+import 'package:onmangeou/features/match/view/match_like.dart';
 import 'package:onmangeou/features/register/view/email_verification.dart';
 import 'package:onmangeou/features/register/view/register.dart';
 import 'package:onmangeou/features/welcome/view/welcome.dart';
@@ -59,8 +60,21 @@ class AppRouter {
               builder: (context, state) {
                 return MatchView(restaurantId: state.uri.queryParameters['restaurantId']!);
               },
+            ),
+            GoRoute(
+              path: 'match-like',
+              redirect: (_, state) {
+                if (!state.uri.queryParameters.containsKey('restaurantIds')) {
+                  return '/home';
+                } else {
+                  return null;
+                }
+              },
+              builder: (context, state) {
+                return MatchLikeView(restaurantIds: state.uri.queryParameters['restaurantIds']!.split(','));
+              },
             )
-          ]
+          ],
         ),
         GoRoute(
             path: '/login',

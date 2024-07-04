@@ -5,8 +5,15 @@ import 'package:onmangeou/shared/widgets/elements/restaurant_card.dart';
 import 'package:provider/provider.dart';
 import 'package:onmangeou/core/domain/repositories/restaurant_repository.dart';
 
-class RestaurantSwiper extends StatelessWidget {
+class RestaurantSwiper extends StatefulWidget {
   const RestaurantSwiper({super.key});
+
+  @override
+  State<RestaurantSwiper> createState() => _RestaurantSwiperState();
+}
+
+class _RestaurantSwiperState extends State<RestaurantSwiper> {
+  final List<String> likedRestaurantIds = [];
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +34,7 @@ class RestaurantSwiper extends StatelessWidget {
         return SizedBox(
           height: cardHeight,
           child: CardSwiper(
+            isLoop: true,
             cardsCount: restaurants.length,
             cardBuilder: (context, index, percentThresholdX, percentThresholdY) {
               final restaurant = restaurants[index];
@@ -40,18 +48,32 @@ class RestaurantSwiper extends StatelessWidget {
               );
             },
             onSwipe: (int previousIndex, int? currentIndex, CardSwiperDirection direction) {
-              print(
-                'The card $previousIndex was swiped to the ${direction.name}. Now the card $currentIndex is on top',
-              );
               if(direction == CardSwiperDirection.top) {
-                context.push('/match?restaurantId=${restaurants[currentIndex!].documentId}');
+                context.push('/match?restaurantId=${restaurants[previousIndex].documentId}');
+              }
+              if (direction == CardSwiperDirection.right) {
+                likedRestaurantIds.add(restaurants[previousIndex].documentId);
+                if (likedRestaurantIds.length >= 5) {
+                  final queryParams = likedRestaurantIds.join(',');
+                  likedRestaurantIds.clear();
+                  context.push('/match-like?restaurantIds=$queryParams');
+                }
               }
               return true;
             },
             onEnd: () {
-              print('No more cards left');
+              if (likedRestaurantIds.length > 1) {
+                context.push('/match-like?restaurantIds=${likedRestaurantIds.join(',')}');
+              } else if(likedRestaurantIds.isNotEmpty) {
+                context.push('/match?restaurantId=${likedRestaurantIds.first}');
+              }
             },
-            allowedSwipeDirection: const AllowedSwipeDirection.only(up: true, down: false, left: true, right: true),
+            allowedSwipeDirection: const AllowedSwipeDirection.only(
+              up: true,
+              down: false,
+              left: true,
+              right: true,
+            ),
           ),
         );
       },
