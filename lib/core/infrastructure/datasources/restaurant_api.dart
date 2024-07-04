@@ -31,19 +31,41 @@ class RestaurantAPI extends ChangeNotifier {
   Future<List<Map<String, dynamic>>> fetchRestaurantsByCell({
     required GeoCell cell,
   }) async {
+    List<Map<String, dynamic>> allDocuments = [];
+    String? nextCursor;
+
     try {
       Utils.logDebug(
           message: '[RestaurantAPI] Fetching restaurants by cell...');
-      final response = await database.listDocuments(
+
+      do {
+        List<String> queries = [
+          Query.lessThanEqual('lat', double.parse(cell.maxLatitude)),
+          Query.greaterThanEqual('lat', double.parse(cell.minLatitude)),
+          Query.lessThanEqual('long', double.parse(cell.maxLongitude)),
+          Query.greaterThanEqual('long', double.parse(cell.minLongitude)),
+        ];
+
+        if (nextCursor != null) {
+          queries.add(Query.cursorAfter(nextCursor));
+        }
+
+        final response = await database.listDocuments(
           databaseId: AppWriteConstants.databaseId,
           collectionId: AppWriteConstants.restaurantCollectionId,
-          queries: [
-            Query.lessThanEqual('lat', double.parse(cell.maxLatitude)),
-            Query.greaterThanEqual('lat', double.parse(cell.minLatitude)),
-            Query.lessThanEqual('long', double.parse(cell.maxLongitude)),
-            Query.greaterThanEqual('long', double.parse(cell.minLongitude)),
-          ]);
-      return response.documents.map((doc) => doc.data).toList();
+          queries: queries,
+        );
+
+        allDocuments.addAll(response.documents.map((doc) => doc.data).toList());
+
+        // Update the cursor for the next batch
+        if (response.documents.isNotEmpty) {
+          nextCursor = response.documents.last.$id;
+        } else {
+          nextCursor = null;
+        }
+      } while (nextCursor != null);
+      return allDocuments;
     } on AppwriteException catch (e) {
       Utils.logError(
           message: '[RestaurantAPI] fetch restaurants failed', error: e);

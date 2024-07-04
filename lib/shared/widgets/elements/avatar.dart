@@ -5,12 +5,14 @@ class Avatar extends StatelessWidget {
   final String? imageUrl;
   final Image? image;
   final double size;
+  final bool displayBorder;
 
   const Avatar({
     super.key,
     this.imageUrl,
     this.image,
     this.size = 75,
+    this.displayBorder = true,
   }) : assert(imageUrl != null || image != null,
             'Au moins une image ou un URL doit être fourni.');
 
@@ -38,10 +40,10 @@ class Avatar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(
+        border: displayBorder ? Border.all(
           color: Colors.white,
           width: 2,
-        ),
+        ) : null,
         boxShadow: [Theme.of(context).extension<AppShadows>()!.shadow],
       ),
       child: imageWidget,
