@@ -18,6 +18,7 @@ class MatchView extends StatelessWidget {
     final restaurant = context.read<RestaurantRepository>().getRestaurantByDocumentId(restaurantId);
 
     return CustomScaffold(
+      hideAppBar: true,
       gradientBackground: true,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       circlePosition: 1,

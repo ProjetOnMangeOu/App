@@ -88,6 +88,7 @@ class _RequestPasswordSentViewState extends State<RequestPasswordSentView> {
     }
 
     return CustomScaffold(
+        hideAppBar: true,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LogoHero(),

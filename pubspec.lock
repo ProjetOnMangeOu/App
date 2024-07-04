@@ -286,6 +286,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.10+1"
+  flutter_tabler_icons:
+    dependency: "direct main"
+    description:
+      name: flutter_tabler_icons
+      sha256: "74bfb6347ebba4b9d9d8ffdc31eeb6dd6ddca1535e4274e603d30f60e32e6472"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.32.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
