@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onmangeou/shared/widgets/elements/CustomNotchedShape.dart';
 
 class CustomNavbar extends StatelessWidget {
   final int currentIndex;
@@ -14,8 +15,8 @@ class CustomNavbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomAppBar(
       color: Theme.of(context).colorScheme.primary,
-      shape: const CircularNotchedRectangle(),
-      notchMargin: 6.0,
+      shape: const CustomNotchedShape(convex: true),
+      notchMargin: 8,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
