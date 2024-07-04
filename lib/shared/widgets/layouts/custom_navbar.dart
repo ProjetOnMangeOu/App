@@ -4,15 +4,18 @@ import 'package:onmangeou/shared/widgets/elements/CustomNotchedShape.dart';
 
 class CustomNavbar extends StatelessWidget {
   final Function(int) onItemTapped;
+  final double height;
 
   const CustomNavbar({
     super.key,
-    required this.onItemTapped
+    required this.onItemTapped,
+    this.height = kBottomNavigationBarHeight + 15
   });
 
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      height: height,
       color: Theme.of(context).colorScheme.primary,
       shape: const CustomNotchedShape(convex: true),
       notchMargin: 8,

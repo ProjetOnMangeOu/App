@@ -27,6 +27,8 @@ class CustomScaffold extends StatefulWidget {
 }
 
 class _CustomScaffold extends State<CustomScaffold> {
+  double bottomBarHeight = kBottomNavigationBarHeight + 15;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -40,6 +42,7 @@ class _CustomScaffold extends State<CustomScaffold> {
 
     return Scaffold(
       bottomNavigationBar: !widget.hideAppBar ? CustomNavbar(
+        height: bottomBarHeight,
         onItemTapped: onItemTapped,
       ) : null,
       floatingActionButton: !widget.hideAppBar ? Container(
@@ -96,7 +99,7 @@ class _CustomScaffold extends State<CustomScaffold> {
               child: SingleChildScrollView(
                   child: Container(
                 constraints: BoxConstraints(
-                  minHeight: screenHeight - topBarHeight,
+                  minHeight: screenHeight - topBarHeight - (widget.hideAppBar ? 0 : bottomBarHeight),
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(
