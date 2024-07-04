@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onmangeou/shared/theme/app_shadows.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/widgets/layouts/custom_navbar.dart';
 
@@ -34,21 +35,29 @@ class _CustomScaffold extends State<CustomScaffold> {
     double circleSize = screenWidth * 3;
 
     onItemTapped(int index) {
-      context.push('/home'); //TODO: push to correct path
+      context.go('/home'); //TODO: go to correct path
     }
 
     return Scaffold(
       bottomNavigationBar: !widget.hideAppBar ? CustomNavbar(
         onItemTapped: onItemTapped,
       ) : null,
-      floatingActionButton: !widget.hideAppBar ? FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        shape: RoundedRectangleBorder(
+      floatingActionButton: !widget.hideAppBar ? Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            Theme.of(context).extension<AppShadows>()!.secondaryShadow,
+          ],
           borderRadius: BorderRadius.circular(999),
         ),
-        onPressed: () => onItemTapped(2),
-        tooltip: 'Home',
-        child: const Icon(TablerIcons.smart_home, size: 30),
+        child: FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(999),
+          ),
+          onPressed: () => onItemTapped(2),
+          tooltip: 'Home',
+          child: const Icon(TablerIcons.smart_home, size: 30),
+        ),
       ) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
