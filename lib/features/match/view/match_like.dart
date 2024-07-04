@@ -21,6 +21,7 @@ class MatchLikeView extends StatelessWidget {
     }).toList();
 
     return CustomScaffold(
+      hideAppBar: true,
       gradientBackground: true,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       circlePosition: 1,

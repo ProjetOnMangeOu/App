@@ -52,7 +52,7 @@ class AppRouter {
               path: 'match',
               redirect: (_, state) {
                 if (!state.uri.queryParameters.containsKey('restaurantId')) {
-                  return '/home';
+                  return '/';
                 } else {
                   return null;
                 }
@@ -65,7 +65,7 @@ class AppRouter {
               path: 'match-like',
               redirect: (_, state) {
                 if (!state.uri.queryParameters.containsKey('restaurantIds')) {
-                  return '/home';
+                  return '/';
                 } else {
                   return null;
                 }

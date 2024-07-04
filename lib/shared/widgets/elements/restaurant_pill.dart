@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:onmangeou/core/domain/entities/restaurant.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/widgets/elements/avatar.dart';
 import 'package:onmangeou/shared/widgets/elements/pill.dart';
 import 'package:onmangeou/shared/widgets/elements/stars.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantPill extends StatelessWidget {
   final Restaurant restaurant;
@@ -57,8 +59,19 @@ class RestaurantPill extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 75),
-          // Icon(icon: TablerIcons.arrow-forward-up),
+          ElevatedButton(
+              onPressed: () {
+                launchUrl(Uri.parse(restaurant.gmapLink), mode: LaunchMode.externalApplication);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+              child: const Icon(TablerIcons.arrow_forward_up, size: 30)
+          )
+          // const SizedBox(width: 75, child: )
         ],
       ),
     );

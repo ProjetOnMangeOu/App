@@ -37,7 +37,25 @@ class _CustomScaffold extends State<CustomScaffold> {
     double circleSize = screenWidth * 3;
 
     onItemTapped(int index) {
-      context.go('/home'); //TODO: go to correct path
+      switch(index) {
+        case 0:
+          context.go('/list');
+          break;
+        case 1:
+          context.go('/likes');
+          break;
+        case 2:
+          context.go('/');
+          break;
+        case 3:
+          context.go('/groups');
+          break;
+        case 4:
+          context.go('/account');
+          break;
+        default:
+          context.go('/');
+      }
     }
 
     return Scaffold(

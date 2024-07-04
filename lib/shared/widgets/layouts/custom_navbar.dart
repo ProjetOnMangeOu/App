@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
-import 'package:onmangeou/shared/widgets/elements/CustomNotchedShape.dart';
+import 'package:onmangeou/shared/widgets/elements/custom_notched_shape.dart';
 
 class CustomNavbar extends StatelessWidget {
   final Function(int) onItemTapped;
@@ -38,8 +38,8 @@ class CustomNavbar extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          _buildNavItem(context, 2, TablerIcons.users, 'Groups'),
-          _buildNavItem(context, 3, TablerIcons.user_circle, 'Account'),
+          _buildNavItem(context, 3, TablerIcons.users, 'Groups'),
+          _buildNavItem(context, 4, TablerIcons.user_circle, 'Account'),
         ],
       ),
     );
