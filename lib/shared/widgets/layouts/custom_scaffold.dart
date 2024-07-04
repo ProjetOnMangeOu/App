@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
+import 'package:onmangeou/shared/widgets/layouts/custom_navbar.dart';
 
-class CustomScaffold extends StatelessWidget {
+class CustomScaffold extends StatefulWidget {
+  final bool hideAppBar;
   final double circlePosition;
   final bool gradientBackground;
   final List<Widget> children;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
-
   const CustomScaffold({
     super.key,
     required this.children,
+    this.hideAppBar = false,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.circlePosition = 0.75,
     this.gradientBackground = false,
   });
+
+  @override
+  State<CustomScaffold> createState() => _CustomScaffold();
+}
+
+class _CustomScaffold extends State<CustomScaffold> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +40,26 @@ class CustomScaffold extends StatelessWidget {
     double circleSize = screenWidth * 3;
 
     return Scaffold(
+      bottomNavigationBar: !widget.hideAppBar ? CustomNavbar(
+        currentIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
+      ) : null,
+      floatingActionButton: !widget.hideAppBar ? FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(999),
+        ),
+        onPressed: () => _onItemTapped(2),
+        tooltip: 'Home',
+        child: const Image(
+            image: AssetImage('assets/icons/home.png')),
+      ) : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
       body: Stack(
         children: [
-          if(!gradientBackground) Positioned(
-            top: -(screenHeight * circlePosition),
+          if(!widget.gradientBackground) Positioned(
+            top: -(screenHeight * widget.circlePosition),
             left: (screenWidth * 0.5) - (circleSize / 2),
             child: Container(
               width: circleSize,
@@ -40,7 +71,7 @@ class CustomScaffold extends StatelessWidget {
             ),
           ),
 
-          if(gradientBackground) Positioned.fill(
+          if(widget.gradientBackground) Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -66,9 +97,9 @@ class CustomScaffold extends StatelessWidget {
                   padding: EdgeInsets.all(
                       Theme.of(context).extension<AppSizes>()!.padding),
                   child: Column(
-                    mainAxisAlignment: mainAxisAlignment,
-                    crossAxisAlignment: crossAxisAlignment,
-                    children: children,
+                    mainAxisAlignment: widget.mainAxisAlignment,
+                    crossAxisAlignment: widget.crossAxisAlignment,
+                    children: widget.children,
                   ),
                 ),
               )),
