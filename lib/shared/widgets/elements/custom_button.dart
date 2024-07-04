@@ -39,11 +39,13 @@ class CustomButton extends StatelessWidget {
               : null,
         ),
         onPressed: onPressed,
-        child: Text(text, style: Theme.of(context).textTheme.titleMedium!.copyWith(
-          color: type == ButtonType.primary || type == ButtonType.background
-              ? Theme.of(context).colorScheme.onSurface
-              : AppColors.neutralSwatch[50],
-        )),
+        child: Text(text,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  color: type == ButtonType.primary ||
+                          type == ButtonType.background
+                      ? Theme.of(context).colorScheme.onSurface
+                      : AppColors.neutralSwatch[50],
+                )),
       ),
     );
   }

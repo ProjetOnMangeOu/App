@@ -10,11 +10,12 @@ class Stars extends StatelessWidget {
 
     return Flex(direction: Axis.horizontal, children: [
       for (var i = 0; i < 5; i++)
-        Image.asset(i < roundedRating
-            ? 'assets/images/star-dynamic-color.png'
-            : 'assets/images/star-dynamic-clay.png',
-        width: 25, height: 25),
+        Image.asset(
+            i < roundedRating
+                ? 'assets/images/star-dynamic-color.png'
+                : 'assets/images/star-dynamic-clay.png',
+            width: 25,
+            height: 25),
     ]);
   }
 }
-

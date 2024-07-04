@@ -6,11 +6,10 @@ class CustomNavbar extends StatelessWidget {
   final Function(int) onItemTapped;
   final double height;
 
-  const CustomNavbar({
-    super.key,
-    required this.onItemTapped,
-    this.height = kBottomNavigationBarHeight + 15
-  });
+  const CustomNavbar(
+      {super.key,
+      required this.onItemTapped,
+      this.height = kBottomNavigationBarHeight + 15});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,10 @@ class CustomNavbar extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               'Choose a restaurant',
-              style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall!
+                  .copyWith(fontSize: 10),
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -45,7 +47,8 @@ class CustomNavbar extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(BuildContext context, int index, IconData icon, String label) {
+  Widget _buildNavItem(
+      BuildContext context, int index, IconData icon, String label) {
     return Expanded(
       child: InkWell(
         onTap: () => onItemTapped(index),
@@ -56,7 +59,10 @@ class CustomNavbar extends StatelessWidget {
             Icon(icon, size: 25),
             Text(
               label,
-              style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall!
+                  .copyWith(fontSize: 10),
             ),
           ],
         ),

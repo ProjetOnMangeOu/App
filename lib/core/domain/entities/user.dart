@@ -44,7 +44,7 @@ class User extends ChangeNotifier {
   }
 
   Future<void> updatePosition() async {
-    try{
+    try {
       Utils.logDebug(message: 'Updating position...');
       // Get user's position
       Position userPosition = await determinePosition();

@@ -37,7 +37,7 @@ class _CustomScaffold extends State<CustomScaffold> {
     double circleSize = screenWidth * 3;
 
     onItemTapped(int index) {
-      switch(index) {
+      switch (index) {
         case 0:
           context.go('/list');
           break;
@@ -59,65 +59,70 @@ class _CustomScaffold extends State<CustomScaffold> {
     }
 
     return Scaffold(
-      bottomNavigationBar: !widget.hideAppBar ? CustomNavbar(
-        height: bottomBarHeight,
-        onItemTapped: onItemTapped,
-      ) : null,
-      floatingActionButton: !widget.hideAppBar ? Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            Theme.of(context).extension<AppShadows>()!.secondaryShadow,
-          ],
-          borderRadius: BorderRadius.circular(999),
-        ),
-        child: FloatingActionButton(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(999),
-          ),
-          onPressed: () => onItemTapped(2),
-          tooltip: 'Home',
-          child: const Icon(TablerIcons.smart_home, size: 30),
-        ),
-      ) : null,
+      bottomNavigationBar: !widget.hideAppBar
+          ? CustomNavbar(
+              height: bottomBarHeight,
+              onItemTapped: onItemTapped,
+            )
+          : null,
+      floatingActionButton: !widget.hideAppBar
+          ? Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  Theme.of(context).extension<AppShadows>()!.secondaryShadow,
+                ],
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: FloatingActionButton(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                onPressed: () => onItemTapped(2),
+                tooltip: 'Home',
+                child: const Icon(TablerIcons.smart_home, size: 30),
+              ),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
       body: Stack(
         children: [
-          if(!widget.gradientBackground) Positioned(
-            top: -(screenHeight * widget.circlePosition),
-            left: (screenWidth * 0.5) - (circleSize / 2),
-            child: Container(
-              width: circleSize,
-              height: circleSize,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-          ),
-
-          if(widget.gradientBackground) Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).colorScheme.secondary,
-                    Theme.of(context).colorScheme.primary,
-                  ],
+          if (!widget.gradientBackground)
+            Positioned(
+              top: -(screenHeight * widget.circlePosition),
+              left: (screenWidth * 0.5) - (circleSize / 2),
+              child: Container(
+                width: circleSize,
+                height: circleSize,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),
-          ),
-
+          if (widget.gradientBackground)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Theme.of(context).colorScheme.secondary,
+                      Theme.of(context).colorScheme.primary,
+                    ],
+                  ),
+                ),
+              ),
+            ),
           Positioned.fill(
             child: SafeArea(
               child: SingleChildScrollView(
                   child: Container(
                 constraints: BoxConstraints(
-                  minHeight: screenHeight - topBarHeight - (widget.hideAppBar ? 0 : bottomBarHeight),
+                  minHeight: screenHeight -
+                      topBarHeight -
+                      (widget.hideAppBar ? 0 : bottomBarHeight),
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(

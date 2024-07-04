@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:onmangeou/shared/theme/colors.dart';
 
 class AppShadows extends ThemeExtension<AppShadows> {
   static const defaultShadows = AppShadows(
@@ -20,8 +19,7 @@ class AppShadows extends ThemeExtension<AppShadows> {
         spreadRadius: 0.1,
         blurRadius: 20,
         offset: Offset(0, 4),
-      )
-  );
+      ));
 
   final BoxShadow shadow;
   final BoxShadow btnShadow;
@@ -35,11 +33,8 @@ class AppShadows extends ThemeExtension<AppShadows> {
     BoxShadow? btnShadow,
     BoxShadow? secondaryShadow,
   }) {
-    return AppShadows(
-      shadow ?? this.shadow,
-      btnShadow ?? this.btnShadow,
-      secondaryShadow ?? this.secondaryShadow
-    );
+    return AppShadows(shadow ?? this.shadow, btnShadow ?? this.btnShadow,
+        secondaryShadow ?? this.secondaryShadow);
   }
 
   @override

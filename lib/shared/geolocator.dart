@@ -117,8 +117,8 @@ double calculateDistanceInKm({
   final double dLat = lat2 - lat1;
   final double dLong = long2 - long1;
 
-  final double a = pow(sin(dLat / 2), 2) +
-      cos(lat1) * cos(lat2) * pow(sin(dLong / 2), 2);
+  final double a =
+      pow(sin(dLat / 2), 2) + cos(lat1) * cos(lat2) * pow(sin(dLong / 2), 2);
   final double c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
   return earthRadius * c;

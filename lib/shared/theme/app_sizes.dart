@@ -12,7 +12,8 @@ class AppSizes extends ThemeExtension<AppSizes> {
   final double pillYPadding;
   final double cardGap;
 
-  const AppSizes(this.padding, this.inputPadding, this.borderRadius, this.pillXPadding, this.pillYPadding, this.cardGap);
+  const AppSizes(this.padding, this.inputPadding, this.borderRadius,
+      this.pillXPadding, this.pillYPadding, this.cardGap);
 
   @override
   AppSizes copyWith({
@@ -45,7 +46,6 @@ class AppSizes extends ThemeExtension<AppSizes> {
         lerpDouble(borderRadius, other.borderRadius, t)!,
         lerpDouble(pillXPadding, other.pillXPadding, t)!,
         lerpDouble(pillYPadding, other.pillYPadding, t)!,
-        lerpDouble(cardGap, other.cardGap, t)!
-    );
+        lerpDouble(cardGap, other.cardGap, t)!);
   }
 }

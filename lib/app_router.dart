@@ -58,7 +58,8 @@ class AppRouter {
                 }
               },
               builder: (context, state) {
-                return MatchView(restaurantId: state.uri.queryParameters['restaurantId']!);
+                return MatchView(
+                    restaurantId: state.uri.queryParameters['restaurantId']!);
               },
             ),
             GoRoute(
@@ -71,7 +72,9 @@ class AppRouter {
                 }
               },
               builder: (context, state) {
-                return MatchLikeView(restaurantIds: state.uri.queryParameters['restaurantIds']!.split(','));
+                return MatchLikeView(
+                    restaurantIds:
+                        state.uri.queryParameters['restaurantIds']!.split(','));
               },
             )
           ],

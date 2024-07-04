@@ -8,7 +8,8 @@ class DistanceText extends StatelessWidget {
   final double long;
   final TextStyle? style;
 
-  const DistanceText({super.key, required this.lat, required this.long, this.style});
+  const DistanceText(
+      {super.key, required this.lat, required this.long, this.style});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,11 @@ class DistanceText extends StatelessWidget {
         if (user?.position == null) {
           return Text('Calculating...', style: style);
         } else {
-          double distance = (calculateDistanceInKm(lat: lat, long: long, position: user!.position!) * 10).round() / 10;
+          double distance = (calculateDistanceInKm(
+                          lat: lat, long: long, position: user!.position!) *
+                      10)
+                  .round() /
+              10;
           return Text('$distance km', style: style);
         }
       },

@@ -11,7 +11,8 @@ class Avatar extends StatelessWidget {
     this.imageUrl,
     this.image,
     this.size = 75,
-  }) : assert(imageUrl != null || image != null, 'Au moins une image ou un URL doit être fourni.');
+  }) : assert(imageUrl != null || image != null,
+            'Au moins une image ou un URL doit être fourni.');
 
   @override
   Widget build(BuildContext context) {

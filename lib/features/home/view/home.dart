@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:onmangeou/core/domain/repositories/restaurant_repository.dart';
-import 'package:onmangeou/core/infrastructure/datasources/auth_api.dart';
 import 'package:onmangeou/shared/widgets/layouts/custom_scaffold.dart';
 import 'package:onmangeou/shared/widgets/sections/restaurant_swiper.dart';
-import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

@@ -6,6 +6,9 @@ class WelcomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScaffold(hideAppBar: true,children: [CircularProgressIndicator()],);
+    return const CustomScaffold(
+      hideAppBar: true,
+      children: [CircularProgressIndicator()],
+    );
   }
 }

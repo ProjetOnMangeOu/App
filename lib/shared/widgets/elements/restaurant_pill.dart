@@ -26,12 +26,14 @@ class RestaurantPill extends StatelessWidget {
           Avatar(
             imageUrl: restaurant.image ?? 'https://picsum.photos/500',
           ),
-          SizedBox(width: Theme.of(context).extension<AppSizes>()!.pillYPadding),
+          SizedBox(
+              width: Theme.of(context).extension<AppSizes>()!.pillYPadding),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(
                 vertical: Theme.of(context).extension<AppSizes>()!.pillYPadding,
-                horizontal: Theme.of(context).extension<AppSizes>()!.pillYPadding,
+                horizontal:
+                    Theme.of(context).extension<AppSizes>()!.pillYPadding,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,9 +51,12 @@ class RestaurantPill extends StatelessWidget {
                         ),
                       ),
                       ...types.map((type) => Padding(
-                        padding: EdgeInsets.only(left: Theme.of(context).extension<AppSizes>()!.cardGap),
-                        child: Pill(type: type),
-                      )),
+                            padding: EdgeInsets.only(
+                                left: Theme.of(context)
+                                    .extension<AppSizes>()!
+                                    .cardGap),
+                            child: Pill(type: type),
+                          )),
                     ],
                   ),
                   Stars(rating: restaurant.googleMapRating),
@@ -61,7 +66,8 @@ class RestaurantPill extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: () {
-                launchUrl(Uri.parse(restaurant.gmapLink), mode: LaunchMode.externalApplication);
+                launchUrl(Uri.parse(restaurant.gmapLink),
+                    mode: LaunchMode.externalApplication);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
@@ -69,8 +75,7 @@ class RestaurantPill extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
-              child: const Icon(TablerIcons.arrow_forward_up, size: 30)
-          )
+              child: const Icon(TablerIcons.arrow_forward_up, size: 30))
           // const SizedBox(width: 75, child: )
         ],
       ),

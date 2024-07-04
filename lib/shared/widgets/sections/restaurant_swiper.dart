@@ -26,8 +26,9 @@ class _RestaurantSwiperState extends State<RestaurantSwiper> {
     return Consumer<RestaurantRepository?>(
       builder: (context, restaurantRepository, child) {
         var restaurants = restaurantRepository?.watchedCells
-            .expand((cell) => cell.restaurants)
-            .toList() ?? [];
+                .expand((cell) => cell.restaurants)
+                .toList() ??
+            [];
 
         if (restaurants.isEmpty) {
           return const Center(child: Text('No restaurants available.'));
@@ -40,10 +41,13 @@ class _RestaurantSwiperState extends State<RestaurantSwiper> {
               child: CardSwiper(
                 controller: controller,
                 isLoop: true,
-            cardsCount: restaurants.length,
-            cardBuilder: (context, index, percentThresholdX, percentThresholdY) {
-              final restaurant = restaurants[index];
-              final types = restaurant.restaurantTypes.map((type) => type.name).toList();
+                cardsCount: restaurants.length,
+                cardBuilder:
+                    (context, index, percentThresholdX, percentThresholdY) {
+                  final restaurant = restaurants[index];
+                  final types = restaurant.restaurantTypes
+                      .map((type) => type.name)
+                      .toList();
 
                   return RestaurantCard(
                     restaurant: restaurant,
@@ -52,12 +56,15 @@ class _RestaurantSwiperState extends State<RestaurantSwiper> {
                     width: screenWidth,
                   );
                 },
-                onSwipe: (int previousIndex, int? currentIndex, CardSwiperDirection direction) {
-                  if(direction == CardSwiperDirection.top) {
-                    context.push('/match?restaurantId=${restaurants[previousIndex].documentId}');
+                onSwipe: (int previousIndex, int? currentIndex,
+                    CardSwiperDirection direction) {
+                  if (direction == CardSwiperDirection.top) {
+                    context.push(
+                        '/match?restaurantId=${restaurants[previousIndex].documentId}');
                   }
                   if (direction == CardSwiperDirection.right) {
-                    likedRestaurantIds.add(restaurants[previousIndex].documentId);
+                    likedRestaurantIds
+                        .add(restaurants[previousIndex].documentId);
                     if (likedRestaurantIds.length >= 5) {
                       final queryParams = likedRestaurantIds.join(',');
                       likedRestaurantIds.clear();
@@ -68,12 +75,15 @@ class _RestaurantSwiperState extends State<RestaurantSwiper> {
                 },
                 onEnd: () {
                   if (likedRestaurantIds.length > 1) {
-                    context.push('/match-like?restaurantIds=${likedRestaurantIds.join(',')}');
-                  } else if(likedRestaurantIds.isNotEmpty) {
-                    context.push('/match?restaurantId=${likedRestaurantIds.first}');
+                    context.push(
+                        '/match-like?restaurantIds=${likedRestaurantIds.join(',')}');
+                  } else if (likedRestaurantIds.isNotEmpty) {
+                    context.push(
+                        '/match?restaurantId=${likedRestaurantIds.first}');
                   }
                 },
-                allowedSwipeDirection: const AllowedSwipeDirection.only(up: true, down: false, left: true, right: true),
+                allowedSwipeDirection: const AllowedSwipeDirection.only(
+                    up: true, down: false, left: true, right: true),
               ),
             ),
             Row(
@@ -84,7 +94,8 @@ class _RestaurantSwiperState extends State<RestaurantSwiper> {
                   child: const Image(
                     height: 35,
                     width: 35,
-                    image: AssetImage('assets/images/thumb-down-dynamic-color.png'),
+                    image: AssetImage(
+                        'assets/images/thumb-down-dynamic-color.png'),
                   ),
                 ),
                 RoundButton(
@@ -100,7 +111,8 @@ class _RestaurantSwiperState extends State<RestaurantSwiper> {
                   child: const Image(
                     height: 35,
                     width: 35,
-                    image: AssetImage('assets/images/thumb-up-dynamic-color.png'),
+                    image:
+                        AssetImage('assets/images/thumb-up-dynamic-color.png'),
                   ),
                 ),
               ],
