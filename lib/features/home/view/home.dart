@@ -22,17 +22,11 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return const CustomScaffold(
       circlePosition: 1,
       children: [
-        const Text('Home'),
-        const RestaurantSwiper(),
-        ElevatedButton(
-          onPressed: () {
-            context.read<AuthAPI>().logout();
-          },
-          child: const Text('logout'),
-        ),
+        Text('Home'),
+        RestaurantSwiper(),
       ],
     );
   }
