@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
+import 'package:go_router/go_router.dart';
 import 'package:onmangeou/shared/theme/app_sizes.dart';
 import 'package:onmangeou/shared/widgets/layouts/custom_navbar.dart';
 
@@ -25,14 +26,6 @@ class CustomScaffold extends StatefulWidget {
 }
 
 class _CustomScaffold extends State<CustomScaffold> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -40,17 +33,20 @@ class _CustomScaffold extends State<CustomScaffold> {
     double topBarHeight = MediaQuery.of(context).viewPadding.top;
     double circleSize = screenWidth * 3;
 
+    onItemTapped(int index) {
+      context.push('/home'); //TODO: push to correct path
+    }
+
     return Scaffold(
       bottomNavigationBar: !widget.hideAppBar ? CustomNavbar(
-        currentIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
+        onItemTapped: onItemTapped,
       ) : null,
       floatingActionButton: !widget.hideAppBar ? FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(999),
         ),
-        onPressed: () => _onItemTapped(2),
+        onPressed: () => onItemTapped(2),
         tooltip: 'Home',
         child: const Icon(TablerIcons.smart_home, size: 30),
       ) : null,
