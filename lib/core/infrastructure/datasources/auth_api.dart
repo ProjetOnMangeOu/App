@@ -54,7 +54,7 @@ class AuthAPI extends ChangeNotifier {
     }
   }
 
-  Future<void> registerAccount(
+  Future<Map<String, Object>> registerAccount(
       {required String email,
       required String password,
       required String username}) async {
@@ -64,8 +64,41 @@ class AuthAPI extends ChangeNotifier {
           email: email,
           password: password,
           name: username);
+      await loginWithPass(email: email, password: password);
+      await sendEmailVerification(url: AppWriteConstants.emailVerificationUrl);
+      return {
+        'success': true,
+      };
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Register failed', error: e);
+      return {
+        'success': false,
+        'error': e,
+      };
+    }
+  }
+
+  Future<void> sendEmailVerification({required String url}) async {
+    try {
+      await account.createVerification(url: url);
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Send email verification failed', error: e);
+    }
+  }
+
+  Future<Map<String, Object>> confirmEmailVerification(
+      {required String userId, required String secret}) async {
+    try {
+      await account.updateVerification(userId: userId, secret: secret);
+      return {
+        'success': true,
+      };
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Email verification failed', error: e);
+      return {
+        'success': false,
+        'error': e,
+      };
     }
   }
 
@@ -76,6 +109,48 @@ class AuthAPI extends ChangeNotifier {
       await loadCurrentUser();
     } on AppwriteException catch (e) {
       Utils.logError(message: 'Login failed', error: e);
+    }
+  }
+
+  Future<Map<String, Object>> requestPasswordReset({
+    required String email,
+    required String url,
+  }) async {
+    try {
+      await account.createRecovery(email: email, url: url);
+      return {
+        'success': true,
+      };
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Request password reset failed', error: e);
+      return {
+        'success': false,
+        'error': e,
+      };
+    }
+  }
+
+  Future<Map<String, Object>> confirmPasswordReset({
+    required String userId,
+    required String secret,
+    required String password,
+    required String passwordAgain,
+  }) async {
+    try {
+      await account.updateRecovery(
+          userId: userId,
+          secret: secret,
+          password: password,
+          passwordAgain: passwordAgain);
+      return {
+        'success': true,
+      };
+    } on AppwriteException catch (e) {
+      Utils.logError(message: 'Confirm password reset failed', error: e);
+      return {
+        'success': false,
+        'error': e,
+      };
     }
   }
 
