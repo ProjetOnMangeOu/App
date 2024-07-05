@@ -5,11 +5,21 @@ import 'package:onmangeou/shared/theme/app_sizes.dart';
 class RoundButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Widget child;
-  const RoundButton({super.key, required this.onPressed, required this.child});
+  final double? height;
+  final double? width;
+  const RoundButton(
+      {super.key,
+      required this.onPressed,
+      required this.child,
+      this.height,
+      this.width});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+        height: height,
+        width: width,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
             boxShadow: [Theme.of(context).extension<AppShadows>()!.btnShadow]),
         child: ElevatedButton(

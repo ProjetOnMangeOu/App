@@ -11,6 +11,7 @@ import 'package:onmangeou/features/match/view/match.dart';
 import 'package:onmangeou/features/match/view/match_like.dart';
 import 'package:onmangeou/features/register/view/email_verification.dart';
 import 'package:onmangeou/features/register/view/register.dart';
+import 'package:onmangeou/features/restaurant/view/restaurant_details.dart';
 import 'package:onmangeou/features/welcome/view/welcome.dart';
 import 'package:onmangeou/features/register/view/email_verification_sent.dart';
 import 'package:onmangeou/shared/utils.dart';
@@ -76,7 +77,21 @@ class AppRouter {
                     restaurantIds:
                         state.uri.queryParameters['restaurantIds']!.split(','));
               },
-            )
+            ),
+            GoRoute(
+              path: 'restaurant-details',
+              redirect: (_, state) {
+                if (!state.uri.queryParameters.containsKey('restaurantId')) {
+                  return '/';
+                } else {
+                  return null;
+                }
+              },
+              builder: (context, state) {
+                return RestaurantDetailsView(
+                    restaurantId: state.uri.queryParameters['restaurantId']!);
+              },
+            ),
           ],
         ),
         GoRoute(
